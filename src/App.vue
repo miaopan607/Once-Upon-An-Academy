@@ -426,7 +426,7 @@ const programs = [
 }
 
 .h-full {
-  height: 100%;
+  flex: 1;
 }
 
 .text-center {
@@ -457,6 +457,11 @@ const programs = [
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
+}
+
+.split-col {
+  display: flex;
+  flex-direction: column;
 }
 
 /* 字体排版 */
