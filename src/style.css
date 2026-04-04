@@ -38,3 +38,131 @@ img {
   height: auto;
   display: block;
 }
+
+/* ===== 共享辅助类 ===== */
+.text-gold {
+  color: #C5A059;
+}
+
+.text-dark {
+  color: #0f1719;
+}
+
+.text-muted {
+  color: #666;
+}
+
+.text-xs {
+  font-size: 0.85rem;
+}
+
+.bg-paper {
+  background-color: #f5f0e6;
+}
+
+.bg-alt {
+  background-color: #f0eadc;
+}
+
+.bg-gold {
+  background-color: #e5d1a7;
+  color: #0f1719;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 2rem;
+}
+
+.mb-6 {
+  margin-bottom: 3rem;
+}
+
+.h-full {
+  flex: 1;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 容器制式 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.container-narrow {
+  max-width: 800px;
+}
+
+.section-padding {
+  padding: 6rem 0;
+}
+
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}
+
+.split-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 字体排版 */
+.title-primary {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #0f1719;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+}
+
+.subtitle-primary {
+  font-size: 1.1rem;
+  color: #C5A059;
+  letter-spacing: 3px;
+  margin-top: 0.5rem;
+}
+
+.text-lead {
+  font-size: 1.25rem;
+  line-height: 2.2;
+  color: #333;
+}
+
+.text-detail {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #444;
+}
+
+.resume-list li {
+  margin-bottom: 1rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  padding-bottom: 1rem;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .split-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
