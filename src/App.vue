@@ -154,8 +154,10 @@ const programs = [
                 </div>
               </div>
               <p><strong>雅集地点：</strong> 上海市 · 交通银行前滩31演艺中心</p>
-              <p>望各班学子奔走相告，共襄盛举。巡演票务详情请<a href="https://weibo.com/7789205210/Qz6QmzFsa" target="_blank"
-                  style="color: #b71c1c; text-decoration: underline; font-weight: bold;">查看此通知</a>。</p>
+              <p>望各班学子奔走相告，共襄盛举。
+                <!-- 巡演票务详情请<a href="https://weibo.com/7789205210/Qz6QmzFsa" target="_blank"
+                  style="color: #b71c1c; text-decoration: underline; font-weight: bold;">查看此通知</a>。 -->
+                </p>
               <div class="doc-stamp">
                 <p>从前书院教务处</p>
               </div>
