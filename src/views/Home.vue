@@ -24,7 +24,10 @@ let resizeObserver: ResizeObserver | null = null;
 const noticeLeft = ref<HTMLElement | null>(null);
 const mobiusSection = ref<HTMLElement | null>(null);
 const redDocument = ref<HTMLElement | null>(null);
+const timeDisplayEl = ref<HTMLElement | null>(null);
+const redTitleEl = ref<HTMLElement | null>(null);
 const expiredSectionHeight = ref('');
+const showNoticeBar = ref(false);
 
 const updateTime = () => {
   const now = new Date();
@@ -53,16 +56,34 @@ const updateExpiredSectionHeight = () => {
   expiredSectionHeight.value = height > 0 ? `${height}px` : '';
 };
 
+const updateNoticeBarVisibility = () => {
+  const timeEl = timeDisplayEl.value;
+  const titleEl = redTitleEl.value;
+
+  if (!timeEl || !titleEl) {
+    showNoticeBar.value = false;
+    return;
+  }
+
+  const triggerTop = window.innerWidth <= 768 ? 100 : 76;
+
+  showNoticeBar.value =
+    timeEl.getBoundingClientRect().bottom <= triggerTop &&
+    titleEl.getBoundingClientRect().bottom <= triggerTop;
+};
+
 onMounted(() => {
   updateTime();
   timer = window.setInterval(updateTime, 1000);
 
   nextTick(() => {
     updateExpiredSectionHeight();
+    updateNoticeBarVisibility();
 
     if (typeof ResizeObserver !== 'undefined') {
       resizeObserver = new ResizeObserver(() => {
         updateExpiredSectionHeight();
+        updateNoticeBarVisibility();
       });
 
       if (mobiusSection.value) {
@@ -75,7 +96,9 @@ onMounted(() => {
     }
   });
 
+  window.addEventListener('scroll', updateNoticeBarVisibility);
   window.addEventListener('resize', updateExpiredSectionHeight);
+  window.addEventListener('resize', updateNoticeBarVisibility);
 });
 
 onUnmounted(() => {
@@ -83,7 +106,9 @@ onUnmounted(() => {
     clearInterval(timer);
   }
 
+  window.removeEventListener('scroll', updateNoticeBarVisibility);
   window.removeEventListener('resize', updateExpiredSectionHeight);
+  window.removeEventListener('resize', updateNoticeBarVisibility);
   resizeObserver?.disconnect();
 });
 
@@ -106,6 +131,13 @@ const expiredInfo = [
 
 <template>
   <div class="home-page">
+    <div v-if="showNoticeBar" class="notice-frozen-bar">
+      <div class="notice-frozen-content">
+        <div class="notice-frozen-time">{{ currentTime }}</div>
+        <div class="notice-frozen-title">从前书院教务处文件</div>
+      </div>
+    </div>
+
     <section class="subhero">
       <div class="subhero-bg" style="background-image: url('/hero.png');"></div>
       <div class="subhero-overlay"></div>
@@ -143,7 +175,7 @@ const expiredInfo = [
                           fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
                   </svg>
                 </div>
-                <div class="time-display">{{ currentTime }}</div>
+                <div class="time-display" ref="timeDisplayEl">{{ currentTime }}</div>
               </div>
               <!-- 下部分：过期信息 -->
               <div class="expired-section" :style="expiredSectionHeight ? { height: expiredSectionHeight } : undefined">
@@ -161,7 +193,7 @@ const expiredInfo = [
             <!-- 右栏：红头文件 -->
             <div class="notice-right">
               <div class="red-document" ref="redDocument">
-                <h3 class="red-title">从前书院教务处文件</h3>
+                <h3 class="red-title" ref="redTitleEl">从前书院教务处文件</h3>
                 <div class="red-line"></div>
                 <h4 class="doc-subject">关于黄诗扶全国巡演（上海站）的通知</h4>
                 <div class="doc-content">
@@ -384,6 +416,51 @@ const expiredInfo = [
   font-size: 1.1rem;
   letter-spacing: 3px;
   opacity: 0.9;
+}
+
+.home-page {
+  --notice-frozen-top: 4.75rem;
+}
+
+.notice-frozen-bar {
+  position: fixed;
+  top: var(--notice-frozen-top);
+  left: 0;
+  width: 100%;
+  z-index: 950;
+  background: rgba(253, 251, 247, 0.97);
+  border-bottom: 1px solid rgba(183, 28, 28, 0.12);
+  box-shadow: 0 8px 20px rgba(15, 23, 25, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.notice-frozen-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.6rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.notice-frozen-time {
+  color: #666;
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.notice-frozen-title {
+  min-width: 0;
+  color: #b71c1c;
+  font-size: 1.1rem;
+  text-align: right;
+  font-weight: bold;
+  font-family: "SimHei", "Microsoft YaHei", sans-serif;
+  letter-spacing: 4px;
+  white-space: nowrap;
 }
 
 /* 两栏布局 */
@@ -777,6 +854,24 @@ const expiredInfo = [
 
   .subhero-title {
     font-size: 1.8rem;
+  }
+
+  .home-page {
+    --notice-frozen-top: 6.25rem;
+  }
+
+  .notice-frozen-content {
+    padding: 0.5rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .notice-frozen-time {
+    font-size: 0.78rem;
+  }
+
+  .notice-frozen-title {
+    font-size: 0.88rem;
+    letter-spacing: 2px;
   }
 
   .notice-two-col {

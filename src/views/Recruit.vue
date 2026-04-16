@@ -41,6 +41,9 @@ const scenes = [
 
 // 实时时间，年份为当前年份+1
 const currentTime = ref('');
+const timeDisplayEl = ref<HTMLElement | null>(null);
+const redTitleEl = ref<HTMLElement | null>(null);
+const showNoticeBar = ref(false);
 let timer: number | null = null;
 
 const updateTime = () => {
@@ -54,20 +57,50 @@ const updateTime = () => {
   currentTime.value = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 };
 
+const updateNoticeBarVisibility = () => {
+  const timeEl = timeDisplayEl.value;
+  const titleEl = redTitleEl.value;
+
+  if (!timeEl || !titleEl) {
+    showNoticeBar.value = false;
+    return;
+  }
+
+  const triggerTop = window.innerWidth <= 768 ? 100 : 76;
+
+  showNoticeBar.value =
+    timeEl.getBoundingClientRect().bottom <= triggerTop &&
+    titleEl.getBoundingClientRect().bottom <= triggerTop;
+};
+
 onMounted(() => {
   updateTime();
   timer = window.setInterval(updateTime, 1000);
+
+  updateNoticeBarVisibility();
+  window.addEventListener('scroll', updateNoticeBarVisibility);
+  window.addEventListener('resize', updateNoticeBarVisibility);
 });
 
 onUnmounted(() => {
   if (timer) {
     clearInterval(timer);
   }
+
+  window.removeEventListener('scroll', updateNoticeBarVisibility);
+  window.removeEventListener('resize', updateNoticeBarVisibility);
 });
 </script>
 
 <template>
   <div class="recruit-page">
+    <div v-if="showNoticeBar" class="notice-frozen-bar">
+      <div class="notice-frozen-content">
+        <div class="notice-frozen-time">{{ currentTime }}</div>
+        <div class="notice-frozen-title">从前书院教务处文件</div>
+      </div>
+    </div>
+
     <section class="subhero">
       <div class="subhero-bg" style="background-image: url('/images/Gemini_Generated_Image_sewh9wsewh9wsewh(1).png');"></div>
       <div class="subhero-overlay"></div>
@@ -102,13 +135,13 @@ onUnmounted(() => {
                           fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
                   </svg>
                 </div>
-                <div class="time-display">{{ currentTime }}</div>
+                <div class="time-display" ref="timeDisplayEl">{{ currentTime }}</div>
               </div>
             </div>
             <!-- 右栏：红头文件 -->
             <div class="notice-right">
               <div class="red-document">
-                <h3 class="red-title">从前书院教务处文件</h3>
+                <h3 class="red-title" ref="redTitleEl">从前书院教务处文件</h3>
                 <div class="red-line"></div>
                 <h4 class="doc-subject">关于黄诗扶全国巡演（上海站）的通知</h4>
                 <div class="doc-content">
@@ -252,6 +285,51 @@ onUnmounted(() => {
   font-size: 1.1rem;
   letter-spacing: 3px;
   opacity: 0.9;
+}
+
+.recruit-page {
+  --notice-frozen-top: 4.75rem;
+}
+
+.notice-frozen-bar {
+  position: fixed;
+  top: var(--notice-frozen-top);
+  left: 0;
+  width: 100%;
+  z-index: 950;
+  background: rgba(253, 251, 247, 0.97);
+  border-bottom: 1px solid rgba(183, 28, 28, 0.12);
+  box-shadow: 0 8px 20px rgba(15, 23, 25, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.notice-frozen-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.6rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.notice-frozen-time {
+  color: #666;
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.notice-frozen-title {
+  min-width: 0;
+  color: #b71c1c;
+  font-size: 1.1rem;
+  text-align: right;
+  font-weight: bold;
+  font-family: "SimHei", "Microsoft YaHei", sans-serif;
+  letter-spacing: 4px;
+  white-space: nowrap;
 }
 
 /* 优雅卡片系统 */
@@ -478,6 +556,24 @@ onUnmounted(() => {
 
   .subhero-title {
     font-size: 1.8rem;
+  }
+
+  .recruit-page {
+    --notice-frozen-top: 6.25rem;
+  }
+
+  .notice-frozen-content {
+    padding: 0.5rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .notice-frozen-time {
+    font-size: 0.78rem;
+  }
+
+  .notice-frozen-title {
+    font-size: 0.88rem;
+    letter-spacing: 2px;
   }
 
   .notice-two-col {
