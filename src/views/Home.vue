@@ -511,7 +511,7 @@ const expiredInfo = [
   margin-bottom: 0.8rem;
   font-size: 1rem;
   color: #222;
-  text-indent: 2rem;
+  text-indent: 2em;
 }
 
 .doc-content p strong {
@@ -526,11 +526,11 @@ const expiredInfo = [
   display: block;
   font-size: 1rem;
   color: #000;
-  padding-left: 2rem;
+  padding-left: 2em;
 }
 
 .doc-date-list {
-  padding-left: 2rem;
+  padding-left: 2em;
   margin-top: 0.3rem;
   line-height: 1.8;
   font-size: 1rem;
@@ -797,7 +797,7 @@ const expiredInfo = [
   .doc-content p {
     font-size: 0.85rem;
     margin-bottom: 0.5rem;
-    text-indent: 1.5rem;
+    text-indent: 2em;
   }
 
   .doc-date-section {
@@ -806,12 +806,12 @@ const expiredInfo = [
 
   .doc-date-label {
     font-size: 0.85rem;
-    padding-left: 1.5rem;
+    padding-left: 2em;
   }
 
   .doc-date-list {
     font-size: 0.85rem;
-    padding-left: 1.5rem;
+    padding-left: 2em;
   }
 
   .doc-stamp {
