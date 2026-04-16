@@ -122,11 +122,11 @@ const expiredInfo = [
                 <div class="doc-content">
                   <p>各书院学子、各级班长：</p>
                   <p>为庆祝本院杰出荣誉校友生辰，同时展示我院在古风音乐领域的至高艺术结晶。特向全体学子预告即将举办的2026年黄诗扶全国巡演上海站盛事。</p>
-                  <div style="margin-bottom: 1rem; padding-left: 2rem;">
-                    <strong style="display: block;">公演吉期：</strong>
-                    <div style="padding-left: 2em; margin-top: 0.3rem; line-height: 1.8;">
-                      2026 / 06 / 19 19:00<br>
-                      2026 / 06 / 20 19:00
+                  <div class="doc-date-section">
+                    <strong class="doc-date-label">公演吉期：</strong>
+                    <div class="doc-date-list">
+                      <div>2026 / 06 / 19 19:00</div>
+                      <div>2026 / 06 / 20 19:00</div>
                     </div>
                   </div>
                   <p><strong>雅集地点：</strong> 上海市 · 交通银行前滩31演艺中心</p>
@@ -240,7 +240,10 @@ const expiredInfo = [
               <p class="mt-4 text-dark">若有心求学，望拨打专线联络。</p>
               <div class="contact-wrap mt-4">
                 <p><strong>[ 统理招生 ] </strong> 卿主任</p>
-                <p class="mt-2"><strong>[ 传书青鸟 ] </strong> <span class="magical-font">（编一个出道日子的电话）</span></p>
+                <p class="mt-2 contact-phone"><strong>[ 电话 ] </strong> 0508-728370-01</p>
+                <p class="mt-2"><strong>[ 纳税号 ] </strong> 8181897268748467</p>
+                <p class="mt-2"><strong>[ 地址 ] </strong> 入间省人梦市清醒县有座山镇今日无路从前书院</p>
+                <p class="mt-2"><strong>[ 邮箱 ] </strong> 0508huangshifuhappy@birth.day.com</p>
               </div>
             </div>
           </div>
@@ -508,14 +511,30 @@ const expiredInfo = [
   margin-bottom: 0.8rem;
   font-size: 1rem;
   color: #222;
-}
-
-.doc-content>p {
   text-indent: 2rem;
 }
 
 .doc-content p strong {
   color: #000;
+}
+
+.doc-date-section {
+  margin-bottom: 0.8rem;
+}
+
+.doc-date-label {
+  display: block;
+  font-size: 1rem;
+  color: #000;
+  padding-left: 2rem;
+}
+
+.doc-date-list {
+  padding-left: 2rem;
+  margin-top: 0.3rem;
+  line-height: 1.8;
+  font-size: 1rem;
+  color: #222;
 }
 
 .doc-stamp {
@@ -588,7 +607,17 @@ const expiredInfo = [
   font-style: italic;
 }
 
-/* Contact Info Magical Font */
+/* Contact Info */
+.contact-wrap p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.contact-phone {
+  font-size: 1.05rem;
+  color: #0f1719;
+}
+
 .magical-font {
   font-size: 1.5rem;
   font-weight: bold;
@@ -766,13 +795,36 @@ const expiredInfo = [
   }
 
   .doc-content p {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     margin-bottom: 0.5rem;
+    text-indent: 1.5rem;
+  }
+
+  .doc-date-section {
+    margin-bottom: 0.5rem;
+  }
+
+  .doc-date-label {
+    font-size: 0.85rem;
+    padding-left: 1.5rem;
+  }
+
+  .doc-date-list {
+    font-size: 0.85rem;
+    padding-left: 1.5rem;
   }
 
   .doc-stamp {
     margin-top: 1.5rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .contact-wrap p {
+    font-size: 0.9rem;
+  }
+
+  .contact-phone {
+    font-size: 0.9rem;
   }
 
   .env-image {
