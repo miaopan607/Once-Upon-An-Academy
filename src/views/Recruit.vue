@@ -315,7 +315,7 @@ onUnmounted(() => {
 
 .notice-frozen-time {
   color: #666;
-  font-size: 1.15rem;
+  font-size: 1.28rem;
   letter-spacing: 1px;
   font-family: monospace;
   white-space: nowrap;
@@ -357,10 +357,10 @@ onUnmounted(() => {
   padding: 1rem 0 0;
 }
 
-/* 两栏布局 - 1:2比例 */
+/* 两栏布局 - 1:3比例 */
 .notice-two-col {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 3fr;
   gap: 1.5rem;
   align-items: start;
 }
@@ -394,7 +394,7 @@ onUnmounted(() => {
 }
 
 .time-display {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: #666;
   letter-spacing: 1px;
   margin-top: 0.5rem;

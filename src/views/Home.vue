@@ -446,7 +446,7 @@ const expiredInfo = [
 
 .notice-frozen-time {
   color: #666;
-  font-size: 1.15rem;
+  font-size: 1.28rem;
   letter-spacing: 1px;
   font-family: monospace;
   white-space: nowrap;
@@ -466,7 +466,7 @@ const expiredInfo = [
 /* 两栏布局 */
 .notice-two-col {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 3fr;
   gap: 1.5rem;
   align-items: start;
 }
@@ -501,7 +501,7 @@ const expiredInfo = [
 }
 
 .time-display {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: #666;
   letter-spacing: 1px;
   margin-top: 0.5rem;
