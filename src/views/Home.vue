@@ -1,74 +1,9 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { inject } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const showCustomAlert = inject<(msg: string) => void>('showCustomAlert')!;
-
-// 全页面上拉手势（仅在页面底部触发，整个页面上移）
-const pullStartY = ref(0);
-const pullStartScrollY = ref(0);
-const pullDelta = ref(0);     // 经过阻力衰减后的显示偏移
-const isPulling = ref(false);
-const isAnimating = ref(false);
-const THRESHOLD = 90;         // 触发跳转的显示偏移阈值
-const MAX_DISPLAY = 110;      // 最大显示偏移
-const DAMPING = 0.3;          // 阻力系数（越小阻力越大，需要拉更远）
-
-const isAtBottom = () => {
-  return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 15;
-};
-
-const onPullStart = (e: TouchEvent) => {
-  if (isAnimating.value) return;
-  pullStartY.value = e.touches[0].clientY;
-  pullStartScrollY.value = window.scrollY;
-  isPulling.value = false;
-};
-
-const onPullMove = (e: TouchEvent) => {
-  const touchDelta = pullStartY.value - e.touches[0].clientY;
-  const scrollDelta = pullStartScrollY.value - window.scrollY;
-
-  if (isPulling.value) {
-    const overflow = touchDelta - scrollDelta;
-    if (overflow > 0) {
-      // 阻力衰减：线性阻尼，拉得越远阻力越大
-      pullDelta.value = Math.min(MAX_DISPLAY, overflow * DAMPING);
-      e.preventDefault();
-    } else {
-      isPulling.value = false;
-      pullDelta.value = 0;
-    }
-    return;
-  }
-
-  if (isAtBottom() && touchDelta > 15) {
-    const overflow = touchDelta - scrollDelta;
-    if (overflow > 8) {
-      isPulling.value = true;
-      pullDelta.value = Math.min(MAX_DISPLAY, overflow * DAMPING);
-      e.preventDefault();
-    }
-  }
-};
-
-const onPullEnd = () => {
-  if (!isPulling.value) return;
-  if (pullDelta.value >= THRESHOLD) {
-    isAnimating.value = true;
-    pullDelta.value = MAX_DISPLAY;
-    setTimeout(() => {
-      router.push('/recruit');
-    }, 300);
-  } else {
-    isAnimating.value = true;
-    pullDelta.value = 0;
-    setTimeout(() => {
-      isAnimating.value = false;
-    }, 350);
-  }
-};
 
 const goToRecruit = () => {
   router.push('/recruit');
@@ -83,14 +18,7 @@ const programs = [
 </script>
 
 <template>
-  <div
-    class="home-page"
-    :class="{ 'page-pulling': isPulling, 'page-animating': isAnimating }"
-    :style="{ transform: (isPulling || isAnimating) && pullDelta > 0 ? `translateY(-${pullDelta}px)` : '' }"
-    @touchstart="onPullStart"
-    @touchmove="onPullMove"
-    @touchend="onPullEnd"
-  >
+  <div class="home-page">
     <section class="subhero">
       <div class="subhero-bg" style="background-image: url('/hero.png');"></div>
       <div class="subhero-overlay"></div>
@@ -244,18 +172,10 @@ const programs = [
       <!-- 底部入口：招募与培养 -->
       <section class="recruit-entry section-padding">
         <div class="container text-center">
-          <button class="entry-btn desktop-only" @click="goToRecruit">
+          <button class="entry-btn" @click="goToRecruit">
             <span>前往 · 招募与培养</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
-          <p class="mobile-hint mobile-only" :class="{ 'hint-ready': pullDelta >= THRESHOLD }">
-            {{ pullDelta >= THRESHOLD ? '松开前往「招募与培养」' : '上拉页面可前往「招募与培养」' }}
-          </p>
-          <div class="pull-progress mobile-only" :class="{ 'progress-active': pullDelta > 0 }">
-            <div class="pull-progress-track">
-              <div class="pull-progress-fill" :style="{ width: `${Math.min(pullDelta / THRESHOLD * 100, 100)}%` }"></div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -538,44 +458,6 @@ const programs = [
   transform: translateY(-3px);
 }
 
-.mobile-hint {
-  font-size: 0.95rem;
-  color: #999;
-  letter-spacing: 2px;
-  transition: color 0.25s;
-}
-
-.hint-ready {
-  color: #C5A059;
-  font-weight: 600;
-}
-
-.pull-progress {
-  margin-top: 1rem;
-  opacity: 0;
-  transition: opacity 0.25s;
-}
-
-.progress-active {
-  opacity: 1;
-}
-
-.pull-progress-track {
-  width: 120px;
-  height: 3px;
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: 2px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.pull-progress-fill {
-  height: 100%;
-  background: #C5A059;
-  border-radius: 2px;
-  transition: width 0.08s ease-out;
-}
-
 /* 桌面端/移动端切换 */
 .desktop-only {
   display: inline-flex;
@@ -583,19 +465,6 @@ const programs = [
 
 .mobile-only {
   display: none;
-}
-
-/* 页面整体上拉 */
-.home-page {
-  transition: transform 0s;
-}
-
-.page-pulling {
-  transition: none;
-}
-
-.page-animating {
-  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* 移动端适配 */
