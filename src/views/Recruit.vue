@@ -114,11 +114,11 @@ onUnmounted(() => {
                 <div class="doc-content">
                   <p>各书院学子、各级班长：</p>
                   <p>为庆祝本院杰出荣誉校友生辰，同时展示我院在古风音乐领域的至高艺术结晶。特向全体学子预告即将举办的2026年黄诗扶全国巡演上海站盛事。</p>
-                  <div style="margin-bottom: 1rem; padding-left: 2rem;">
-                    <strong style="display: block;">公演吉期：</strong>
-                    <div style="padding-left: 2em; margin-top: 0.3rem; line-height: 1.8;">
-                      2026 / 06 / 19 19:00<br>
-                      2026 / 06 / 20 19:00
+                  <div class="doc-date-section">
+                    <strong class="doc-date-label">公演吉期：</strong>
+                    <div class="doc-date-list">
+                      <div>2026 / 06 / 19 19:00</div>
+                      <div>2026 / 06 / 20 19:00</div>
                     </div>
                   </div>
                   <p><strong>雅集地点：</strong> 上海市 · 交通银行前滩31演艺中心</p>
@@ -333,46 +333,62 @@ onUnmounted(() => {
 
 .red-title {
   color: #b71c1c;
-  font-size: 1.6rem;
+  font-size: 2rem;
   text-align: center;
   font-weight: bold;
   font-family: "SimHei", "Microsoft YaHei", sans-serif;
-  letter-spacing: 4px;
+  letter-spacing: 6px;
 }
 
 .red-line {
-  height: 3px;
+  height: 4px;
   background: #b71c1c;
-  margin: 1rem 0 1.5rem;
+  margin: 1.5rem 0 2.5rem;
   box-shadow: 0 2px 0 rgba(183, 28, 28, 0.3);
 }
 
 .doc-subject {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #111;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .doc-content p {
-  margin-bottom: 0.6rem;
-  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
   color: #222;
-}
-
-.doc-content>p {
-  text-indent: 2rem;
+  text-indent: 2em;
 }
 
 .doc-content p strong {
   color: #000;
 }
 
+.doc-date-section {
+  margin-bottom: 0.8rem;
+}
+
+.doc-date-label {
+  display: block;
+  font-size: 1rem;
+  color: #000;
+  padding-left: 2em;
+}
+
+.doc-date-list {
+  padding-left: 2em;
+  margin-top: 0.3rem;
+  line-height: 1.8;
+  font-size: 1rem;
+  color: #222;
+}
+
 .doc-stamp {
-  margin-top: 2rem;
+  margin-top: 3rem;
   text-align: right;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #111;
 }
@@ -490,28 +506,42 @@ onUnmounted(() => {
   }
 
   .red-title {
-    font-size: 1rem;
-    letter-spacing: 2px;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
   }
 
   .red-line {
-    margin: 0.5rem 0 0.75rem;
-    height: 2px;
+    margin: 0.75rem 0 1rem;
   }
 
   .doc-subject {
-    font-size: 0.85rem;
-    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
   }
 
   .doc-content p {
-    font-size: 0.75rem;
-    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    text-indent: 2em;
+  }
+
+  .doc-date-section {
+    margin-bottom: 0.5rem;
+  }
+
+  .doc-date-label {
+    font-size: 0.85rem;
+    padding-left: 2em;
+  }
+
+  .doc-date-list {
+    font-size: 0.85rem;
+    padding-left: 2em;
   }
 
   .doc-stamp {
-    margin-top: 1rem;
-    font-size: 0.75rem;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
   }
 }
 </style>
