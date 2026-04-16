@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, onMounted, onUnmounted } from 'vue';
+import { inject, ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -19,6 +19,12 @@ const programs = [
 // 实时时间，年份为当前年份+1
 const currentTime = ref('');
 let timer: number | null = null;
+let resizeObserver: ResizeObserver | null = null;
+
+const noticeLeft = ref<HTMLElement | null>(null);
+const mobiusSection = ref<HTMLElement | null>(null);
+const redDocument = ref<HTMLElement | null>(null);
+const expiredSectionHeight = ref('');
 
 const updateTime = () => {
   const now = new Date();
@@ -31,20 +37,59 @@ const updateTime = () => {
   currentTime.value = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 };
 
+const updateExpiredSectionHeight = () => {
+  const left = noticeLeft.value;
+  const mobius = mobiusSection.value;
+  const red = redDocument.value;
+
+  if (!left || !mobius || !red) {
+    return;
+  }
+
+  const styles = window.getComputedStyle(left);
+  const gap = parseFloat(styles.rowGap || styles.gap || '0');
+  const height = red.offsetHeight - mobius.offsetHeight - gap;
+
+  expiredSectionHeight.value = height > 0 ? `${height}px` : '';
+};
+
 onMounted(() => {
   updateTime();
   timer = window.setInterval(updateTime, 1000);
+
+  nextTick(() => {
+    updateExpiredSectionHeight();
+
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        updateExpiredSectionHeight();
+      });
+
+      if (mobiusSection.value) {
+        resizeObserver.observe(mobiusSection.value);
+      }
+
+      if (redDocument.value) {
+        resizeObserver.observe(redDocument.value);
+      }
+    }
+  });
+
+  window.addEventListener('resize', updateExpiredSectionHeight);
 });
 
 onUnmounted(() => {
   if (timer) {
     clearInterval(timer);
   }
+
+  window.removeEventListener('resize', updateExpiredSectionHeight);
+  resizeObserver?.disconnect();
 });
 
 // 过期信息数据
 const expiredInfo = [
-  { name: '入梦·北京站', dates: ['2026/04/30', '2026/05/01'] },
+  { name: '入梦·北京站（下面都是暂时编的）', dates: ['2026/04/30', '2026/05/01'] },
   { name: '入梦·上海站', dates: ['2026/03/15', '2026/03/16'] },
   { name: '入梦·广州站', dates: ['2026/02/20', '2026/02/21', '2026/02/22'] },
   { name: '入梦·成都站', dates: ['2026/01/10', '2026/01/11'] },
@@ -80,9 +125,9 @@ const expiredInfo = [
         <div class="container">
           <div class="notice-two-col">
             <!-- 左栏 -->
-            <div class="notice-left">
+            <div class="notice-left" ref="noticeLeft">
               <!-- 上部分：莫比乌斯环和时间 -->
-              <div class="mobius-section">
+              <div class="mobius-section" ref="mobiusSection">
                 <div class="mobius-container">
                   <svg class="mobius-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -101,7 +146,7 @@ const expiredInfo = [
                 <div class="time-display">{{ currentTime }}</div>
               </div>
               <!-- 下部分：过期信息 -->
-              <div class="expired-section">
+              <div class="expired-section" :style="expiredSectionHeight ? { height: expiredSectionHeight } : undefined">
                 <h4 class="expired-title">过期信息</h4>
                 <div class="expired-list">
                   <div class="expired-item" v-for="item in expiredInfo" :key="item.name">
@@ -115,7 +160,7 @@ const expiredInfo = [
             </div>
             <!-- 右栏：红头文件 -->
             <div class="notice-right">
-              <div class="red-document">
+              <div class="red-document" ref="redDocument">
                 <h3 class="red-title">从前书院教务处文件</h3>
                 <div class="red-line"></div>
                 <h4 class="doc-subject">关于黄诗扶全国巡演（上海站）的通知</h4>
@@ -237,7 +282,6 @@ const expiredInfo = [
             </div>
             <div class="elegant-card bg-gold">
               <h3 class="card-title text-dark">从前书院招生办</h3>
-              <p class="mt-4 text-dark">若有心求学，望拨打专线联络。</p>
               <div class="contact-wrap mt-4">
                 <p><strong>[ 统理招生 ] </strong> 卿主任</p>
                 <p class="mt-2 contact-phone"><strong>[ 电话 ] </strong> 0508-728370-01</p>
@@ -394,7 +438,7 @@ const expiredInfo = [
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  max-height: 240px;
+  min-height: 0;
 }
 
 .expired-title {
@@ -409,6 +453,7 @@ const expiredInfo = [
 .expired-list {
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
   padding-right: 0.5rem;
 }
 
@@ -760,7 +805,6 @@ const expiredInfo = [
 
   .expired-section {
     padding: 0.75rem;
-    max-height: 180px;
   }
 
   .expired-title {
