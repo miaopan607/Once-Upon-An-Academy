@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+
 const scenes = [
   {
     course: '音乐',
@@ -36,6 +38,32 @@ const scenes = [
     desc: '（描述）'
   }
 ];
+
+// 实时时间，年份为当前年份+1
+const currentTime = ref('');
+let timer: number | null = null;
+
+const updateTime = () => {
+  const now = new Date();
+  const year = now.getFullYear() + 1;
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  currentTime.value = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+};
+
+onMounted(() => {
+  updateTime();
+  timer = window.setInterval(updateTime, 1000);
+});
+
+onUnmounted(() => {
+  if (timer) {
+    clearInterval(timer);
+  }
+});
 </script>
 
 <template>
@@ -44,7 +72,7 @@ const scenes = [
       <div class="subhero-bg" style="background-image: url('/images/Gemini_Generated_Image_sewh9wsewh9wsewh(1).png');"></div>
       <div class="subhero-overlay"></div>
       <div class="subhero-content">
-        <h1 class="subhero-title">招募与培养</h1>
+        <h1 class="subhero-title">导师</h1>
         <div class="subhero-divider"></div>
         <p class="subhero-motto">五处幻境，五堂必修。以梦为马，不负韶华。</p>
       </div>
@@ -52,8 +80,62 @@ const scenes = [
 
     <div class="main-body">
 
+      <!-- 两栏布局 - 1:2比例 -->
+      <section class="notice-section section-padding bg-paper">
+        <div class="container">
+          <div class="notice-two-col">
+            <!-- 左栏：莫比乌斯环和时间 -->
+            <div class="notice-left">
+              <div class="mobius-section">
+                <div class="mobius-container">
+                  <svg class="mobius-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="mobiusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#8B7355;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:1" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M100,20 C140,20 170,50 170,90 C170,130 140,160 100,160 C70,160 50,140 50,110 C50,80 70,60 100,60 C120,60 135,75 135,95 C135,115 120,130 100,130"
+                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round"/>
+                    <path d="M100,180 C60,180 30,150 30,110 C30,70 60,40 100,40 C130,40 150,60 150,90 C150,120 130,140 100,140 C80,140 65,125 65,105 C65,85 80,70 100,70"
+                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+                  </svg>
+                </div>
+                <div class="time-display">{{ currentTime }}</div>
+              </div>
+            </div>
+            <!-- 右栏：红头文件 -->
+            <div class="notice-right">
+              <div class="red-document">
+                <h3 class="red-title">从前书院教务处文件</h3>
+                <div class="red-line"></div>
+                <h4 class="doc-subject">关于黄诗扶全国巡演（上海站）的通知</h4>
+                <div class="doc-content">
+                  <p>各书院学子、各级班长：</p>
+                  <p>为庆祝本院杰出荣誉校友生辰，同时展示我院在古风音乐领域的至高艺术结晶。特向全体学子预告即将举办的2026年黄诗扶全国巡演上海站盛事。</p>
+                  <div style="margin-bottom: 1rem; padding-left: 2rem;">
+                    <strong style="display: block;">公演吉期：</strong>
+                    <div style="padding-left: 2em; margin-top: 0.3rem; line-height: 1.8;">
+                      2026 / 06 / 19 19:00<br>
+                      2026 / 06 / 20 19:00
+                    </div>
+                  </div>
+                  <p><strong>雅集地点：</strong> 上海市 · 交通银行前滩31演艺中心</p>
+                  <p>望各班学子届时拨冗出席，共襄盛举。</p>
+                  <div class="doc-stamp">
+                    <p>从前书院教务处</p>
+                    <p>2027年5月8日</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- 招生、培养 -->
-      <section class="req-env-section section-padding bg-paper">
+      <section class="req-env-section section-padding">
         <div class="container">
           <div class="section-header text-center" style="display: flex; flex-direction: column; align-items: center;">
             <h2 class="title-primary">招募与培养</h2>
@@ -151,12 +233,12 @@ const scenes = [
 }
 
 .subhero-title {
-  font-size: 3.5rem;
+  font-size: 2.8rem;
   font-weight: 400;
-  letter-spacing: 12px;
+  letter-spacing: 10px;
   margin-bottom: 1rem;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  margin-left: 12px;
+  margin-left: 10px;
 }
 
 .subhero-divider {
@@ -167,8 +249,8 @@ const scenes = [
 }
 
 .subhero-motto {
-  font-size: 1.25rem;
-  letter-spacing: 4px;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
   opacity: 0.9;
 }
 
@@ -187,7 +269,7 @@ const scenes = [
 }
 
 .card-title {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   margin-bottom: 0.5rem;
 }
 
@@ -195,6 +277,104 @@ const scenes = [
   max-width: 700px;
   margin: 0 auto;
   padding: 1rem 0 0;
+}
+
+/* 两栏布局 - 1:2比例 */
+.notice-two-col {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.notice-left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 莫比乌斯环区域 */
+.mobius-section {
+  background: #fff;
+  border: 1px solid rgba(200, 0, 0, 0.15);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mobius-container {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobius-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.time-display {
+  font-size: 0.85rem;
+  color: #666;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+  font-family: monospace;
+}
+
+/* 红头文件装潢 */
+.red-document {
+  background: #fff;
+  padding: 2rem;
+  border: 1px solid rgba(200, 0, 0, 0.15);
+  box-shadow: inset 0 0 50px rgba(200, 0, 0, 0.02), 0 10px 40px rgba(0, 0, 0, 0.03);
+}
+
+.red-title {
+  color: #b71c1c;
+  font-size: 1.6rem;
+  text-align: center;
+  font-weight: bold;
+  font-family: "SimHei", "Microsoft YaHei", sans-serif;
+  letter-spacing: 4px;
+}
+
+.red-line {
+  height: 3px;
+  background: #b71c1c;
+  margin: 1rem 0 1.5rem;
+  box-shadow: 0 2px 0 rgba(183, 28, 28, 0.3);
+}
+
+.doc-subject {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #111;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.doc-content p {
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+  color: #222;
+}
+
+.doc-content>p {
+  text-indent: 2rem;
+}
+
+.doc-content p strong {
+  color: #000;
+}
+
+.doc-stamp {
+  margin-top: 2rem;
+  text-align: right;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
 }
 
 /* 场景卡片 */
@@ -241,26 +421,26 @@ const scenes = [
 
 .course-name {
   display: inline-block;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #C5A059;
   border: 1px solid #C5A059;
   padding: 2px 10px;
   border-radius: 20px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .scene-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: #0f1719;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .mentor-badge {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #555;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
   background-color: rgba(197, 160, 89, 0.1);
-  padding: 8px 15px;
+  padding: 6px 12px;
   display: inline-block;
 }
 
@@ -270,7 +450,7 @@ const scenes = [
 
 .scene-desc {
   color: #666;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   text-align: justify;
 }
 
@@ -281,7 +461,57 @@ const scenes = [
   }
 
   .subhero-title {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+  }
+
+  .notice-two-col {
+    grid-template-columns: 1fr 2fr;
+    gap: 0.75rem;
+  }
+
+  .notice-left {
+    order: 1;
+  }
+
+  .notice-right {
+    order: 2;
+  }
+
+  .mobius-section {
+    padding: 0.5rem;
+  }
+
+  .time-display {
+    font-size: 0.7rem;
+  }
+
+  .red-document {
+    padding: 0.75rem;
+  }
+
+  .red-title {
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .red-line {
+    margin: 0.5rem 0 0.75rem;
+    height: 2px;
+  }
+
+  .doc-subject {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .doc-content p {
+    font-size: 0.75rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .doc-stamp {
+    margin-top: 1rem;
+    font-size: 0.75rem;
   }
 }
 </style>

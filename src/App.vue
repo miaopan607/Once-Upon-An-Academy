@@ -6,11 +6,6 @@ const route = useRoute();
 const isScrolled = ref(false);
 const showToast = ref(false);
 const toastMessage = ref('');
-const isMobileMenuOpen = ref(false);
-
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value;
-};
 
 const showCustomAlert = (msg: string) => {
   toastMessage.value = msg;
@@ -35,13 +30,10 @@ onUnmounted(() => {
 });
 
 const navLinks = [
-  { name: '学校概况', path: '/' },
-  { name: '招募与培养', path: '/recruit' },
+  { name: '校园', path: '/' },
+  { name: '导师', path: '/recruit' },
+  { name: '学院', path: '/academy' },
 ];
-
-const closeMobileMenu = () => {
-  isMobileMenuOpen.value = false;
-};
 </script>
 
 <template>
@@ -50,16 +42,22 @@ const closeMobileMenu = () => {
     <!-- Header -->
     <header :class="{ 'header-scrolled': isScrolled }">
       <div class="header-content">
-        <router-link to="/" class="logo" style="white-space: nowrap;" @click="closeMobileMenu">从前书院</router-link>
-        <div class="mobile-toggle" @click="toggleMobileMenu">
-          <span></span><span></span><span></span>
-        </div>
-        <nav class="nav-links" :class="{ 'nav-open': isMobileMenuOpen }">
+        <router-link to="/" class="logo" style="white-space: nowrap;">从前书院</router-link>
+        <nav class="nav-links desktop-nav">
           <router-link v-for="link in navLinks" :key="link.path" :to="link.path"
-            :class="{ active: route.path === link.path }" @click="closeMobileMenu">
+            :class="{ active: route.path === link.path }">
             {{ link.name }}
           </router-link>
         </nav>
+      </div>
+      <!-- 移动端导航栏 -->
+      <div class="mobile-nav">
+        <div class="mobile-nav-scroll">
+          <router-link v-for="link in navLinks" :key="link.path" :to="link.path"
+            :class="{ active: route.path === link.path }">
+            {{ link.name }}
+          </router-link>
+        </div>
       </div>
     </header>
 
@@ -109,7 +107,7 @@ header.header-scrolled {
 }
 
 .logo {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #fff;
   letter-spacing: 4px;
@@ -122,7 +120,7 @@ header.header-scrolled .logo {
 
 .nav-links a {
   margin-left: 2rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.85);
   transition: all 0.3s;
   letter-spacing: 1px;
@@ -155,6 +153,42 @@ header.header-scrolled .logo {
   padding-bottom: 4px;
 }
 
+/* 移动端导航栏 */
+.mobile-nav {
+  display: none;
+  background: #0f1719;
+  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mobile-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-nav-scroll {
+  display: flex;
+  padding: 0.6rem 1rem;
+  gap: 1.5rem;
+  white-space: nowrap;
+}
+
+.mobile-nav-scroll a {
+  font-size: 0.85rem;
+  color: #888;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+  flex-shrink: 0;
+}
+
+.mobile-nav-scroll a.active {
+  color: #F5C542;
+  font-weight: 500;
+}
+
 /* Custom Toast Modal */
 .custom-toast {
   position: fixed;
@@ -163,9 +197,9 @@ header.header-scrolled .logo {
   transform: translate(-50%, -50%) scale(0.9);
   background: rgba(15, 23, 25, 0.9);
   color: #C5A059;
-  padding: 1.2rem 3rem;
+  padding: 1rem 2.5rem;
   border-radius: 8px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   letter-spacing: 2px;
   z-index: 9999;
   opacity: 0;
@@ -182,42 +216,27 @@ header.header-scrolled .logo {
 
 /* 移动端适配 */
 @media (max-width: 768px) {
-  .mobile-toggle {
-    display: flex;
-  }
-
-  .nav-links {
+  .desktop-nav {
     display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #0f1719;
-    flex-direction: column;
-    padding: 1rem 0;
   }
 
-  .nav-links.nav-open {
-    display: flex;
-  }
-
-  .nav-links a {
-    margin: 0.5rem 0;
-    text-align: center;
+  .mobile-nav {
+    display: block;
   }
 
   header,
   header.header-scrolled {
-    padding: 0.5rem 0;
+    padding: 0;
     background: #0f1719;
   }
 
   .header-content {
     flex-wrap: wrap;
+    padding: 0.6rem 1rem;
   }
 
   .logo {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 }
 </style>

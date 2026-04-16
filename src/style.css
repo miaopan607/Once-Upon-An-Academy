@@ -126,7 +126,7 @@ img {
 
 /* 字体排版 */
 .title-primary {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: #0f1719;
   letter-spacing: 2px;
@@ -135,21 +135,21 @@ img {
 }
 
 .subtitle-primary {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: #C5A059;
   letter-spacing: 3px;
   margin-top: 0.5rem;
 }
 
 .text-lead {
-  font-size: 1.25rem;
-  line-height: 2.2;
+  font-size: 1.1rem;
+  line-height: 2;
   color: #333;
 }
 
 .text-detail {
-  font-size: 1.05rem;
-  line-height: 1.9;
+  font-size: 0.95rem;
+  line-height: 1.8;
   color: #444;
 }
 
