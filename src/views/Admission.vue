@@ -55,7 +55,11 @@ const tours = [
 
           <div class="timeline-scroll">
             <div class="timeline-track">
-              <div class="tl-item" v-for="(item, idx) in tours" :key="idx" :class="idx % 2 === 0 ? 'tl-item-above' : 'tl-item-below'">
+              <div class="tl-item" v-for="(item, idx) in tours" :key="idx" :class="[
+                  idx % 2 === 0 ? 'tl-item-above' : 'tl-item-below',
+                  idx === 0 ? 'tl-item-first' : '',
+                  idx === tours.length - 1 ? 'tl-item-last' : ''
+                ]">
                 <div class="tl-upper">
                   <template v-if="idx % 2 === 0">
                     <div class="tl-date">{{ item.dates[0] }}</div>
@@ -85,8 +89,8 @@ const tours = [
                   </template>
                 </div>
               </div>
+              <!-- timeline line drawn via .tl-dot pseudo-elements -->
             </div>
-            <div class="timeline-line"></div>
           </div>
         </div>
       </section>
@@ -201,15 +205,36 @@ const tours = [
   position: relative;
 }
 
-.timeline-line {
+/* 时间轴连接线：通过圆点伪元素绘制 */
+.tl-dot::before,
+.tl-dot::after {
+  content: '';
   position: absolute;
   top: 50%;
-  left: 2rem;
-  right: 2rem;
   height: 2px;
   background: #e2dac9;
-  z-index: 0;
   transform: translateY(-50%);
+  z-index: -1;
+}
+
+.tl-dot::before {
+  right: 100%;
+  width: calc(140px / 2);
+}
+
+.tl-dot::after {
+  left: 100%;
+  width: calc(140px / 2);
+}
+
+/* 第一站：左边不画线 */
+.tl-item-first .tl-dot::before {
+  display: none;
+}
+
+/* 最后一站：右边不画线 */
+.tl-item-last .tl-dot::after {
+  display: none;
 }
 
 .tl-item {
@@ -241,18 +266,20 @@ const tours = [
 .tl-lower {
   text-align: center;
   padding: 0 0.5rem;
-  min-height: 3rem;
+  height: 4.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  overflow: hidden;
 }
 
 .tl-upper {
   margin-bottom: 0.8rem;
+  justify-content: flex-end;
 }
 
 .tl-lower {
   margin-top: 0.8rem;
+  justify-content: flex-start;
 }
 
 .tl-item-above .tl-upper {
@@ -330,7 +357,9 @@ const tours = [
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
   .tl-item { min-width: 110px; }
-  .tl-upper, .tl-lower { min-height: 2.5rem; }
+  .tl-dot::before { width: calc(110px / 2); }
+  .tl-dot::after { width: calc(110px / 2); }
+  .tl-upper, .tl-lower { height: 3.5rem; }
   .page-entry { padding: 3rem 0 2rem; }
 }
 </style>
