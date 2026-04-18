@@ -1,22 +1,6 @@
 <script setup lang="ts">
-import { inject, ref, onMounted, onUnmounted, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 
-const router = useRouter();
-const showCustomAlert = inject<(msg: string) => void>('showCustomAlert')!;
-
-const goToRecruit = () => {
-  router.push('/recruit');
-};
-
-const programs = [
-  { title: '（标题）', type: '类型（音乐）', link: '#' },
-  { title: '（标题）', type: '类型（视频）', link: '#' },
-  { title: '（标题）', type: '类型（舞蹈）', link: '#' },
-  { title: '（标题）', type: '类型（彩蛋）', link: '#' }
-];
-
-// 实时时间，年份为当前年份+1
 const currentTime = ref('');
 let timer: number | null = null;
 let resizeObserver: ResizeObserver | null = null;
@@ -44,68 +28,41 @@ const updateExpiredSectionHeight = () => {
   const left = noticeLeft.value;
   const mobius = mobiusSection.value;
   const red = redDocument.value;
-
-  if (!left || !mobius || !red) {
-    return;
-  }
+  if (!left || !mobius || !red) return;
 
   const styles = window.getComputedStyle(left);
   const gap = parseFloat(styles.rowGap || styles.gap || '0');
   const height = red.offsetHeight - mobius.offsetHeight - gap;
-
   expiredSectionHeight.value = height > 0 ? `${height}px` : '';
 };
 
 const updateNoticeBarVisibility = () => {
   const timeEl = timeDisplayEl.value;
   const titleEl = redTitleEl.value;
-
-  if (!timeEl || !titleEl) {
-    showNoticeBar.value = false;
-    return;
-  }
-
+  if (!timeEl || !titleEl) { showNoticeBar.value = false; return; }
   const triggerTop = window.innerWidth <= 768 ? 100 : 76;
-
-  showNoticeBar.value =
-    timeEl.getBoundingClientRect().bottom <= triggerTop &&
-    titleEl.getBoundingClientRect().bottom <= triggerTop;
+  showNoticeBar.value = timeEl.getBoundingClientRect().bottom <= triggerTop && titleEl.getBoundingClientRect().bottom <= triggerTop;
 };
 
 onMounted(() => {
   updateTime();
   timer = window.setInterval(updateTime, 1000);
-
   nextTick(() => {
     updateExpiredSectionHeight();
     updateNoticeBarVisibility();
-
     if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(() => {
-        updateExpiredSectionHeight();
-        updateNoticeBarVisibility();
-      });
-
-      if (mobiusSection.value) {
-        resizeObserver.observe(mobiusSection.value);
-      }
-
-      if (redDocument.value) {
-        resizeObserver.observe(redDocument.value);
-      }
+      resizeObserver = new ResizeObserver(() => { updateExpiredSectionHeight(); updateNoticeBarVisibility(); });
+      if (mobiusSection.value) resizeObserver.observe(mobiusSection.value);
+      if (redDocument.value) resizeObserver.observe(redDocument.value);
     }
   });
-
   window.addEventListener('scroll', updateNoticeBarVisibility);
   window.addEventListener('resize', updateExpiredSectionHeight);
   window.addEventListener('resize', updateNoticeBarVisibility);
 });
 
 onUnmounted(() => {
-  if (timer) {
-    clearInterval(timer);
-  }
-
+  if (timer) clearInterval(timer);
   window.removeEventListener('scroll', updateNoticeBarVisibility);
   window.removeEventListener('resize', updateExpiredSectionHeight);
   window.removeEventListener('resize', updateNoticeBarVisibility);
@@ -114,17 +71,14 @@ onUnmounted(() => {
 
 const getDateSortValue = (date: string) => {
   const [year, month, day] = date.split('/').map(Number);
-
   return new Date(year, month - 1, day).getTime();
 };
 
 const getExpiredInfoSortValue = (dates: string[]) => {
   const sortDate = dates[dates.length - 1] ?? dates[0] ?? '1970/01/01';
-
   return getDateSortValue(sortDate);
 };
 
-// 过期信息数据
 const expiredInfo = [
   { name: '人间·广州站', dates: ['2023/05/02'] },
   { name: '人间·武汉站', dates: ['2023/06/10'] },
@@ -150,7 +104,7 @@ const expiredInfo = [
 </script>
 
 <template>
-  <div class="home-page">
+  <div class="overview-page">
     <div v-if="showNoticeBar" class="notice-frozen-bar">
       <div class="notice-frozen-content">
         <div class="notice-frozen-time">{{ currentTime }}</div>
@@ -162,23 +116,19 @@ const expiredInfo = [
       <div class="subhero-bg" style="background-image: url('/hero.png');"></div>
       <div class="subhero-overlay"></div>
       <div class="subhero-content">
-        <h1 class="subhero-title">校园</h1>
+        <h1 class="subhero-title">学校概况</h1>
         <div class="subhero-divider"></div>
         <p class="subhero-motto">相信爱永存 · 感谢传统文化带来的力量</p>
-        <p class="subhero-motto">（这张图乱放的）</p>
       </div>
     </section>
 
-    <!-- 主体内容 -->
     <div class="main-body">
 
-      <!-- 红头文件通知 - 两栏布局 -->
+      <!-- 红头文件通知 -->
       <section class="notice-section section-padding bg-paper">
         <div class="container">
           <div class="notice-two-col">
-            <!-- 左栏 -->
             <div class="notice-left" ref="noticeLeft">
-              <!-- 上部分：莫比乌斯环和时间 -->
               <div class="mobius-section" ref="mobiusSection">
                 <div class="mobius-container">
                   <svg class="mobius-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -189,17 +139,14 @@ const expiredInfo = [
                         <stop offset="100%" style="stop-color:#C5A059;stop-opacity:1" />
                       </linearGradient>
                     </defs>
-                    <path
-                      d="M100,20 C140,20 170,50 170,90 C170,130 140,160 100,160 C70,160 50,140 50,110 C50,80 70,60 100,60 C120,60 135,75 135,95 C135,115 120,130 100,130"
-                      fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" />
-                    <path
-                      d="M100,180 C60,180 30,150 30,110 C30,70 60,40 100,40 C130,40 150,60 150,90 C150,120 130,140 100,140 C80,140 65,125 65,105 C65,85 80,70 100,70"
-                      fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6" />
+                    <path d="M100,20 C140,20 170,50 170,90 C170,130 140,160 100,160 C70,160 50,140 50,110 C50,80 70,60 100,60 C120,60 135,75 135,95 C135,115 120,130 100,130"
+                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" />
+                    <path d="M100,180 C60,180 30,150 30,110 C30,70 60,40 100,40 C130,40 150,60 150,90 C150,120 130,140 100,140 C80,140 65,125 65,105 C65,85 80,70 100,70"
+                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6" />
                   </svg>
                 </div>
                 <div class="time-display" ref="timeDisplayEl">{{ currentTime }}</div>
               </div>
-              <!-- 下部分：过期信息 -->
               <div class="expired-section" :style="expiredSectionHeight ? { height: expiredSectionHeight } : undefined">
                 <h4 class="expired-title">过期信息</h4>
                 <div class="expired-list">
@@ -212,7 +159,6 @@ const expiredInfo = [
                 </div>
               </div>
             </div>
-            <!-- 右栏：红头文件 -->
             <div class="notice-right">
               <div class="red-document" ref="redDocument">
                 <h3 class="red-title" ref="redTitleEl">从前书院教务处文件</h3>
@@ -245,7 +191,7 @@ const expiredInfo = [
       <section class="campus-overview section-padding">
         <div class="container">
           <div class="section-header text-center">
-            <h2 class="title-primary">校园概况</h2>
+            <h2 class="title-primary">书院概况</h2>
           </div>
           <div class="overview-content">
             <p class="overview-text">
@@ -255,32 +201,62 @@ const expiredInfo = [
         </div>
       </section>
 
-      <!-- 荣誉校友与校史 -->
+      <!-- 校训·精神·理念 -->
+      <section class="motto-section section-padding bg-paper">
+        <div class="container">
+          <div class="section-header text-center">
+            <h2 class="title-primary">立校之本</h2>
+            <p class="subtitle-primary">勤学好诗 · 知行合一</p>
+          </div>
+          <div class="motto-cards">
+            <div class="motto-card">
+              <div class="motto-label">校训</div>
+              <div class="motto-text">勤学好诗，爱国爱扶</div>
+              <div class="motto-divider"></div>
+              <p class="motto-desc">以勤治学，以诗修身；心系家国，以爱扶人。</p>
+            </div>
+            <div class="motto-card motto-card-dark">
+              <div class="motto-label">学校精神</div>
+              <div class="motto-text">以诗为本，以扶为怀，知行合一</div>
+              <div class="motto-divider"></div>
+              <p class="motto-desc">诗为根本，扶济苍生，所学即所行，所行即所信。</p>
+            </div>
+            <div class="motto-card">
+              <div class="motto-label">教育理念</div>
+              <div class="motto-text">人间最值得，醒来多加餐</div>
+              <div class="motto-divider"></div>
+              <p class="motto-desc">人间值得留恋，醒后仍需加餐——以乐观之心面对世间，以务实之态耕耘自我。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 校史拾遗与荣誉校友 -->
       <section class="history-alumni-section section-padding">
         <div class="container split-layout">
           <div class="split-col">
             <div class="section-header">
               <h2 class="title-primary">校史拾遗</h2>
-              <p class="subtitle-primary">（描述）</p>
+              <p class="subtitle-primary">从大四书院到从前书院</p>
             </div>
             <div class="elegant-card h-full">
-              <h3 class="card-title">（标题）</h3>
+              <h3 class="card-title">道阻且长，行则将至</h3>
               <p class="mt-4 text-detail">
-                （内容）
+                从前书院的前身大四书院，曾与四大书院齐名于世。历经教改，更名为从前书院，薪火相传，弦歌不辍。从最初的筚路蓝缕到如今的桃李满天下，书院始终秉持"以诗为本，以扶为怀"之精神，在国风音乐与传统文化领域深耕不辍，终成今日之规模与声望。
               </p>
             </div>
           </div>
           <div class="split-col">
             <div class="section-header">
               <h2 class="title-primary">荣誉校友</h2>
-              <p class="subtitle-primary">（描述）</p>
+              <p class="subtitle-primary">书院之光，学子楷模</p>
             </div>
             <div class="elegant-card elegant-card-dark h-full">
               <h3 class="card-title text-gold">黄诗扶</h3>
-              <p class="tagline mt-2">（称号） / （称号） / （称号）</p>
+              <p class="tagline mt-2">国风歌者 / 古风音乐人 / 诗意唱作人</p>
               <ul class="resume-list mt-4">
-                <li><strong>代表作：</strong>（代表作）</li>
-                <li><strong>（其他内容）：</strong>（内容）</li>
+                <li><strong>代表作品：</strong>《九万字》《人间不值得》《杨花落尽》《人间朝暮》等</li>
+                <li><strong>艺术成就：</strong>以独特的诗意嗓音与深厚的文化底蕴，在国风音乐领域独树一帜</li>
               </ul>
             </div>
           </div>
@@ -292,91 +268,16 @@ const expiredInfo = [
         <div class="container">
           <div class="section-header">
             <h2 class="title-primary">雅学之境</h2>
-            <p class="subtitle-primary">（描述）</p>
+            <p class="subtitle-primary">依山傍水，潜心修学</p>
           </div>
           <div class="env-image"
             style="background-image: url('/campus.png'); background-size: cover; background-position: center; border: 1px solid #e2dac9; position: relative; width: 100%; height: 400px;">
             <div
               style="position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(transparent, rgba(15,23,25,0.9)); padding: 2rem;">
               <h3 style="color: #C5A059; font-size: 1.4rem; margin-bottom: 0.2rem;">校园环境</h3>
-              <p style="color: #eee; font-size: 0.95rem;">（描述）（先随便放一个图）</p>
+              <p style="color: #eee; font-size: 0.95rem;">后倚有座山，前饮清水河，左木修，右池阔</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- 留言与咨询 -->
-      <section class="interactive-section section-padding">
-        <div class="container split-layout">
-          <div class="split-col">
-            <div class="section-header">
-              <h2 class="title-primary">学子留言壁</h2>
-              <p class="subtitle-primary">（描述）</p>
-            </div>
-            <div class="message-board">
-              <div class="message-item">
-                <span class="author">@（昵称）：</span>
-                <span class="content">（内容）</span>
-              </div>
-              <div class="message-item">
-                <span class="author">@（昵称）：</span>
-                <span class="content">（内容）</span>
-              </div>
-              <div class="message-item">
-                <span class="author">@（昵称）：</span>
-                <span class="content">（内容）</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="split-col">
-            <div class="section-header">
-              <h2 class="title-primary">联系我们</h2>
-              <p class="subtitle-primary">缘起从前，一见如故</p>
-            </div>
-            <div class="elegant-card bg-gold">
-              <h3 class="card-title text-dark">从前书院招生办</h3>
-              <div class="contact-wrap mt-4">
-                <p><strong>[ 统理招生 ] </strong> 卿主任</p>
-                <p class="mt-2 contact-phone"><strong>[ 电话 ] </strong> 0508-728370-01</p>
-                <p class="mt-2"><strong>[ 纳税号 ] </strong> 8181897268748467</p>
-                <p class="mt-2"><strong>[ 地址 ] </strong> 入间省人梦市清醒县有座山镇今日无路从前书院</p>
-                <p class="mt-2"><strong>[ 邮箱 ] </strong> 0508huangshifuhappy@birth.day.com</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 节目板块 -->
-      <section class="programs-section section-padding bg-alt">
-        <div class="container text-center">
-          <div class="section-header mb-6">
-            <h2 class="title-primary">生贺节目大观</h2>
-            <p class="subtitle-primary mt-2">校园开放日：每年5月8日 · 节目档案陆续解锁中...</p>
-          </div>
-          <div class="programs-grid">
-            <a :href="prog.link" class="program-card" v-for="prog in programs" :key="prog.title"
-              @click.prevent="showCustomAlert('链接🔗更新中，敬请期待！')">
-              <div class="prog-type">{{ prog.type }}</div>
-              <h4 class="prog-title">{{ prog.title }}</h4>
-              <div class="prog-status">敬请期待</div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- 底部入口：招募与培养 -->
-      <section class="recruit-entry section-padding">
-        <div class="container text-center">
-          <button class="entry-btn" @click="goToRecruit">
-            <span>前往 · 招募与培养</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </button>
         </div>
       </section>
 
@@ -385,7 +286,6 @@ const expiredInfo = [
 </template>
 
 <style scoped>
-/* Subhero Banner */
 .subhero {
   position: relative;
   height: 500px;
@@ -399,20 +299,16 @@ const expiredInfo = [
 
 .subhero-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background-size: cover;
   background-position: center;
 }
 
 .subhero-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: linear-gradient(to bottom, rgba(15, 23, 25, 0.6), rgba(15, 23, 25, 0.9));
 }
 
@@ -444,7 +340,7 @@ const expiredInfo = [
   opacity: 0.9;
 }
 
-.home-page {
+.overview-page {
   --notice-frozen-top: 4.75rem;
 }
 
@@ -489,7 +385,6 @@ const expiredInfo = [
   white-space: nowrap;
 }
 
-/* 两栏布局 */
 .notice-two-col {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -503,7 +398,6 @@ const expiredInfo = [
   gap: 1rem;
 }
 
-/* 莫比乌斯环区域 */
 .mobius-section {
   background: #fff;
   border: 1px solid rgba(200, 0, 0, 0.15);
@@ -521,10 +415,7 @@ const expiredInfo = [
   justify-content: center;
 }
 
-.mobius-svg {
-  width: 100%;
-  height: 100%;
-}
+.mobius-svg { width: 100%; height: 100%; }
 
 .time-display {
   font-size: 1rem;
@@ -534,7 +425,6 @@ const expiredInfo = [
   font-family: monospace;
 }
 
-/* 过期信息区域 */
 .expired-section {
   background: #fff;
   border: 1px solid rgba(200, 0, 0, 0.15);
@@ -560,18 +450,9 @@ const expiredInfo = [
   padding-right: 0.5rem;
 }
 
-.expired-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.expired-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.expired-list::-webkit-scrollbar-thumb {
-  background: #C5A059;
-  border-radius: 2px;
-}
+.expired-list::-webkit-scrollbar { width: 4px; }
+.expired-list::-webkit-scrollbar-track { background: #f1f1f1; }
+.expired-list::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 2px; }
 
 .expired-item {
   margin-bottom: 0.8rem;
@@ -579,29 +460,14 @@ const expiredInfo = [
   border-bottom: 1px dashed #eee;
 }
 
-.expired-item:last-child {
-  border-bottom: none;
-}
+.expired-item:last-child { border-bottom: none; }
 
-.expired-name {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #333;
-  margin-bottom: 0.3rem;
-}
+.expired-name { font-weight: 600; font-size: 0.9rem; color: #333; margin-bottom: 0.3rem; }
 
-.expired-dates {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
+.expired-dates { display: flex; flex-direction: column; gap: 0.2rem; }
 
-.expired-date {
-  font-size: 0.8rem;
-  color: #888;
-}
+.expired-date { font-size: 0.8rem; color: #888; }
 
-/* 校园概况 */
 .campus-overview {
   background: linear-gradient(to bottom, #f5f0e6, #fdfbf7);
 }
@@ -623,7 +489,69 @@ const expiredInfo = [
   text-indent: 2em;
 }
 
-/* 红头文件装潢 */
+/* 立校之本 */
+.motto-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.motto-card {
+  background: #fff;
+  padding: 2.5rem 2rem;
+  border-top: 3px solid #0f1719;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
+  text-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.motto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+}
+
+.motto-card-dark {
+  background: #0f1719;
+  color: #fff;
+  border-top: 3px solid #C5A059;
+}
+
+.motto-label {
+  font-size: 0.85rem;
+  color: #C5A059;
+  letter-spacing: 3px;
+  margin-bottom: 1.2rem;
+}
+
+.motto-card-dark .motto-label { color: #C5A059; }
+
+.motto-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #0f1719;
+  letter-spacing: 2px;
+  line-height: 1.8;
+}
+
+.motto-card-dark .motto-text { color: #fff; }
+
+.motto-divider {
+  width: 40px;
+  height: 2px;
+  background: #C5A059;
+  margin: 1.2rem auto;
+}
+
+.motto-desc {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.8;
+}
+
+.motto-card-dark .motto-desc { color: #aaa; }
+
+/* 红头文件 */
 .red-document {
   background: #fff;
   padding: 2rem;
@@ -662,13 +590,9 @@ const expiredInfo = [
   text-indent: 2em;
 }
 
-.doc-content p strong {
-  color: #000;
-}
+.doc-content p strong { color: #000; }
 
-.doc-date-section {
-  margin-bottom: 0.8rem;
-}
+.doc-date-section { margin-bottom: 0.8rem; }
 
 .doc-date-label {
   display: block;
@@ -693,7 +617,7 @@ const expiredInfo = [
   color: #111;
 }
 
-/* 优雅卡片系统 */
+/* 优雅卡片 */
 .elegant-card {
   background: #fff;
   padding: 3rem;
@@ -713,299 +637,37 @@ const expiredInfo = [
   border-top: 3px solid #C5A059;
 }
 
-.card-title {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
-}
+.card-title { font-size: 1.4rem; margin-bottom: 0.5rem; }
 
-/* 留言板 */
-.message-board {
-  border-left: 2px solid #C5A059;
-  padding-left: 2.5rem;
-  position: relative;
-}
+.env-image { border-radius: 4px; }
 
-.message-item {
-  margin-bottom: 2rem;
-  position: relative;
-}
+.tagline { font-size: 0.95rem; color: #aaa; letter-spacing: 1px; }
 
-.message-item::before {
-  content: '';
-  position: absolute;
-  left: calc(-2.5rem - 1px);
-  transform: translateX(-50%);
-  top: 8px;
-  width: 12px;
-  height: 12px;
-  background: #fdfbf7;
-  border: 2px solid #C5A059;
-  border-radius: 50%;
-}
-
-.author {
-  font-weight: bold;
-  color: #0f1719;
-  display: block;
-  margin-bottom: 0.3rem;
-}
-
-.content {
-  color: #555;
-  font-style: italic;
-}
-
-/* Contact Info */
-.contact-wrap p {
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-.contact-phone {
-  font-size: 1.05rem;
-  color: #0f1719;
-}
-
-.magical-font {
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-/* 节目板块 */
-.programs-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-}
-
-.program-card {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 2rem;
-  text-decoration: none;
-  min-width: 250px;
-  transition: all 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
-.program-card:hover {
-  border-color: #C5A059;
-  box-shadow: 0 10px 30px rgba(197, 160, 89, 0.15);
-  transform: translateY(-5px);
-}
-
-.prog-type {
-  font-size: 0.8rem;
-  color: #C5A059;
-  letter-spacing: 2px;
-  margin-bottom: 0.8rem;
-}
-
-.prog-title {
-  color: #0f1719;
-  font-size: 1.15rem;
-  margin-bottom: 1.2rem;
-}
-
-.prog-status {
-  font-size: 0.85rem;
-  color: #999;
-  border-top: 1px solid #eee;
-  padding-top: 0.8rem;
-}
-
-.program-card:hover .prog-status {
-  color: #C5A059;
-}
-
-/* 雅学之境 */
-.env-image {
-  border-radius: 4px;
-}
-
-/* 底部入口 */
-.recruit-entry {
-  padding: 5rem 0 4rem;
-  background: #f5f0e6;
-}
-
-.entry-hint {
-  font-size: 1.1rem;
-  color: #555;
-  letter-spacing: 3px;
-  margin-bottom: 2rem;
-}
-
-.entry-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.8rem 2rem;
-  font-family: "Noto Serif SC", "STSong", "SimSun", serif;
-  font-size: 1rem;
-  color: #C5A059;
-  background: #0f1719;
-  border: 1px solid rgba(197, 160, 89, 0.3);
-  cursor: pointer;
-  letter-spacing: 2px;
-  transition: all 0.35s ease;
-}
-
-.entry-btn:hover {
-  background: #1a2a2e;
-  border-color: #C5A059;
-  box-shadow: 0 8px 30px rgba(197, 160, 89, 0.2);
-  transform: translateY(-3px);
-}
-
-/* 桌面端/移动端切换 */
-.desktop-only {
-  display: inline-flex;
-}
-
-.mobile-only {
-  display: none;
-}
-
-/* 移动端适配 */
 @media (max-width: 768px) {
-  .subhero {
-    height: 350px;
-  }
-
-  .subhero-title {
-    font-size: 1.8rem;
-  }
-
-  .home-page {
-    --notice-frozen-top: 6.25rem;
-  }
-
-  .notice-frozen-content {
-    padding: 0.5rem 1rem;
-    gap: 0.75rem;
-  }
-
-  .notice-frozen-time {
-    font-size: 0.78rem;
-  }
-
-  .notice-frozen-title {
-    font-size: 0.88rem;
-    letter-spacing: 2px;
-  }
-
-  .notice-two-col {
-    grid-template-columns: 2fr 3fr;
-    gap: 0.75rem;
-    align-items: start;
-  }
-
-  .notice-left {
-    order: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .notice-right {
-    order: 2;
-  }
-
-  .mobius-section {
-    padding: 0.5rem;
-  }
-
-  .time-display {
-    font-size: 0.7rem;
-  }
-
-  .expired-section {
-    padding: 0.75rem;
-  }
-
-  .expired-title {
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .expired-name {
-    font-size: 0.8rem;
-  }
-
-  .expired-date {
-    font-size: 0.75rem;
-  }
-
-  .red-document {
-    padding: 0.75rem;
-  }
-
-  .red-title {
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-  }
-
-  .red-line {
-    margin: 0.75rem 0 1rem;
-  }
-
-  .doc-subject {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-  }
-
-  .doc-content p {
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-    text-indent: 2em;
-  }
-
-  .doc-date-section {
-    margin-bottom: 0.5rem;
-  }
-
-  .doc-date-label {
-    font-size: 0.85rem;
-    padding-left: 2em;
-  }
-
-  .doc-date-list {
-    font-size: 0.85rem;
-    padding-left: 2em;
-  }
-
-  .doc-stamp {
-    margin-top: 1.5rem;
-    font-size: 0.85rem;
-  }
-
-  .contact-wrap p {
-    font-size: 0.9rem;
-  }
-
-  .contact-phone {
-    font-size: 0.9rem;
-  }
-
-  .env-image {
-    height: 260px !important;
-  }
-
-  .desktop-only {
-    display: none !important;
-  }
-
-  .mobile-only {
-    display: block;
-  }
-
-  .recruit-entry {
-    padding: 3rem 0 2rem;
-  }
+  .subhero { height: 350px; }
+  .subhero-title { font-size: 1.8rem; }
+  .overview-page { --notice-frozen-top: 6.25rem; }
+  .notice-frozen-content { padding: 0.5rem 1rem; gap: 0.75rem; }
+  .notice-frozen-time { font-size: 0.78rem; }
+  .notice-frozen-title { font-size: 0.88rem; letter-spacing: 2px; }
+  .notice-two-col { grid-template-columns: 2fr 3fr; gap: 0.75rem; align-items: start; }
+  .mobius-section { padding: 0.5rem; }
+  .time-display { font-size: 0.7rem; }
+  .expired-section { padding: 0.75rem; }
+  .expired-title { font-size: 0.85rem; margin-bottom: 0.5rem; }
+  .expired-name { font-size: 0.8rem; }
+  .expired-date { font-size: 0.75rem; }
+  .red-document { padding: 0.75rem; }
+  .red-title { font-size: 1.1rem; letter-spacing: 3px; }
+  .red-line { margin: 0.75rem 0 1rem; }
+  .doc-subject { font-size: 0.9rem; margin-bottom: 1rem; }
+  .doc-content p { font-size: 0.85rem; margin-bottom: 0.5rem; text-indent: 2em; }
+  .doc-date-section { margin-bottom: 0.5rem; }
+  .doc-date-label { font-size: 0.85rem; }
+  .doc-date-list { font-size: 0.85rem; }
+  .doc-stamp { margin-top: 1.5rem; font-size: 0.85rem; }
+  .env-image { height: 260px !important; }
+  .motto-cards { grid-template-columns: 1fr; gap: 1.5rem; }
+  .motto-card { padding: 2rem 1.5rem; }
 }
 </style>

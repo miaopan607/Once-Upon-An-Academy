@@ -30,9 +30,14 @@ onUnmounted(() => {
 });
 
 const navLinks = [
-  { name: '校园', path: '/' },
-  { name: '导师', path: '/recruit' },
-  { name: '学院', path: '/academy' },
+  { name: '学校概况', path: '/' },
+  { name: '机构设置', path: '/organization' },
+  { name: '师资队伍', path: '/faculty' },
+  { name: '人才培养', path: '/talent' },
+  { name: '学术研究', path: '/research' },
+  { name: '招生就业', path: '/admission' },
+  { name: '网上教学', path: '/online-learning' },
+  { name: '联系我们', path: '/contact' },
 ];
 </script>
 
@@ -119,8 +124,8 @@ header.header-scrolled .logo {
 }
 
 .nav-links a {
-  margin-left: 2rem;
-  font-size: 0.9rem;
+  margin-left: 1.4rem;
+  font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.85);
   transition: all 0.3s;
   letter-spacing: 1px;
