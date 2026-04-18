@@ -220,11 +220,6 @@ header.header-scrolled .logo {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* 主内容区域 - 为固定头部留出空间 */
-.main-content {
-  padding-top: 76px;
-}
-
 /* 移动端适配 */
 @media (max-width: 768px) {
   .main-content {
