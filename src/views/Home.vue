@@ -112,21 +112,41 @@ onUnmounted(() => {
   resizeObserver?.disconnect();
 });
 
+const getDateSortValue = (date: string) => {
+  const [year, month, day] = date.split('/').map(Number);
+
+  return new Date(year, month - 1, day).getTime();
+};
+
+const getExpiredInfoSortValue = (dates: string[]) => {
+  const sortDate = dates[dates.length - 1] ?? dates[0] ?? '1970/01/01';
+
+  return getDateSortValue(sortDate);
+};
+
 // 过期信息数据
 const expiredInfo = [
-  { name: '入梦·北京站（下面都是暂时编的）', dates: ['2026/04/30', '2026/05/01'] },
-  { name: '入梦·上海站', dates: ['2026/03/15', '2026/03/16'] },
-  { name: '入梦·广州站', dates: ['2026/02/20', '2026/02/21', '2026/02/22'] },
-  { name: '入梦·成都站', dates: ['2026/01/10', '2026/01/11'] },
-  { name: '入梦·杭州站', dates: ['2025/12/25', '2025/12/26'] },
-  { name: '入梦·南京站', dates: ['2025/12/05', '2025/12/06'] },
-  { name: '入梦·西安站', dates: ['2025/11/20', '2025/11/21'] },
-  { name: '入梦·武汉站', dates: ['2025/11/01', '2025/11/02'] },
-  { name: '入梦·深圳站', dates: ['2025/10/15', '2025/10/16'] },
-  { name: '入梦·重庆站', dates: ['2025/09/28', '2025/09/29'] },
-  { name: '入梦·苏州站', dates: ['2025/09/10', '2025/09/11'] },
-  { name: '入梦·天津站', dates: ['2025/08/22', '2025/08/23'] },
-];
+  { name: '人间·广州站', dates: ['2023/05/02'] },
+  { name: '人间·武汉站', dates: ['2023/06/10'] },
+  { name: '人间·成都站', dates: ['2023/06/17'] },
+  { name: '人间·南京站', dates: ['2023/06/22'] },
+  { name: '人间·西安站', dates: ['2023/07/08'] },
+  { name: '人间·沈阳站', dates: ['2023/08/05'] },
+  { name: '人间·福州站', dates: ['2023/08/19'] },
+  { name: '人间·杭州站', dates: ['2023/08/26'] },
+  { name: '人间·北京站', dates: ['2023/09/09'] },
+  { name: '人间·重庆站', dates: ['2023/09/23'] },
+  { name: '人间·上海站', dates: ['2023/09/30'] },
+  { name: '人间·长沙站', dates: ['2023/10/05'] },
+  { name: '入梦·杭州站', dates: ['2025/06/28'] },
+  { name: '入梦·济南站', dates: ['2025/08/02'] },
+  { name: '入梦·成都站', dates: ['2025/08/23'] },
+  { name: '入梦·武汉站', dates: ['2025/10/04', '2025/10/06'] },
+  { name: '入梦·苏州站', dates: ['2025/12/06', '2025/12/07'] },
+  { name: '入梦·深圳站', dates: ['2026/03/21', '2026/03/22'] },
+  { name: '入梦·北京站', dates: ['2026/04/30', '2026/05/01'] },
+  { name: '入梦·上海站', dates: ['2026/06/19', '2026/06/20'] },
+].sort((a, b) => getExpiredInfoSortValue(b.dates) - getExpiredInfoSortValue(a.dates));
 </script>
 
 <template>
@@ -169,10 +189,12 @@ const expiredInfo = [
                         <stop offset="100%" style="stop-color:#C5A059;stop-opacity:1" />
                       </linearGradient>
                     </defs>
-                    <path d="M100,20 C140,20 170,50 170,90 C170,130 140,160 100,160 C70,160 50,140 50,110 C50,80 70,60 100,60 C120,60 135,75 135,95 C135,115 120,130 100,130"
-                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round"/>
-                    <path d="M100,180 C60,180 30,150 30,110 C30,70 60,40 100,40 C130,40 150,60 150,90 C150,120 130,140 100,140 C80,140 65,125 65,105 C65,85 80,70 100,70"
-                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+                    <path
+                      d="M100,20 C140,20 170,50 170,90 C170,130 140,160 100,160 C70,160 50,140 50,110 C50,80 70,60 100,60 C120,60 135,75 135,95 C135,115 120,130 100,130"
+                      fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" />
+                    <path
+                      d="M100,180 C60,180 30,150 30,110 C30,70 60,40 100,40 C130,40 150,60 150,90 C150,120 130,140 100,140 C80,140 65,125 65,105 C65,85 80,70 100,70"
+                      fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6" />
                   </svg>
                 </div>
                 <div class="time-display" ref="timeDisplayEl">{{ currentTime }}</div>
@@ -349,7 +371,11 @@ const expiredInfo = [
         <div class="container text-center">
           <button class="entry-btn" @click="goToRecruit">
             <span>前往 · 招募与培养</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
           </button>
         </div>
       </section>
