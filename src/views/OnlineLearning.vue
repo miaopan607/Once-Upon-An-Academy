@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const categories = [
   { name: '声乐课程', desc: '演唱技巧与舞台表现' },
   { name: '创作课程', desc: '词曲创作与编曲基础' },
@@ -37,6 +40,21 @@ const categories = [
           </div>
         </div>
       </section>
+
+      <!-- 底部入口 -->
+      <section class="page-entry section-padding">
+        <div class="container text-center">
+          <button class="entry-btn" @click="router.push('/contact')">
+            <span>前往 · 联系我们</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </section>
+
     </div>
   </div>
 </template>
@@ -139,10 +157,39 @@ const categories = [
   border-top: 1px dashed #e2dac9;
 }
 
+/* 底部入口 */
+.page-entry {
+  padding: 5rem 0 4rem;
+  background: #f5f0e6;
+}
+
+.entry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 2rem;
+  font-family: "Noto Serif SC", "STSong", "SimSun", serif;
+  font-size: 1rem;
+  color: #C5A059;
+  background: #0f1719;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.35s ease;
+}
+
+.entry-btn:hover {
+  background: #1a2a2e;
+  border-color: #C5A059;
+  box-shadow: 0 8px 30px rgba(197, 160, 89, 0.2);
+  transform: translateY(-3px);
+}
+
 @media (max-width: 768px) {
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
   .category-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
   .category-card { padding: 2rem 1.5rem; }
+  .page-entry { padding: 3rem 0 2rem; }
 }
 </style>

@@ -31,7 +31,6 @@ onUnmounted(() => {
 
 const navLinks = [
   { name: '学校概况', path: '/' },
-  { name: '机构设置', path: '/organization' },
   { name: '师资队伍', path: '/faculty' },
   { name: '人才培养', path: '/talent' },
   { name: '学术研究', path: '/research' },
@@ -66,7 +65,9 @@ const navLinks = [
       </div>
     </header>
 
-    <router-view />
+    <main class="main-content">
+      <router-view />
+    </main>
 
     <!-- Custom Toast -->
     <div class="custom-toast" :class="{ 'toast-visible': showToast }">
@@ -219,8 +220,17 @@ header.header-scrolled .logo {
   transform: translate(-50%, -50%) scale(1);
 }
 
+/* 主内容区域 - 为固定头部留出空间 */
+.main-content {
+  padding-top: 76px;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
+  .main-content {
+    padding-top: 82px;
+  }
+
   .desktop-nav {
     display: none;
   }

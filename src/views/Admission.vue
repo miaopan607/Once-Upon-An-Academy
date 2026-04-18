@@ -1,36 +1,35 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const getDateSortValue = (date: string) => {
   const [year, month, day] = date.split('/').map(Number);
   return new Date(year, month - 1, day).getTime();
 };
 
-const getExpiredInfoSortValue = (dates: string[]) => {
-  const sortDate = dates[dates.length - 1] ?? dates[0] ?? '1970/01/01';
-  return getDateSortValue(sortDate);
-};
-
 const tours = [
-  { name: '人间·广州站', dates: ['2023/05/02'] },
-  { name: '人间·武汉站', dates: ['2023/06/10'] },
-  { name: '人间·成都站', dates: ['2023/06/17'] },
-  { name: '人间·南京站', dates: ['2023/06/22'] },
-  { name: '人间·西安站', dates: ['2023/07/08'] },
-  { name: '人间·沈阳站', dates: ['2023/08/05'] },
-  { name: '人间·福州站', dates: ['2023/08/19'] },
-  { name: '人间·杭州站', dates: ['2023/08/26'] },
-  { name: '人间·北京站', dates: ['2023/09/09'] },
-  { name: '人间·重庆站', dates: ['2023/09/23'] },
-  { name: '人间·上海站', dates: ['2023/09/30'] },
-  { name: '人间·长沙站', dates: ['2023/10/05'] },
-  { name: '入梦·杭州站', dates: ['2025/06/28'] },
-  { name: '入梦·济南站', dates: ['2025/08/02'] },
-  { name: '入梦·成都站', dates: ['2025/08/23'] },
-  { name: '入梦·武汉站', dates: ['2025/10/04', '2025/10/06'] },
-  { name: '入梦·苏州站', dates: ['2025/12/06', '2025/12/07'] },
-  { name: '入梦·深圳站', dates: ['2026/03/21', '2026/03/22'] },
-  { name: '入梦·北京站', dates: ['2026/04/30', '2026/05/01'] },
-  { name: '入梦·上海站', dates: ['2026/06/19', '2026/06/20'] },
-].sort((a, b) => getExpiredInfoSortValue(b.dates) - getExpiredInfoSortValue(a.dates));
+  { name: '人间巡演', venue: '广州站', dates: ['2023/05/02'], tour: '人间' },
+  { name: '人间巡演', venue: '武汉站', dates: ['2023/06/10'], tour: '人间' },
+  { name: '人间巡演', venue: '成都站', dates: ['2023/06/17'], tour: '人间' },
+  { name: '人间巡演', venue: '南京站', dates: ['2023/06/22'], tour: '人间' },
+  { name: '人间巡演', venue: '西安站', dates: ['2023/07/08'], tour: '人间' },
+  { name: '人间巡演', venue: '沈阳站', dates: ['2023/08/05'], tour: '人间' },
+  { name: '人间巡演', venue: '福州站', dates: ['2023/08/19'], tour: '人间' },
+  { name: '人间巡演', venue: '杭州站', dates: ['2023/08/26'], tour: '人间' },
+  { name: '人间巡演', venue: '北京站', dates: ['2023/09/09'], tour: '人间' },
+  { name: '人间巡演', venue: '重庆站', dates: ['2023/09/23'], tour: '人间' },
+  { name: '人间巡演', venue: '上海站', dates: ['2023/09/30'], tour: '人间' },
+  { name: '人间巡演', venue: '长沙站', dates: ['2023/10/05'], tour: '人间' },
+  { name: '入梦巡演', venue: '杭州站', dates: ['2025/06/28'], tour: '入梦' },
+  { name: '入梦巡演', venue: '济南站', dates: ['2025/08/02'], tour: '入梦' },
+  { name: '入梦巡演', venue: '成都站', dates: ['2025/08/23'], tour: '入梦' },
+  { name: '入梦巡演', venue: '武汉站', dates: ['2025/10/04', '2025/10/06'], tour: '入梦' },
+  { name: '入梦巡演', venue: '苏州站', dates: ['2025/12/06', '2025/12/07'], tour: '入梦' },
+  { name: '入梦巡演', venue: '深圳站', dates: ['2026/03/21', '2026/03/22'], tour: '入梦' },
+  { name: '入梦巡演', venue: '北京站', dates: ['2026/04/30', '2026/05/01'], tour: '入梦' },
+  { name: '入梦巡演', venue: '上海站', dates: ['2026/06/19', '2026/06/20'], tour: '入梦' },
+].sort((a, b) => getDateSortValue(a.dates[0]) - getDateSortValue(b.dates[0]));
 </script>
 
 <template>
@@ -54,13 +53,40 @@ const tours = [
             <p class="subtitle-primary">黄诗扶全国巡演纪录</p>
           </div>
 
-          <div class="tour-grid">
-            <div class="tour-card" v-for="item in tours" :key="item.name">
-              <div class="tour-name">{{ item.name }}</div>
-              <div class="tour-dates">
-                <span class="tour-date" v-for="date in item.dates" :key="date">{{ date }}</span>
+          <div class="timeline-scroll">
+            <div class="timeline-track">
+              <div class="tl-item" v-for="(item, idx) in tours" :key="idx" :class="idx % 2 === 0 ? 'tl-item-above' : 'tl-item-below'">
+                <div class="tl-upper">
+                  <template v-if="idx % 2 === 0">
+                    <div class="tl-date">{{ item.dates[0] }}</div>
+                    <div class="tl-extra-dates" v-if="item.dates.length > 1">
+                      <span v-for="d in item.dates.slice(1)" :key="d">{{ d }}</span>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div class="tl-name">{{ item.name }}</div>
+                    <div class="tl-venue">{{ item.venue }}</div>
+                    <div class="tl-extra-dates" v-if="item.dates.length > 1">
+                      <span v-for="d in item.dates.slice(1)" :key="d">{{ d }}</span>
+                    </div>
+                  </template>
+                </div>
+                <div class="tl-dot" :class="item.tour === '入梦' ? 'tl-dot-rumeng' : ''"></div>
+                <div class="tl-lower">
+                  <template v-if="idx % 2 === 0">
+                    <div class="tl-name">{{ item.name }}</div>
+                    <div class="tl-venue">{{ item.venue }}</div>
+                  </template>
+                  <template v-else>
+                    <div class="tl-date">{{ item.dates[0] }}</div>
+                    <div class="tl-extra-dates" v-if="item.dates.length > 1">
+                      <span v-for="d in item.dates.slice(1)" :key="d">{{ d }}</span>
+                    </div>
+                  </template>
+                </div>
               </div>
             </div>
+            <div class="timeline-line"></div>
           </div>
         </div>
       </section>
@@ -69,17 +95,22 @@ const tours = [
       <section class="section-padding">
         <div class="container">
           <div class="section-header text-center">
-            <h2 class="title-primary">新闻报道</h2>
-            <p class="subtitle-primary">媒体报道与采访</p>
+            <h2 class="title-primary">新闻报道（这地方放什么？）</h2>
           </div>
+        </div>
+      </section>
 
-          <div class="placeholder-section">
-            <div class="placeholder-card">
-              <div class="placeholder-icon">📰</div>
-              <h3 class="placeholder-title">资料整理中</h3>
-              <p class="placeholder-desc">新闻报道与采访数据正在收集中，敬请期待。</p>
-            </div>
-          </div>
+      <!-- 底部入口 -->
+      <section class="page-entry section-padding">
+        <div class="container text-center">
+          <button class="entry-btn" @click="router.push('/online-learning')">
+            <span>前往 · 网上教学</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </section>
     </div>
@@ -141,86 +172,165 @@ const tours = [
   opacity: 0.9;
 }
 
-/* 巡演数据 */
-.tour-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+/* 时间轴 - 横向 */
+.timeline-scroll {
   margin-top: 3rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 0 0 2rem;
+  position: relative;
 }
 
-.tour-card {
-  background: #fff;
-  padding: 1.5rem;
-  border: 1px solid #e2dac9;
-  transition: all 0.3s ease;
+.timeline-scroll::-webkit-scrollbar {
+  height: 4px;
 }
 
-.tour-card:hover {
-  border-color: #C5A059;
-  box-shadow: 0 8px 20px rgba(197, 160, 89, 0.1);
-  transform: translateY(-2px);
+.timeline-scroll::-webkit-scrollbar-track {
+  background: #e2dac9;
 }
 
-.tour-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #0f1719;
-  margin-bottom: 0.5rem;
+.timeline-scroll::-webkit-scrollbar-thumb {
+  background: #C5A059;
 }
 
-.tour-dates {
+.timeline-track {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  align-items: center;
+  min-width: max-content;
+  padding: 0 2rem;
+  position: relative;
 }
 
-.tour-date {
-  font-size: 0.8rem;
-  color: #888;
-  background: #f5f0e6;
-  padding: 2px 8px;
-  border-radius: 3px;
+.timeline-line {
+  position: absolute;
+  top: 50%;
+  left: 2rem;
+  right: 2rem;
+  height: 2px;
+  background: #e2dac9;
+  z-index: 0;
+  transform: translateY(-50%);
 }
 
-/* 占位 */
-.placeholder-section {
-  max-width: 600px;
-  margin: 4rem auto 0;
+.tl-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 140px;
+  position: relative;
+  z-index: 1;
 }
 
-.placeholder-card {
-  background: #fff;
-  padding: 4rem 3rem;
-  border: 1px solid #e2dac9;
+.tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A059;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.15);
+}
+
+.tl-dot-rumeng {
+  background: #a53222;
+  box-shadow: 0 0 0 4px rgba(165, 50, 34, 0.15);
+}
+
+.tl-upper,
+.tl-lower {
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  padding: 0 0.5rem;
+  min-height: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
-.placeholder-icon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-}
-
-.placeholder-title {
-  font-size: 1.3rem;
-  color: #0f1719;
-  letter-spacing: 3px;
+.tl-upper {
   margin-bottom: 0.8rem;
 }
 
-.placeholder-desc {
-  font-size: 0.95rem;
+.tl-lower {
+  margin-top: 0.8rem;
+}
+
+.tl-item-above .tl-upper {
+  justify-content: flex-end;
+}
+
+.tl-item-above .tl-lower {
+  justify-content: flex-start;
+}
+
+.tl-item-below .tl-upper {
+  justify-content: flex-end;
+}
+
+.tl-item-below .tl-lower {
+  justify-content: flex-start;
+}
+
+.tl-date {
+  font-size: 0.82rem;
   color: #888;
-  line-height: 1.8;
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tl-name {
+  font-size: 0.9rem;
+  color: #0f1719;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 0.15rem;
+}
+
+.tl-venue {
+  font-size: 0.8rem;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+.tl-extra-dates {
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-top: 0.1rem;
+}
+
+/* 底部入口 */
+.page-entry {
+  padding: 5rem 0 4rem;
+  background: #f5f0e6;
+}
+
+.entry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 2rem;
+  font-family: "Noto Serif SC", "STSong", "SimSun", serif;
+  font-size: 1rem;
+  color: #C5A059;
+  background: #0f1719;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.35s ease;
+}
+
+.entry-btn:hover {
+  background: #1a2a2e;
+  border-color: #C5A059;
+  box-shadow: 0 8px 30px rgba(197, 160, 89, 0.2);
+  transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
-  .tour-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-  .tour-card { padding: 1rem; }
-  .tour-name { font-size: 0.9rem; }
-  .placeholder-card { padding: 3rem 2rem; }
+  .tl-item { min-width: 110px; }
+  .tl-upper, .tl-lower { min-height: 2.5rem; }
+  .page-entry { padding: 3rem 0 2rem; }
 }
 </style>

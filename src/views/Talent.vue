@@ -1,22 +1,59 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const scenes = [
+  {
+    course: '音乐',
+    scene: '（嘿嘿想不出来叫什么）',
+    mentors: '杜丽娘、柳梦梅',
+    desc: '（描述）'
+  },
+  {
+    course: '美术',
+    scene: '（想不出来叫什么x2）',
+    mentors: '贾宝玉、林黛玉',
+    desc: '（描述）'
+  },
+  {
+    course: '国学',
+    scene: '文枢阁',
+    mentors: '梁山伯、祝英台',
+    desc: '（描述）'
+  },
+  {
+    course: '劳技',
+    scene: '掠影廊',
+    mentors: '项羽、虞姬',
+    desc: '（描述）'
+  },
+  {
+    course: '入梦',
+    scene: '藏经阁',
+    mentors: '教书先生卿卿',
+    desc: '（描述）'
+  }
+];
+
 const coreCourses = [
-  { name: '黄诗扶入坑导学课', desc: '系统了解黄诗扶音乐世界，建立国风音乐审美基础' },
-  { name: '声乐演唱与舞台表现', desc: '从气息控制到情感表达，全面培养演唱能力' },
-  { name: '词曲创作与编曲基础', desc: '掌握古风词曲创作的核心技法与编曲思维' },
-  { name: '国风音乐赏析与创作', desc: '深入赏析经典国风作品，激发创作灵感' }
+  '黄诗扶入坑导学课',
+  '声乐演唱与舞台表现',
+  '词曲创作与编曲基础',
+  '国风音乐赏析与创作'
 ];
 
 const cultureCourses = [
-  { name: '古典诗词与文学', desc: '从诗经到宋词，领略千年文学之美' },
-  { name: '琴棋诗画通识', desc: '四艺入门，涵养文人雅趣' },
-  { name: '传统艺术鉴赏', desc: '戏曲、书画、器乐的多维鉴赏' },
-  { name: '传统武术技能学习', desc: '强身健体，内外兼修' }
+  '古典诗词与文学',
+  '琴棋诗画通识',
+  '传统艺术鉴赏',
+  '传统武术技能学习'
 ];
 
 const practiceCourses = [
-  { name: '组织观看【入梦】幕剧音乐会', desc: '沉浸式体验现场艺术之美' },
-  { name: '作品录制与后期', desc: '从创作到成品的完整实践链' },
-  { name: '艺术策划与运营', desc: '培养活动策划与执行能力' }
+  '组织观看【入梦】幕剧音乐会',
+  '作品录制与后期',
+  '艺术策划与运营'
 ];
 </script>
 
@@ -38,15 +75,14 @@ const practiceCourses = [
         <div class="container">
           <div class="section-header text-center">
             <h2 class="title-primary">培养目标</h2>
-            <p class="subtitle-primary">不摆烂 · 不内卷 · 快乐学习</p>
           </div>
 
           <div class="goal-section">
-            <div class="goal-card">
+            <div class="goal-item">
               <h3 class="goal-label">培养宗旨</h3>
               <p class="goal-text">旨在轻松学习，培养不摆烂不内卷的快乐学员。</p>
             </div>
-            <div class="goal-card goal-card-dark">
+            <div class="goal-item">
               <h3 class="goal-label">培养能力</h3>
               <p class="goal-text">本学院致力于培养兼具国风素养与专业能力的复合型艺术人才。致力于把学生打造成兼具琴棋书画之雅韵与词曲演唱、编曲创作技能的新型艺术人才。培养他们注重文化底蕴与艺术修养，秉持德艺兼修、知行合一的理念，能做到气质温润、功底扎实、富有情怀，成为兼具审美与创造力的新时代文艺人才。</p>
             </div>
@@ -59,86 +95,99 @@ const practiceCourses = [
         <div class="container">
           <div class="section-header text-center">
             <h2 class="title-primary">学年计划</h2>
-            <p class="subtitle-primary">一学年两学期 · 理论与实践并重</p>
           </div>
 
-          <div class="semester-grid">
-            <div class="semester-card">
-              <div class="semester-num">上学期</div>
-              <h3 class="semester-title">书院学习</h3>
-              <div class="semester-divider"></div>
-              <p class="semester-desc">以书院课程学习为主，夯实理论基础。修习专业核心课与文化素养课，建立完整的国风音乐知识体系与艺术审美框架。</p>
+          <div class="semester-layout">
+            <div class="semester-half">
+              <div class="semester-half-deco"></div>
+              <h3 class="semester-half-label">上学期</h3>
+              <p class="semester-half-name">书院学习</p>
+              <p class="semester-half-desc">以书院学习为主，夯实专业与文化根基。</p>
             </div>
-            <div class="semester-card semester-card-alt">
-              <div class="semester-num">下学期</div>
-              <h3 class="semester-title">课外实践</h3>
-              <div class="semester-divider"></div>
-              <p class="semester-desc">以课外实践为主，学以致用。参与音乐会观摩、作品录制、艺术策划等实践拓展课，将所学技能转化为实际成果。</p>
+            <div class="semester-divider">
+              <div class="semester-divider-line"></div>
+              <div class="semester-divider-or">一学年</div>
+              <div class="semester-divider-line"></div>
+            </div>
+            <div class="semester-half">
+              <div class="semester-half-deco"></div>
+              <h3 class="semester-half-label">下学期</h3>
+              <p class="semester-half-name">课外实践</p>
+              <p class="semester-half-desc">以课外实践为主，登台演出与项目实训。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 书院五景 · 限定课程 -->
+      <section class="section-padding bg-alt">
+        <div class="container">
+          <div class="section-header text-center">
+            <h2 class="title-primary">书院五景 · 限定课程</h2>
+            <p class="subtitle-primary">五处幻境，五堂必修。特邀名师入梦传道。</p>
+          </div>
+
+          <div class="scene-cards">
+            <div class="scene-card" v-for="item in scenes" :key="item.course">
+              <div class="scene-card-inner">
+                <div class="scene-header">
+                  <span class="course-name">{{ item.course }}</span>
+                  <h3 class="scene-title">{{ item.scene }}</h3>
+                </div>
+                <div class="mentor-badge">
+                  <span>特邀导师：</span><strong>{{ item.mentors }}</strong>
+                </div>
+                <p class="scene-desc">{{ item.desc }}</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- 课程体系 -->
-      <section class="section-padding bg-alt">
+      <section class="section-padding">
         <div class="container">
           <div class="section-header text-center">
             <h2 class="title-primary">课程体系</h2>
-            <p class="subtitle-primary">三阶课程 · 全面培养</p>
           </div>
 
           <div class="course-grid">
-            <!-- 专业核心课 -->
             <div class="course-section">
-              <div class="course-section-header">
-                <h3 class="course-section-title">专业核心课</h3>
-                <div class="course-section-line"></div>
-              </div>
-              <div class="course-list">
-                <div class="course-item" v-for="(c, i) in coreCourses" :key="i">
-                  <div class="course-num">{{ String(i + 1).padStart(2, '0') }}</div>
-                  <div class="course-info">
-                    <h4 class="course-name">{{ c.name }}</h4>
-                    <p class="course-desc">{{ c.desc }}</p>
-                  </div>
-                </div>
-              </div>
+              <h3 class="course-section-title">专业核心课</h3>
+              <div class="course-section-line"></div>
+              <ol class="course-list">
+                <li v-for="c in coreCourses" :key="c">{{ c }}</li>
+              </ol>
             </div>
-
-            <!-- 文化素养课 -->
             <div class="course-section">
-              <div class="course-section-header">
-                <h3 class="course-section-title">文化素养课</h3>
-                <div class="course-section-line"></div>
-              </div>
-              <div class="course-list">
-                <div class="course-item" v-for="(c, i) in cultureCourses" :key="i">
-                  <div class="course-num">{{ String(i + 1).padStart(2, '0') }}</div>
-                  <div class="course-info">
-                    <h4 class="course-name">{{ c.name }}</h4>
-                    <p class="course-desc">{{ c.desc }}</p>
-                  </div>
-                </div>
-              </div>
+              <h3 class="course-section-title">文化素养课</h3>
+              <div class="course-section-line"></div>
+              <ol class="course-list">
+                <li v-for="c in cultureCourses" :key="c">{{ c }}</li>
+              </ol>
             </div>
-
-            <!-- 实践拓展课 -->
             <div class="course-section">
-              <div class="course-section-header">
-                <h3 class="course-section-title">实践拓展课</h3>
-                <div class="course-section-line"></div>
-              </div>
-              <div class="course-list">
-                <div class="course-item" v-for="(c, i) in practiceCourses" :key="i">
-                  <div class="course-num">{{ String(i + 1).padStart(2, '0') }}</div>
-                  <div class="course-info">
-                    <h4 class="course-name">{{ c.name }}</h4>
-                    <p class="course-desc">{{ c.desc }}</p>
-                  </div>
-                </div>
-              </div>
+              <h3 class="course-section-title">实践拓展课</h3>
+              <div class="course-section-line"></div>
+              <ol class="course-list">
+                <li v-for="c in practiceCourses" :key="c">{{ c }}</li>
+              </ol>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- 底部入口 -->
+      <section class="page-entry section-padding">
+        <div class="container text-center">
+          <button class="entry-btn" @click="router.push('/research')">
+            <span>前往 · 学术研究</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </section>
     </div>
@@ -202,30 +251,24 @@ const practiceCourses = [
 
 /* 培养目标 */
 .goal-section {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 2rem;
-  margin-top: 3rem;
+  max-width: 800px;
+  margin: 3rem auto 0;
 }
 
-.goal-card {
-  background: #fff;
-  padding: 2.5rem;
-  border-top: 3px solid #0f1719;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+.goal-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #e2dac9;
 }
 
-.goal-card-dark {
-  background: #0f1719;
-  color: #fff;
-  border-top: 3px solid #C5A059;
+.goal-item:last-child {
+  border-bottom: none;
 }
 
 .goal-label {
   font-size: 0.85rem;
   color: #C5A059;
   letter-spacing: 3px;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.8rem;
 }
 
 .goal-text {
@@ -233,68 +276,151 @@ const practiceCourses = [
   line-height: 2;
   color: #444;
   text-align: justify;
+  text-indent: 2em;
 }
-
-.goal-card-dark .goal-text { color: #ccc; }
 
 /* 学年计划 */
-.semester-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  margin-top: 3rem;
+.semester-layout {
+  max-width: 800px;
+  margin: 3rem auto 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
 }
 
-.semester-card {
-  background: #fff;
-  padding: 3rem 2.5rem;
-  border: 1px solid #e2dac9;
+.semester-half {
+  flex: 1;
   text-align: center;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  padding: 2.5rem 2rem;
+  position: relative;
 }
 
-.semester-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
-}
-
-.semester-card-alt {
-  background: #0f1719;
-  color: #fff;
-  border-color: #0f1719;
-}
-
-.semester-num {
-  font-size: 0.85rem;
-  color: #C5A059;
-  letter-spacing: 3px;
-  margin-bottom: 1rem;
-}
-
-.semester-title {
-  font-size: 1.5rem;
-  letter-spacing: 3px;
-  margin-bottom: 0.5rem;
-}
-
-.semester-card-alt .semester-title { color: #fff; }
-
-.semester-divider {
+.semester-half-deco {
   width: 40px;
   height: 2px;
   background: #C5A059;
-  margin: 1rem auto;
+  margin: 0 auto 1.5rem;
 }
 
-.semester-desc {
-  font-size: 0.95rem;
+.semester-half-label {
+  font-size: 0.8rem;
+  color: #C5A059;
+  letter-spacing: 4px;
+  margin-bottom: 0.6rem;
+  font-weight: 400;
+}
+
+.semester-half-name {
+  font-size: 1.4rem;
+  color: #0f1719;
+  letter-spacing: 3px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.semester-half-desc {
+  font-size: 0.9rem;
   color: #666;
   line-height: 1.8;
-  text-align: justify;
-  margin-top: 1rem;
+  letter-spacing: 1px;
 }
 
-.semester-card-alt .semester-desc { color: #aaa; }
+.semester-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  flex-shrink: 0;
+}
+
+.semester-divider-line {
+  flex: 1;
+  width: 1px;
+  background: #e2dac9;
+}
+
+.semester-divider-or {
+  font-size: 0.75rem;
+  color: #C5A059;
+  letter-spacing: 3px;
+  padding: 1rem 0;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+/* 书院五景 - 场景卡片 */
+.scene-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  margin-top: 3rem;
+}
+
+.scene-card {
+  position: relative;
+  background: #fff;
+  padding: 3rem 2rem;
+  border: 1px solid #e2dac9;
+  transition: all 0.5s ease;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.scene-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #0f1719;
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+.scene-card:hover { border-color: #0f1719; }
+.scene-card:hover::before { transform: translateY(0); }
+.scene-card:hover * { color: #fff !important; }
+
+.scene-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.course-name {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: #C5A059;
+  border: 1px solid #C5A059;
+  padding: 2px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.scene-title {
+  font-size: 1.3rem;
+  color: #0f1719;
+}
+
+.mentor-badge {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1.2rem;
+  background-color: rgba(197, 160, 89, 0.1);
+  padding: 6px 12px;
+  display: inline-block;
+}
+
+.mentor-badge strong { color: #a53222; }
+
+.scene-desc {
+  color: #666;
+  font-size: 0.95rem;
+  text-align: justify;
+  line-height: 1.8;
+}
 
 /* 课程体系 */
 .course-grid {
@@ -305,14 +431,12 @@ const practiceCourses = [
 }
 
 .course-section {
-  background: #fff;
-  padding: 2.5rem 2rem;
-  border-top: 3px solid #0f1719;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  padding: 2rem 0;
+  border-top: 2px solid #0f1719;
 }
 
 .course-section-title {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: #0f1719;
   letter-spacing: 2px;
 }
@@ -321,49 +445,75 @@ const practiceCourses = [
   width: 30px;
   height: 2px;
   background: #C5A059;
-  margin-top: 0.8rem;
-  margin-bottom: 1.5rem;
+  margin: 0.8rem 0 1.2rem;
 }
 
-.course-item {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
+.course-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: course-counter;
+}
+
+.course-list li {
+  counter-increment: course-counter;
+  padding: 0.6rem 0;
   border-bottom: 1px dashed #e2dac9;
+  font-size: 0.95rem;
+  color: #333;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
 }
 
-.course-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.course-list li:last-child { border-bottom: none; }
 
-.course-num {
-  font-size: 1.4rem;
+.course-list li::before {
+  content: counter(course-counter, decimal-leading-zero);
+  font-size: 1.1rem;
   font-weight: 600;
   color: #C5A059;
   flex-shrink: 0;
-  line-height: 1;
-  min-width: 2rem;
 }
 
-.course-name {
+/* 底部入口 */
+.page-entry {
+  padding: 5rem 0 4rem;
+  background: #f5f0e6;
+}
+
+.entry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 2rem;
+  font-family: "Noto Serif SC", "STSong", "SimSun", serif;
   font-size: 1rem;
-  color: #0f1719;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
+  color: #C5A059;
+  background: #0f1719;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.35s ease;
 }
 
-.course-desc {
-  font-size: 0.85rem;
-  color: #888;
-  line-height: 1.6;
+.entry-btn:hover {
+  background: #1a2a2e;
+  border-color: #C5A059;
+  box-shadow: 0 8px 30px rgba(197, 160, 89, 0.2);
+  transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
-  .goal-section { grid-template-columns: 1fr; }
-  .semester-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .semester-card { padding: 2rem 1.5rem; }
+  .semester-layout { flex-direction: column; }
+  .semester-divider { flex-direction: row; padding: 0 1rem; }
+  .semester-divider-line { height: 1px; width: auto; flex: 1; }
+  .semester-divider-or { writing-mode: horizontal-tb; padding: 0 1rem; }
+  .scene-cards { grid-template-columns: 1fr; gap: 1.5rem; }
+  .scene-card { padding: 2rem 1.5rem; }
   .course-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .course-section { padding: 2rem 1.5rem; }
+  .page-entry { padding: 3rem 0 2rem; }
 }
 </style>

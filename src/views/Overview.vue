@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const currentTime = ref('');
 let timer: number | null = null;
@@ -206,26 +209,19 @@ const expiredInfo = [
         <div class="container">
           <div class="section-header text-center">
             <h2 class="title-primary">立校之本</h2>
-            <p class="subtitle-primary">勤学好诗 · 知行合一</p>
           </div>
-          <div class="motto-cards">
-            <div class="motto-card">
-              <div class="motto-label">校训</div>
-              <div class="motto-text">勤学好诗，爱国爱扶</div>
-              <div class="motto-divider"></div>
-              <p class="motto-desc">以勤治学，以诗修身；心系家国，以爱扶人。</p>
+          <div class="motto-block">
+            <div class="motto-row">
+              <span class="motto-label">校训</span>
+              <span class="motto-em">勤学好诗，爱国爱扶</span>
             </div>
-            <div class="motto-card motto-card-dark">
-              <div class="motto-label">学校精神</div>
-              <div class="motto-text">以诗为本，以扶为怀，知行合一</div>
-              <div class="motto-divider"></div>
-              <p class="motto-desc">诗为根本，扶济苍生，所学即所行，所行即所信。</p>
+            <div class="motto-row">
+              <span class="motto-label">学校精神</span>
+              <span class="motto-em">以诗为本，以扶为怀，知行合一</span>
             </div>
-            <div class="motto-card">
-              <div class="motto-label">教育理念</div>
-              <div class="motto-text">人间最值得，醒来多加餐</div>
-              <div class="motto-divider"></div>
-              <p class="motto-desc">人间值得留恋，醒后仍需加餐——以乐观之心面对世间，以务实之态耕耘自我。</p>
+            <div class="motto-row">
+              <span class="motto-label">教育理念</span>
+              <span class="motto-em">人间最值得，醒来多加餐</span>
             </div>
           </div>
         </div>
@@ -237,26 +233,25 @@ const expiredInfo = [
           <div class="split-col">
             <div class="section-header">
               <h2 class="title-primary">校史拾遗</h2>
-              <p class="subtitle-primary">从大四书院到从前书院</p>
+              <p class="subtitle-primary">（描述）</p>
             </div>
             <div class="elegant-card h-full">
-              <h3 class="card-title">道阻且长，行则将至</h3>
+              <h3 class="card-title">（标题）</h3>
               <p class="mt-4 text-detail">
-                从前书院的前身大四书院，曾与四大书院齐名于世。历经教改，更名为从前书院，薪火相传，弦歌不辍。从最初的筚路蓝缕到如今的桃李满天下，书院始终秉持"以诗为本，以扶为怀"之精神，在国风音乐与传统文化领域深耕不辍，终成今日之规模与声望。
+                （校史待补充）
               </p>
             </div>
           </div>
           <div class="split-col">
             <div class="section-header">
               <h2 class="title-primary">荣誉校友</h2>
-              <p class="subtitle-primary">书院之光，学子楷模</p>
+              <p class="subtitle-primary">（描述）</p>
             </div>
             <div class="elegant-card elegant-card-dark h-full">
               <h3 class="card-title text-gold">黄诗扶</h3>
-              <p class="tagline mt-2">国风歌者 / 古风音乐人 / 诗意唱作人</p>
+              <p class="tagline mt-2">（头衔待补充）</p>
               <ul class="resume-list mt-4">
-                <li><strong>代表作品：</strong>《九万字》《人间不值得》《杨花落尽》《人间朝暮》等</li>
-                <li><strong>艺术成就：</strong>以独特的诗意嗓音与深厚的文化底蕴，在国风音乐领域独树一帜</li>
+                <li>（荣誉校友信息待补充）</li>
               </ul>
             </div>
           </div>
@@ -266,18 +261,32 @@ const expiredInfo = [
       <!-- 雅学之境 -->
       <section class="env-section section-padding bg-paper">
         <div class="container">
-          <div class="section-header">
-            <h2 class="title-primary">雅学之境</h2>
-            <p class="subtitle-primary">依山傍水，潜心修学</p>
-          </div>
-          <div class="env-image"
+            <div class="section-header">
+              <h2 class="title-primary">雅学之境</h2>
+              <p class="subtitle-primary">（描述）</p>
+            </div>
+            <div class="env-image"
             style="background-image: url('/campus.png'); background-size: cover; background-position: center; border: 1px solid #e2dac9; position: relative; width: 100%; height: 400px;">
             <div
               style="position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(transparent, rgba(15,23,25,0.9)); padding: 2rem;">
               <h3 style="color: #C5A059; font-size: 1.4rem; margin-bottom: 0.2rem;">校园环境</h3>
-              <p style="color: #eee; font-size: 0.95rem;">后倚有座山，前饮清水河，左木修，右池阔</p>
+              <p style="color: #eee; font-size: 0.95rem;">（描述）（先随便放一个图）</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- 底部入口 -->
+      <section class="page-entry section-padding">
+        <div class="container text-center">
+          <button class="entry-btn" @click="router.push('/faculty')">
+            <span>前往 · 师资队伍</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </section>
 
@@ -490,66 +499,37 @@ const expiredInfo = [
 }
 
 /* 立校之本 */
-.motto-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 3rem;
+.motto-block {
+  max-width: 700px;
+  margin: 3rem auto 0;
 }
 
-.motto-card {
-  background: #fff;
-  padding: 2.5rem 2rem;
-  border-top: 3px solid #0f1719;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
-  text-align: center;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+.motto-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid #e2dac9;
 }
 
-.motto-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
-}
-
-.motto-card-dark {
-  background: #0f1719;
-  color: #fff;
-  border-top: 3px solid #C5A059;
+.motto-row:last-child {
+  border-bottom: none;
 }
 
 .motto-label {
   font-size: 0.85rem;
   color: #C5A059;
   letter-spacing: 3px;
-  margin-bottom: 1.2rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.motto-card-dark .motto-label { color: #C5A059; }
-
-.motto-text {
-  font-size: 1.3rem;
+.motto-em {
+  font-size: 1.15rem;
   font-weight: 600;
   color: #0f1719;
   letter-spacing: 2px;
-  line-height: 1.8;
 }
-
-.motto-card-dark .motto-text { color: #fff; }
-
-.motto-divider {
-  width: 40px;
-  height: 2px;
-  background: #C5A059;
-  margin: 1.2rem auto;
-}
-
-.motto-desc {
-  font-size: 0.9rem;
-  color: #666;
-  line-height: 1.8;
-}
-
-.motto-card-dark .motto-desc { color: #aaa; }
 
 /* 红头文件 */
 .red-document {
@@ -641,6 +621,41 @@ const expiredInfo = [
 
 .env-image { border-radius: 4px; }
 
+/* 底部入口 */
+.page-entry {
+  padding: 5rem 0 4rem;
+  background: #f5f0e6;
+}
+
+.entry-hint {
+  font-size: 1.1rem;
+  color: #555;
+  letter-spacing: 3px;
+  margin-bottom: 2rem;
+}
+
+.entry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 2rem;
+  font-family: "Noto Serif SC", "STSong", "SimSun", serif;
+  font-size: 1rem;
+  color: #C5A059;
+  background: #0f1719;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.35s ease;
+}
+
+.entry-btn:hover {
+  background: #1a2a2e;
+  border-color: #C5A059;
+  box-shadow: 0 8px 30px rgba(197, 160, 89, 0.2);
+  transform: translateY(-3px);
+}
+
 .tagline { font-size: 0.95rem; color: #aaa; letter-spacing: 1px; }
 
 @media (max-width: 768px) {
@@ -667,7 +682,7 @@ const expiredInfo = [
   .doc-date-list { font-size: 0.85rem; }
   .doc-stamp { margin-top: 1.5rem; font-size: 0.85rem; }
   .env-image { height: 260px !important; }
-  .motto-cards { grid-template-columns: 1fr; gap: 1.5rem; }
-  .motto-card { padding: 2rem 1.5rem; }
+  .motto-row { flex-direction: column; gap: 0.3rem; }
+  .page-entry { padding: 3rem 0 2rem; }
 }
 </style>

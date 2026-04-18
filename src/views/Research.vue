@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 </script>
 
 <template>
@@ -21,13 +24,21 @@
             <p class="subtitle-primary">黄诗扶歌曲数据</p>
           </div>
 
-          <div class="placeholder-section">
-            <div class="placeholder-card">
-              <div class="placeholder-icon">📚</div>
-              <h3 class="placeholder-title">资料整理中</h3>
-              <p class="placeholder-desc">歌曲数据正在收集中，敬请期待。</p>
-            </div>
-          </div>
+          <div class="placeholder-text">资料整理中</div>
+        </div>
+      </section>
+
+      <!-- 底部入口 -->
+      <section class="page-entry section-padding">
+        <div class="container text-center">
+          <button class="entry-btn" @click="router.push('/admission')">
+            <span>前往 · 招生就业</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </section>
     </div>
@@ -89,40 +100,45 @@
   opacity: 0.9;
 }
 
-.placeholder-section {
-  max-width: 600px;
-  margin: 4rem auto 0;
-}
-
-.placeholder-card {
-  background: #fff;
-  padding: 4rem 3rem;
-  border: 1px solid #e2dac9;
+.placeholder-text {
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-}
-
-.placeholder-icon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-}
-
-.placeholder-title {
-  font-size: 1.3rem;
-  color: #0f1719;
-  letter-spacing: 3px;
-  margin-bottom: 0.8rem;
-}
-
-.placeholder-desc {
-  font-size: 0.95rem;
+  margin-top: 4rem;
+  font-size: 1.1rem;
   color: #888;
-  line-height: 1.8;
+  letter-spacing: 4px;
+}
+
+/* 底部入口 */
+.page-entry {
+  padding: 5rem 0 4rem;
+  background: #f5f0e6;
+}
+
+.entry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 2rem;
+  font-family: "Noto Serif SC", "STSong", "SimSun", serif;
+  font-size: 1rem;
+  color: #C5A059;
+  background: #0f1719;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.35s ease;
+}
+
+.entry-btn:hover {
+  background: #1a2a2e;
+  border-color: #C5A059;
+  box-shadow: 0 8px 30px rgba(197, 160, 89, 0.2);
+  transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
-  .placeholder-card { padding: 3rem 2rem; }
+  .page-entry { padding: 3rem 0 2rem; }
 }
 </style>
