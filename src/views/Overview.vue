@@ -478,16 +478,12 @@ const expiredInfo = [
 .expired-date { font-size: 0.8rem; color: #888; }
 
 .campus-overview {
-  background: linear-gradient(to bottom, #f5f0e6, #fdfbf7);
+  background: #fdfbf7;
 }
 
 .overview-content {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
-  background: #fff;
-  border: 1px solid #e2dac9;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 .overview-text {
