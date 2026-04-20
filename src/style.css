@@ -165,10 +165,6 @@ img {
 
 /* 移动端适配 */
 @media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
-
   .split-layout {
     grid-template-columns: 1fr;
     gap: 2rem;

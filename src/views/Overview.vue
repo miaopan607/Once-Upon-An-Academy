@@ -634,6 +634,7 @@ const expiredInfo = [
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
   .overview-page { --notice-frozen-top: 6.25rem; }
+  .notice-section .container { padding: 0 1rem; }
   .notice-frozen-content { padding: 0.5rem 1rem; gap: 0.75rem; }
   .notice-frozen-time { font-size: 0.78rem; }
   .notice-frozen-title { font-size: 0.88rem; letter-spacing: 2px; }
