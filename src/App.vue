@@ -257,7 +257,7 @@ header.header-scrolled {
 }
 
 header.header-scrolled .logo {
-  color: #C5A059;
+  color: #fbda41;
 }
 
 .brand-group {
@@ -280,7 +280,7 @@ header.header-scrolled .logo {
   flex-shrink: 0;
   border: none;
   background: transparent;
-  color: #f5dca1;
+  color: #fbda41;
   cursor: pointer;
   padding: 0;
   transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease;
@@ -288,11 +288,11 @@ header.header-scrolled .logo {
 
 .music-toggle:hover {
   transform: translateY(-1px);
-  color: #ffe3aa;
+  color: #fbda41;
 }
 
 .music-toggle.is-playing {
-  filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.22));
+  filter: drop-shadow(0 0 10px rgba(251, 218, 65, 0.22));
 }
 
 .music-toggle__icon {
@@ -337,18 +337,18 @@ header.header-scrolled .logo {
   display: block;
   width: 25px;
   height: 3px;
-  background: #C5A059;
+  background: #fbda41;
   transition: 0.3s;
 }
 
 .nav-links a:hover {
-  color: #C5A059;
+  color: #fbda41;
 }
 
 .nav-links a.active {
-  color: #C5A059;
+  color: #fbda41;
   font-weight: 600;
-  border-bottom: 2px solid #C5A059;
+  border-bottom: 2px solid #fbda41;
   padding-bottom: 4px;
 }
 
@@ -356,7 +356,7 @@ header.header-scrolled .logo {
 .mobile-nav {
   display: none;
   background: #0f1719;
-  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  border-top: 1px solid rgba(251, 218, 65, 0.2);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -387,7 +387,7 @@ header.header-scrolled .logo {
 }
 
 .mobile-nav-scroll a.active {
-  color: #F5C542;
+  color: #fbda41;
   font-weight: 500;
 }
 
@@ -404,7 +404,7 @@ header.header-scrolled .logo {
   left: 50%;
   transform: translate(-50%, -50%) scale(0.9);
   background: rgba(15, 23, 25, 0.9);
-  color: #C5A059;
+  color: #fbda41;
   padding: 1rem 2.5rem;
   border-radius: 8px;
   font-size: 1rem;
@@ -414,7 +414,7 @@ header.header-scrolled .logo {
   pointer-events: none;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(197, 160, 89, 0.3);
+  border: 1px solid rgba(251, 218, 65, 0.3);
 }
 
 .custom-toast.toast-visible {

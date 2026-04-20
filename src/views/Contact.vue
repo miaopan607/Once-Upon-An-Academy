@@ -90,7 +90,7 @@
 .subhero-divider {
   width: 60px;
   height: 2px;
-  background-color: #C5A059;
+  background-color: #fbda41;
   margin: 0 auto 1.5rem;
 }
 

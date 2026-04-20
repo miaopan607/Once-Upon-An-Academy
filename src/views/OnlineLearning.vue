@@ -104,7 +104,7 @@ const categories = [
 .subhero-divider {
   width: 60px;
   height: 2px;
-  background-color: #C5A059;
+  background-color: #fbda41;
   margin: 0 auto 1.5rem;
 }
 
@@ -170,9 +170,9 @@ const categories = [
   padding: 0.8rem 2rem;
   font-family: "Noto Serif SC", "STSong", "SimSun", serif;
   font-size: 1rem;
-  color: #C5A059;
+  color: #fbda41;
   background: #0f1719;
-  border: 1px solid rgba(197, 160, 89, 0.3);
+  border: 1px solid rgba(251, 218, 65, 0.3);
   cursor: pointer;
   letter-spacing: 2px;
   transition: all 0.35s ease;
@@ -180,8 +180,8 @@ const categories = [
 
 .entry-btn:hover {
   background: #1a2a2e;
-  border-color: #C5A059;
-  box-shadow: 0 8px 30px rgba(197, 160, 89, 0.2);
+  border-color: #fbda41;
+  box-shadow: 0 8px 30px rgba(251, 218, 65, 0.2);
   transform: translateY(-3px);
 }
 
