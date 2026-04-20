@@ -134,19 +134,7 @@ const expiredInfo = [
             <div class="notice-left" ref="noticeLeft">
               <div class="mobius-section" ref="mobiusSection">
                 <div class="mobius-container">
-                  <svg class="mobius-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="mobiusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:#8B7355;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:1" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M100,20 C140,20 170,50 170,90 C170,130 140,160 100,160 C70,160 50,140 50,110 C50,80 70,60 100,60 C120,60 135,75 135,95 C135,115 120,130 100,130"
-                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" />
-                    <path d="M100,180 C60,180 30,150 30,110 C30,70 60,40 100,40 C130,40 150,60 150,90 C150,120 130,140 100,140 C80,140 65,125 65,105 C65,85 80,70 100,70"
-                          fill="none" stroke="url(#mobiusGrad)" stroke-width="8" stroke-linecap="round" opacity="0.6" />
-                  </svg>
+                  <img class="mobius-img" src="/images/d508w-7xfm8.gif" alt="莫比乌斯环" />
                 </div>
                 <div class="time-display" ref="timeDisplayEl">{{ currentTime }}</div>
               </div>
@@ -418,13 +406,13 @@ const expiredInfo = [
 
 .mobius-container {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 16 / 9;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.mobius-svg { width: 100%; height: 100%; }
+.mobius-img { width: 100%; height: 100%; object-fit: cover; }
 
 .time-display {
   font-size: 1rem;
