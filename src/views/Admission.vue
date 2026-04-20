@@ -70,9 +70,6 @@ const tours = [
                   <template v-else>
                     <div class="tl-name">{{ item.name }}</div>
                     <div class="tl-venue">{{ item.venue }}</div>
-                    <div class="tl-extra-dates" v-if="item.dates.length > 1">
-                      <span v-for="d in item.dates.slice(1)" :key="d">{{ d }}</span>
-                    </div>
                   </template>
                 </div>
                 <div class="tl-dot" :class="item.tour === '入梦' ? 'tl-dot-rumeng' : ''"></div>
@@ -282,22 +279,6 @@ const tours = [
   justify-content: flex-start;
 }
 
-.tl-item-above .tl-upper {
-  justify-content: flex-end;
-}
-
-.tl-item-above .tl-lower {
-  justify-content: flex-start;
-}
-
-.tl-item-below .tl-upper {
-  justify-content: flex-end;
-}
-
-.tl-item-below .tl-lower {
-  justify-content: flex-start;
-}
-
 .tl-date {
   font-size: 0.82rem;
   color: #888;
@@ -320,9 +301,11 @@ const tours = [
 }
 
 .tl-extra-dates {
-  font-size: 0.7rem;
-  color: #aaa;
+  font-size: 0.82rem;
+  color: #888;
+  letter-spacing: 1px;
   margin-top: 0.1rem;
+  font-variant-numeric: tabular-nums;
 }
 
 /* 底部入口 */
