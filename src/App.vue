@@ -4,8 +4,11 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const isScrolled = ref(false);
+const isPlaying = ref(false);
 const showToast = ref(false);
 const toastMessage = ref('');
+const audioRef = ref<HTMLAudioElement | null>(null);
+let removeAutoplayUnlockListeners: (() => void) | null = null;
 
 const showCustomAlert = (msg: string) => {
   toastMessage.value = msg;
@@ -21,13 +24,90 @@ const handleScroll = () => {
   isScrolled.value = window.scrollY > 150;
 };
 
-onMounted(() => {
+const tryPlayAudio = async (showBlockedMessage = false) => {
+  const audio = audioRef.value;
+
+  if (!audio) {
+    return false;
+  }
+
+  try {
+    await audio.play();
+    return true;
+  } catch {
+    if (showBlockedMessage) {
+      showCustomAlert('当前浏览器阻止了自动播放，请再点击一次');
+    }
+    return false;
+  }
+};
+
+const setupAutoplayUnlock = () => {
+  if (removeAutoplayUnlockListeners) {
+    return;
+  }
+
+  const interactionEvents: Array<'pointerdown' | 'keydown' | 'touchstart'> = ['pointerdown', 'keydown', 'touchstart'];
+  const handleFirstInteraction = async () => {
+    const played = await tryPlayAudio();
+
+    if (played) {
+      removeAutoplayUnlockListeners?.();
+    }
+  };
+
+  interactionEvents.forEach((eventName) => {
+    window.addEventListener(eventName, handleFirstInteraction, { passive: true });
+  });
+
+  removeAutoplayUnlockListeners = () => {
+    interactionEvents.forEach((eventName) => {
+      window.removeEventListener(eventName, handleFirstInteraction);
+    });
+    removeAutoplayUnlockListeners = null;
+  };
+};
+
+onMounted(async () => {
   window.addEventListener('scroll', handleScroll);
+  const played = await tryPlayAudio();
+
+  if (!played) {
+    setupAutoplayUnlock();
+  }
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
+  removeAutoplayUnlockListeners?.();
 });
+
+const togglePlayback = async () => {
+  const audio = audioRef.value;
+
+  if (!audio) {
+    return;
+  }
+
+  if (audio.paused) {
+    const played = await tryPlayAudio(true);
+
+    if (played) {
+      removeAutoplayUnlockListeners?.();
+    }
+    return;
+  }
+
+  audio.pause();
+};
+
+const handleAudioPlay = () => {
+  isPlaying.value = true;
+};
+
+const handleAudioPause = () => {
+  isPlaying.value = false;
+};
 
 const navLinks = [
   { name: '学校概况', path: '/' },
@@ -41,23 +121,68 @@ const navLinks = [
 
 <template>
   <div class="academy-website">
-
     <!-- Header -->
     <header :class="{ 'header-scrolled': isScrolled }">
       <div class="header-content">
-        <router-link to="/" class="logo" style="white-space: nowrap;">从前书院</router-link>
+        <div class="brand-group">
+          <router-link to="/" class="logo" style="white-space: nowrap;">从前书院</router-link>
+          <button
+            type="button"
+            class="music-toggle desktop-music-toggle"
+            :class="{ 'is-playing': isPlaying }"
+            :aria-label="isPlaying ? '暂停背景音乐' : '播放背景音乐'"
+            @click="togglePlayback"
+          >
+            <span class="music-toggle__icon" aria-hidden="true">
+              <svg viewBox="0 0 1024 1024" focusable="false">
+                <path
+                  d="M875.008 295.424a34.133333 34.133333 0 1 0-58.197333 35.669333c35.328 57.514667 53.930667 123.562667 53.930666 191.488 0 201.898667-164.352 366.250667-366.250666 366.250667S138.24 724.48 138.24 522.581333 302.592 156.330667 504.490667 156.330667c18.773333 0 34.133333-15.36 34.133333-34.133334s-15.36-34.133333-34.133333-34.133333C264.874667 88.064 69.973333 282.965333 69.973333 522.581333s194.901333 434.517333 434.517334 434.517334 434.517333-194.901333 434.517333-434.517334c0.170667-80.384-22.016-159.061333-64-227.157333z"
+                />
+                <path
+                  d="M501.248 389.973333c-77.653333 0-140.8 63.146667-140.8 140.8s63.146667 140.8 140.8 140.8 140.8-63.146667 140.8-140.8V224.256c0-19.456 15.872-35.328 35.328-35.328 19.456 0 35.328 15.872 35.328 35.328 0 18.773333 15.36 34.133333 34.133333 34.133333s34.133333-15.36 34.133334-34.133333c0-57.173333-46.421333-103.594667-103.594667-103.594667s-103.594667 46.421333-103.594667 103.594667v186.026667a140.526933 140.526933 0 0 0-72.533333-20.309334z m0 213.333334a72.704 72.704 0 0 1-72.533333-72.533334 72.704 72.704 0 0 1 72.533333-72.533333 72.704 72.704 0 0 1 72.533333 72.533333 72.704 72.704 0 0 1-72.533333 72.533334z"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
         <nav class="nav-links desktop-nav">
-          <router-link v-for="link in navLinks" :key="link.path" :to="link.path"
-            :class="{ active: route.path === link.path }">
+          <router-link
+            v-for="link in navLinks"
+            :key="link.path"
+            :to="link.path"
+            :class="{ active: route.path === link.path }"
+          >
             {{ link.name }}
           </router-link>
         </nav>
+        <button
+          type="button"
+          class="music-toggle mobile-music-toggle"
+          :class="{ 'is-playing': isPlaying }"
+          :aria-label="isPlaying ? '暂停背景音乐' : '播放背景音乐'"
+          @click="togglePlayback"
+        >
+          <span class="music-toggle__icon" aria-hidden="true">
+            <svg viewBox="0 0 1024 1024" focusable="false">
+              <path
+                d="M875.008 295.424a34.133333 34.133333 0 1 0-58.197333 35.669333c35.328 57.514667 53.930667 123.562667 53.930666 191.488 0 201.898667-164.352 366.250667-366.250666 366.250667S138.24 724.48 138.24 522.581333 302.592 156.330667 504.490667 156.330667c18.773333 0 34.133333-15.36 34.133333-34.133334s-15.36-34.133333-34.133333-34.133333C264.874667 88.064 69.973333 282.965333 69.973333 522.581333s194.901333 434.517333 434.517334 434.517334 434.517333-194.901333 434.517333-434.517334c0.170667-80.384-22.016-159.061333-64-227.157333z"
+              />
+              <path
+                d="M501.248 389.973333c-77.653333 0-140.8 63.146667-140.8 140.8s63.146667 140.8 140.8 140.8 140.8-63.146667 140.8-140.8V224.256c0-19.456 15.872-35.328 35.328-35.328 19.456 0 35.328 15.872 35.328 35.328 0 18.773333 15.36 34.133333 34.133333 34.133333s34.133333-15.36 34.133334-34.133333c0-57.173333-46.421333-103.594667-103.594667-103.594667s-103.594667 46.421333-103.594667 103.594667v186.026667a140.526933 140.526933 0 0 0-72.533333-20.309334z m0 213.333334a72.704 72.704 0 0 1-72.533333-72.533334 72.704 72.704 0 0 1 72.533333-72.533333 72.704 72.704 0 0 1 72.533333 72.533333 72.704 72.704 0 0 1-72.533333 72.533334z"
+              />
+            </svg>
+          </span>
+        </button>
       </div>
       <!-- 移动端导航栏 -->
       <div class="mobile-nav">
         <div class="mobile-nav-scroll">
-          <router-link v-for="link in navLinks" :key="link.path" :to="link.path"
-            :class="{ active: route.path === link.path }">
+          <router-link
+            v-for="link in navLinks"
+            :key="link.path"
+            :to="link.path"
+            :class="{ active: route.path === link.path }"
+          >
             {{ link.name }}
           </router-link>
         </div>
@@ -72,6 +197,17 @@ const navLinks = [
     <div class="custom-toast" :class="{ 'toast-visible': showToast }">
       {{ toastMessage }}
     </div>
+
+    <audio
+      ref="audioRef"
+      src="/audio/music.mp3"
+      autoplay
+      loop
+      preload="auto"
+      @play="handleAudioPlay"
+      @pause="handleAudioPause"
+      @ended="handleAudioPause"
+    />
   </div>
 </template>
 
@@ -109,6 +245,7 @@ header.header-scrolled {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.25rem;
 }
 
 .logo {
@@ -121,6 +258,63 @@ header.header-scrolled {
 
 header.header-scrolled .logo {
   color: #C5A059;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.desktop-music-toggle {
+  margin-top: 3px;
+}
+
+.music-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #f5dca1;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease;
+}
+
+.music-toggle:hover {
+  transform: translateY(-1px);
+  color: #ffe3aa;
+}
+
+.music-toggle.is-playing {
+  filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.22));
+}
+
+.music-toggle__icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.music-toggle__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.music-toggle.is-playing .music-toggle__icon {
+  animation: music-note-spin 3.2s linear infinite;
+}
+
+.mobile-music-toggle {
+  display: none;
 }
 
 .nav-links a {
@@ -228,12 +422,23 @@ header.header-scrolled .logo {
   transform: translate(-50%, -50%) scale(1);
 }
 
+@keyframes music-note-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .main-content {
     padding-top: 82px;
   }
 
+  .brand-group .desktop-music-toggle,
   .desktop-nav {
     display: none;
   }
@@ -249,12 +454,19 @@ header.header-scrolled .logo {
   }
 
   .header-content {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding: 0.6rem 1rem;
   }
 
   .logo {
     font-size: 1.3rem;
+    margin-right: auto;
+  }
+
+  .mobile-music-toggle {
+    display: inline-flex;
+    width: 2.55rem;
+    height: 2.55rem;
   }
 }
 </style>
