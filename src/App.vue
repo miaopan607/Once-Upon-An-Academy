@@ -33,7 +33,6 @@ const navLinks = [
   { name: '学校概况', path: '/' },
   { name: '师资队伍', path: '/faculty' },
   { name: '人才培养', path: '/talent' },
-  { name: '学术研究', path: '/research' },
   { name: '招生就业', path: '/admission' },
   { name: '网上教学', path: '/online-learning' },
   { name: '联系我们', path: '/contact' },

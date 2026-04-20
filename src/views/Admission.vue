@@ -92,15 +92,6 @@ const tours = [
         </div>
       </section>
 
-      <!-- 新闻报道 -->
-      <section class="section-padding">
-        <div class="container">
-          <div class="section-header text-center">
-            <h2 class="title-primary">新闻报道（这地方放什么？）</h2>
-          </div>
-        </div>
-      </section>
-
       <!-- 底部入口 -->
       <section class="page-entry section-padding">
         <div class="container text-center">
