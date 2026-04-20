@@ -175,8 +175,7 @@ header.header-scrolled .logo {
 
 .mobile-nav-scroll {
   display: flex;
-  padding: 0.6rem 1rem;
-  gap: 1.5rem;
+  padding: 0.6rem 0 0.6rem 1rem;
   white-space: nowrap;
 }
 
@@ -189,9 +188,19 @@ header.header-scrolled .logo {
   flex-shrink: 0;
 }
 
+.mobile-nav-scroll a + a {
+  margin-left: 1.5rem;
+}
+
 .mobile-nav-scroll a.active {
   color: #F5C542;
   font-weight: 500;
+}
+
+.mobile-nav-scroll::after {
+  content: '';
+  flex-shrink: 0;
+  width: 1rem;
 }
 
 /* Custom Toast Modal */
