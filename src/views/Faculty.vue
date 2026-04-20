@@ -45,7 +45,7 @@ const teachers = [
 <template>
   <div class="faculty-page">
     <section class="subhero">
-      <div class="subhero-bg" style="background-image: url('/hero.png');"></div>
+      <div class="subhero-bg" style="background-image: url('/hero.jpg');"></div>
       <div class="subhero-overlay"></div>
       <div class="subhero-content">
         <h1 class="subhero-title">师资队伍</h1>

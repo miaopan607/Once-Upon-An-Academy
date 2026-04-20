@@ -35,7 +35,7 @@ const tours = [
 <template>
   <div class="admission-page">
     <section class="subhero">
-      <div class="subhero-bg" style="background-image: url('/hero.png');"></div>
+      <div class="subhero-bg" style="background-image: url('/hero.jpg');"></div>
       <div class="subhero-overlay"></div>
       <div class="subhero-content">
         <h1 class="subhero-title">招生就业</h1>

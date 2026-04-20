@@ -116,7 +116,7 @@ const expiredInfo = [
     </div>
 
     <section class="subhero">
-      <div class="subhero-bg" style="background-image: url('/hero.png');"></div>
+      <div class="subhero-bg" style="background-image: url('/hero.jpg');"></div>
       <div class="subhero-overlay"></div>
       <div class="subhero-content">
         <h1 class="subhero-title">学校概况</h1>
@@ -199,6 +199,10 @@ const expiredInfo = [
             <h2 class="title-primary">立校之本</h2>
           </div>
           <div class="motto-block">
+            <div class="motto-row">
+              <span class="motto-label">校歌</span>
+              <span class="motto-em">《第一个孟夏》</span>
+            </div>
             <div class="motto-row">
               <span class="motto-label">校训</span>
               <span class="motto-em">勤学好诗，爱国爱扶</span>
