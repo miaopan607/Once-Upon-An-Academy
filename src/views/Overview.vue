@@ -201,7 +201,7 @@ const expiredInfo = [
           <div class="motto-block">
             <div class="motto-row">
               <span class="motto-label">校歌</span>
-              <span class="motto-em">《第一个孟夏》</span>
+              <span class="motto-em">《第七个孟夏》</span>
             </div>
             <div class="motto-row">
               <span class="motto-label">校训</span>
