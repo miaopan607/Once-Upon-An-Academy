@@ -237,13 +237,15 @@ const expiredInfo = [
           <div class="split-col">
             <div class="section-header">
               <h2 class="title-primary">荣誉校友</h2>
-              <p class="subtitle-primary">（描述）</p>
+              <p class="subtitle-primary" style="visibility: hidden;">（描述）</p>
             </div>
             <div class="elegant-card elegant-card-dark h-full">
               <h3 class="card-title text-gold">黄诗扶</h3>
-              <p class="tagline mt-2">（头衔待补充）</p>
+              <!-- <p class="tagline mt-2">（头衔待补充）</p> -->
               <ul class="resume-list mt-4">
-                <li>（荣誉校友信息待补充）</li>
+                <li>
+                  古风音乐唱作人。她发行的首张个人音乐专辑《人间不值得》颇受青睐，此后陆续推出二专《入梦也&清醒记》、三专《从前有座山》、《见过》EP与四专《今日无事》，还创作了《吹梦到西洲》《何必诗债换酒钱》《天上掉下个林妹妹》等脍炙人口的作品，并举办了“人间”和“入梦”两轮主题巡演，反响与口碑俱佳。
+                </li>
               </ul>
             </div>
           </div>
