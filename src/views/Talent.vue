@@ -3,39 +3,6 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const scenes = [
-  {
-    course: '音乐',
-    scene: '（嘿嘿想不出来叫什么）',
-    mentors: '杜丽娘、柳梦梅',
-    desc: '（描述）'
-  },
-  {
-    course: '美术',
-    scene: '（想不出来叫什么x2）',
-    mentors: '贾宝玉、林黛玉',
-    desc: '（描述）'
-  },
-  {
-    course: '国学',
-    scene: '文枢阁',
-    mentors: '梁山伯、祝英台',
-    desc: '（描述）'
-  },
-  {
-    course: '劳技',
-    scene: '掠影廊',
-    mentors: '项羽、虞姬',
-    desc: '（描述）'
-  },
-  {
-    course: '入梦',
-    scene: '藏经阁',
-    mentors: '教书先生卿卿',
-    desc: '（描述）'
-  }
-];
-
 const coreCourses = [
   '黄诗扶入坑导学课',
   '声乐演唱与舞台表现',
@@ -114,31 +81,6 @@ const practiceCourses = [
               <h3 class="semester-half-label">下学期</h3>
               <p class="semester-half-name">课外实践</p>
               <p class="semester-half-desc">以课外实践为主，登台演出与项目实训。</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 书院五景 · 限定课程 -->
-      <section class="section-padding bg-alt">
-        <div class="container">
-          <div class="section-header text-center">
-            <h2 class="title-primary">书院五景 · 限定课程</h2>
-            <p class="subtitle-primary">五处幻境，五堂必修。特邀名师入梦传道。</p>
-          </div>
-
-          <div class="scene-cards">
-            <div class="scene-card" v-for="item in scenes" :key="item.course">
-              <div class="scene-card-inner">
-                <div class="scene-header">
-                  <span class="course-name">{{ item.course }}</span>
-                  <h3 class="scene-title">{{ item.scene }}</h3>
-                </div>
-                <div class="mentor-badge">
-                  <span>特邀导师：</span><strong>{{ item.mentors }}</strong>
-                </div>
-                <p class="scene-desc">{{ item.desc }}</p>
-              </div>
             </div>
           </div>
         </div>
@@ -349,79 +291,6 @@ const practiceCourses = [
   writing-mode: vertical-rl;
 }
 
-/* 书院五景 - 场景卡片 */
-.scene-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2.5rem;
-  margin-top: 3rem;
-}
-
-.scene-card {
-  position: relative;
-  background: #fff;
-  padding: 3rem 2rem;
-  border: 1px solid #e2dac9;
-  transition: all 0.5s ease;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.scene-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #0f1719;
-  transform: translateY(100%);
-  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-  z-index: -1;
-}
-
-.scene-card:hover { border-color: #0f1719; }
-.scene-card:hover::before { transform: translateY(0); }
-.scene-card:hover * { color: #fff !important; }
-
-.scene-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.course-name {
-  display: inline-block;
-  font-size: 0.85rem;
-  color: #C5A059;
-  border: 1px solid #C5A059;
-  padding: 2px 10px;
-  border-radius: 20px;
-  flex-shrink: 0;
-}
-
-.scene-title {
-  font-size: 1.3rem;
-  color: #0f1719;
-}
-
-.mentor-badge {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 1.2rem;
-  background-color: rgba(197, 160, 89, 0.1);
-  padding: 6px 12px;
-  display: inline-block;
-}
-
-.mentor-badge strong { color: #a53222; }
-
-.scene-desc {
-  color: #666;
-  font-size: 0.95rem;
-  text-align: justify;
-  line-height: 1.8;
-}
-
 /* 课程体系 */
 .course-grid {
   display: grid;
@@ -511,8 +380,6 @@ const practiceCourses = [
   .semester-divider { flex-direction: row; padding: 0 1rem; }
   .semester-divider-line { height: 1px; width: auto; flex: 1; }
   .semester-divider-or { writing-mode: horizontal-tb; padding: 0 1rem; }
-  .scene-cards { grid-template-columns: 1fr; gap: 1.5rem; }
-  .scene-card { padding: 2rem 1.5rem; }
   .course-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   .page-entry { padding: 3rem 0 2rem; }
 }

@@ -3,48 +3,45 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const teachers = [
+const colleges = [
   {
-    name: '杜丽娘',
-    title: '女 | 毕业并曾任教于南安书院',
-    skill: '主修声乐',
-    college: '音乐学院',
-    desc: '现系从前书院音乐学院教授。曾获全国声乐大赛女子组特等奖。'
+    name: '音乐学院',
+    desc: '（描述）',
+    mentors: [
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+    ]
   },
   {
-    name: '柳梦梅',
-    title: '男 | 先后毕业于东郡书院、岭南书院',
-    skill: '主修作曲',
-    college: '音乐学院',
-    desc: '现系从前书院音乐学院教授。曾获全国谱曲大赛第一名。'
+    name: '美术学院',
+    desc: '（描述）',
+    mentors: [
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+    ]
   },
   {
-    name: '项羽',
-    title: '男 | 国际健将级运动员，毕业于吴中武校',
-    skill: '主修举重、刀枪术',
-    college: '体育学院',
-    desc: '现系从前书院体育学院教授。'
+    name: '文学学院',
+    desc: '（描述）',
+    mentors: [
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+    ]
   },
   {
-    name: '虞姬',
-    title: '女 | 国际健将级运动员，毕业于吴中武校',
-    skill: '主修剑术',
-    college: '体育学院',
-    desc: '现系从前书院体育学院教授。'
+    name: '体育学院',
+    desc: '（描述）',
+    mentors: [
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+    ]
   },
   {
-    name: '贾宝玉',
-    title: '男 | 毕业于大观书院',
-    skill: '主修水墨画',
-    college: '美术学院',
-    desc: '现系从前书院美术学院教授。现已举办个人艺术展三十余次。'
-  },
-  {
-    name: '林黛玉',
-    title: '女 | 毕业于金陵书院',
-    skill: '主修肖像画',
-    college: '美术学院',
-    desc: '现系从前书院美术学院教授。现已举办个人艺术展四十余次。'
+    name: '藏经阁',
+    desc: '（描述）',
+    mentors: [
+      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+    ]
   }
 ];
 </script>
@@ -55,9 +52,9 @@ const teachers = [
       <div class="subhero-bg" style="background-image: url('/hero.jpg');"></div>
       <div class="subhero-overlay"></div>
       <div class="subhero-content">
-        <h1 class="subhero-title">师资队伍</h1>
+        <h1 class="subhero-title">学院介绍</h1>
         <div class="subhero-divider"></div>
-        <p class="subhero-motto">名师荟萃 · 传道授业</p>
+        <p class="subhero-motto">五院并立 · 各展其长</p>
       </div>
     </section>
 
@@ -80,24 +77,25 @@ const teachers = [
         </div>
       </section>
 
-      <!-- 青年教师团队 -->
-      <section class="section-padding">
+      <!-- 五大学院介绍 -->
+      <section class="section-padding" v-for="(college, idx) in colleges" :key="college.name" :class="idx % 2 === 1 ? 'bg-alt' : ''">
         <div class="container">
-          <div class="section-header text-center">
-            <h2 class="title-primary">青年教师团队</h2>
-          </div>
-          <div class="teacher-cards">
-            <div class="teacher-card" v-for="t in teachers" :key="t.name">
-              <div class="teacher-card-inner">
-                <div class="teacher-card-top">
-                  <span class="teacher-college-badge">{{ t.college }}</span>
-                  <h3 class="teacher-name">{{ t.name }}</h3>
+          <div class="college-block">
+            <div class="college-intro">
+              <div class="section-header">
+                <h2 class="title-primary">{{ college.name }}</h2>
+              </div>
+              <p class="college-desc">{{ college.desc }}</p>
+            </div>
+            <div class="college-mentors">
+              <div class="mentor-card" v-for="mentor in college.mentors" :key="mentor.name">
+                <div class="mentor-photo">
+                  <img :src="mentor.photo" :alt="mentor.name" />
                 </div>
-                <div class="teacher-meta">
-                  <span class="teacher-title">{{ t.title }}</span>
-                  <span class="teacher-skill">{{ t.skill }}</span>
+                <div class="mentor-info">
+                  <h3 class="mentor-name">{{ mentor.name }}</h3>
+                  <p class="mentor-desc">{{ mentor.desc }}</p>
                 </div>
-                <p class="teacher-desc">{{ t.desc }}</p>
               </div>
             </div>
           </div>
@@ -212,72 +210,76 @@ const teachers = [
   letter-spacing: 1px;
 }
 
-/* 教师卡片 */
-.teacher-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+/* 学院介绍区块 */
+.college-block {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.teacher-card {
+.college-intro {
+  margin-bottom: 3rem;
+}
+
+.college-desc {
+  font-size: 1rem;
+  line-height: 2;
+  color: #444;
+  text-align: justify;
+  text-indent: 2em;
+  margin-top: 1.5rem;
+}
+
+/* 导师卡片 */
+.college-mentors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.mentor-card {
   background: #fff;
   border: 1px solid #e2dac9;
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem;
   transition: all 0.4s ease;
 }
 
-.teacher-card:hover {
+.mentor-card:hover {
   border-color: #0f1719;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
 }
 
-.teacher-card-inner {
-  padding: 2.5rem 2rem;
-}
-
-.teacher-card-top {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 1rem;
-}
-
-.teacher-college-badge {
-  display: inline-block;
-  font-size: 0.8rem;
-  color: #C5A059;
-  border: 1px solid #C5A059;
-  padding: 2px 10px;
-  border-radius: 20px;
+.mentor-photo {
+  width: 90px;
+  height: 120px;
   flex-shrink: 0;
-  white-space: nowrap;
+  overflow: hidden;
+  border: 2px solid #e2dac9;
 }
 
-.teacher-name {
-  font-size: 1.2rem;
+.mentor-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mentor-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.mentor-name {
+  font-size: 1.15rem;
   color: #0f1719;
   font-weight: 600;
   letter-spacing: 2px;
+  margin-bottom: 0.6rem;
 }
 
-.teacher-meta {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 0.8rem;
-}
-
-.teacher-title {
-  font-size: 0.85rem;
-  color: #a53222;
-}
-
-.teacher-skill {
-  font-size: 0.85rem;
-  color: #C5A059;
-  letter-spacing: 1px;
-}
-
-.teacher-desc {
+.mentor-desc {
   font-size: 0.9rem;
   color: #666;
   line-height: 1.8;
@@ -316,7 +318,10 @@ const teachers = [
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
   .recruit-notice-contact { flex-direction: column; gap: 0.5rem; }
-  .teacher-cards { grid-template-columns: 1fr; }
+  .college-mentors { grid-template-columns: 1fr; }
+  .mentor-card { flex-direction: column; align-items: center; text-align: center; }
+  .mentor-photo { width: 75px; height: 100px; }
+  .mentor-desc { text-align: center; }
   .page-entry { padding: 3rem 0 2rem; }
 }
 </style>
