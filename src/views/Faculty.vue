@@ -129,11 +129,8 @@ const colleges = [
       <section class="section-padding" v-for="(college, idx) in colleges" :key="college.name" :class="idx % 2 === 1 ? 'bg-alt' : ''">
         <div class="container">
           <div class="college-block">
-            <div class="college-intro">
-              <div class="section-header">
-                <h2 class="title-primary">{{ college.name }}</h2>
-              </div>
-              <p class="college-desc" v-for="(para, i) in college.desc" :key="i">{{ para }}</p>
+            <div class="section-header college-title">
+              <h2 class="title-primary">{{ college.name }}</h2>
             </div>
             <div class="college-mentors">
               <div class="mentor-card" v-for="mentor in college.mentors" :key="mentor.name">
@@ -146,6 +143,9 @@ const colleges = [
                   <p class="mentor-desc">{{ mentor.desc }}</p>
                 </div>
               </div>
+            </div>
+            <div class="college-intro">
+              <p class="college-desc" v-for="(para, i) in college.desc" :key="i">{{ para }}</p>
             </div>
           </div>
         </div>
@@ -265,8 +265,13 @@ const colleges = [
   margin: 0 auto;
 }
 
+.college-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
 .college-intro {
-  margin-bottom: 3rem;
+  margin-top: 3rem;
   text-align: center;
 }
 
