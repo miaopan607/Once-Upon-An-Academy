@@ -6,41 +6,78 @@ const router = useRouter();
 const colleges = [
   {
     name: '音乐学院',
-    desc: '（描述）',
+    desc: [
+      '音乐学院是从前书院极具特色、独树一帜的艺术院系。本院深耕苦情歌与小甜歌艺术教学，摒弃枯燥的传统声乐教学模式，主打培养既有感情又有技巧的情歌小王子小公主。',
+      '本院于设立之初便已拥有了自己独立的院楼——松风亭。松风亭坐落于从前书院西南角，亭外还有一大花园，桃红柳绿，春色如许。走进花园，会看到一条绘满彩色壁画的画廊，虽然画上的金粉由于年久失修早已脱落，但在一番良辰美景的衬托下，这里仍成为了从前书院公认的情侣约会天堂。',
+      '本院教学风格自由，课堂氛围轻松随性。上课可带手绢，同时也允许课上小憩入梦寻找演唱灵感。日常练习不是机械练歌，而是沉浸式亲身体验爱恨离愁；期末考核不注重理论知识，核心评判标准为是否打动了听众，是否唱得出爱恨跨越千古的故事感。考试形式多样，可凭学生的擅长之处做自由选择。',
+      '自建院以来，依托两位传奇教授的独特教学体系，打破传统声乐的固化壁垒，培养了许多杰出的音乐界才子。自学院创设以来，我院始终秉持“爱恨都真诚，悲喜都真实”的教育理念，致力于培养技巧合格、感情饱满、温柔浪漫的全能情歌歌手。让学子不止学会唱歌，更学会读懂浪漫、诠释温柔，变成一个温柔且强大的人。'
+    ],
     mentors: [
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+      {
+        name: '杜丽娘',
+        photo: '/导师图片/杜丽娘.jpg',
+        desc: '毕业于南安书院，后留校任教，现系从前书院音乐学院教授。在读时主修声乐，曾获全国声乐大赛女子组特等奖。深谙爱恨嗔痴、缱绻温柔的情感内核，拥有顶级的情绪理解能力与唱腔塑造能力。'
+      },
+      {
+        name: '柳梦梅',
+        photo: '/导师图片/柳梦梅.jpg',
+        desc: '先后毕业于东郡书院、岭南书院，现系从前书院音乐学院教授。在读时主修作曲，曾获全国谱曲大赛第一名。专攻“入梦式唱法”，不讲枯燥乐理套路，主打沉浸式情绪输出，擅长用想象梦中情人的方法教导学生掌握流行情歌的拉扯感、遗憾感，以及久别重逢、起死回生的宿命感。'
+      }
     ]
   },
   {
     name: '美术学院',
-    desc: '（描述）',
+    desc: ['（描述）'],
     mentors: [
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+      { name: '贾宝玉', photo: '/导师图片/贾宝玉.jpg', desc: '（描述）' },
+      { name: '林黛玉', photo: '/导师图片/林黛玉.jpg', desc: '（描述）' }
     ]
   },
   {
     name: '文学学院',
-    desc: '（描述）',
+    desc: [
+      '从前书院于成立之初便设立文学学院，是书院最早成立的学院之一。建院之初，得书院鼎力相助，为本学院修建了一栋独立的院楼——万松文苑。万松文苑占地508㎡，坐落于书院居中位置，地理位置十分优渥。',
+      '本学院学风松弛自由，摒弃了充满条条框框的刻板教条，允许学院学生偶尔睡个懒觉，醒来加餐。育人方面，学院坚持践行“以情悟文，以学养心”的教育理念。致力于培养温柔通透，笔墨出众的学子。曾培养出薛簿会、提布南、柳森武、陆人贾等多名为文学领域做出过突出贡献的佼佼者。',
+      '愿四方少年奔赴万松文苑，于此手中握笔为剑，身侧千帆相伴。与同窗共同执笔写风雅，拾字赴温柔。于松风墨韵间学有所得，在诗书天地里自在成长，奔赴属于自己独一无二的百味人间。'
+    ],
     mentors: [
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+      {
+        name: '梁山伯',
+        photo: '/导师图片/梁山伯.jpg',
+        desc: '千古知名才子，文学学院常驻导师。学识渊博，读研期间曾与祝英台教授为同门学子，期间共同在国内文学领域顶级杂志KTV期刊上发表过多篇一作论文。亦擅长因材施教，主要教授诗词文笔、处世涵养与风雅礼数。'
+      },
+      {
+        name: '祝英台',
+        photo: '/导师图片/祝英台.jpg',
+        desc: '千古知名佳人，文学学院常驻导师。学识渊博，读研期间曾与梁山伯教授为同门学子，期间共同在国内文学领域顶级杂志KTV期刊上发表过多篇一作论文。亦擅长因材施教，主要教授诗词文笔、处世涵养与风雅礼数。'
+      }
     ]
   },
   {
     name: '体育学院',
-    desc: '（描述）',
+    desc: [
+      '从前书院曾开设“西楚班”，专门招收前来习武的子弟。后因西楚班规模逐渐壮大，书院决定成立体育学院，以提供更细致化更丰富的课程给更多慕名前来习武深造的江湖学子。',
+      '本学院坐落于从前书院最北端的拊轼轩，是公认的最具魄力学院。“拊轼”取自霸王凭轼揽山河的典故，寓意登高砺骨，象征学子凭体魄立身、凭武艺成事，是书院锤炼筋骨、精进武术的专属宝地。本院主要教授极具王者气魄的各类武术、运动。大力弘扬以楚汉风骨为核心的学院精神，培养坚韧不屈、迎难而上、大敌当前临危不乱的大将精神。专治四肢无力、体态松散、气场不足等各类初入学院的学子通病。',
+      '多年来，体育学院一直秉承“逢战必扬眉”的办学理念，给本院学子以充足而饱满的精神动力去努力学习各项武艺技能。院内特色课程包罗万象，开设举重力量训练、刀枪实战、形体剑术、仪态塑造等专项课程。不止训练体能体魄，更能磨炼心性毅力。本院坚持将楚汉武侠底蕴与现代体育训练结合，培养体魄强健、身姿优雅、文武兼备的六边形人才。'
+    ],
     mentors: [
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' },
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+      {
+        name: '项羽',
+        photo: '/导师图片/项羽.jpg',
+        desc: '国际健将级金牌教授，学院力量系王牌导师。同毕业于吴中武校，功底深厚、履历传奇。天生气力超群，完美诠释“力拔山兮气盖世”的顶级体魄。专攻举重、刀枪术。主要教授力量训练、兵器实战技法、爆发力突破等课程。教学风格耿直严厉，无人敢缨其锋芒，坚守“英雄会当不胜不归”的信念。'
+      },
+      {
+        name: '虞姬',
+        photo: '/导师图片/虞姬.jpg',
+        desc: '国际健将级金牌教授，学院身法美学首席导师。同毕业于吴中武校，功底深厚、履历传奇。专攻剑术，主打轻盈身法与仪态塑造。剑法动静相宜、刚柔并济，快可御敌，慢可修身。擅长矫正体态、打磨身姿，教会学生何为翩若惊鸿，剑韵天成。'
+      }
     ]
   },
   {
     name: '藏经阁',
-    desc: '（描述）',
+    desc: ['（描述）'],
     mentors: [
-      { name: '（导师姓名）', photo: '/images/placeholder-mentor.jpg', desc: '（描述）' }
+      { name: '卿主任', photo: '/导师图片/卿主任.jpg', desc: '（描述）' }
     ]
   }
 ];
@@ -85,7 +122,7 @@ const colleges = [
               <div class="section-header">
                 <h2 class="title-primary">{{ college.name }}</h2>
               </div>
-              <p class="college-desc">{{ college.desc }}</p>
+              <p class="college-desc" v-for="(para, i) in college.desc" :key="i">{{ para }}</p>
             </div>
             <div class="college-mentors">
               <div class="mentor-card" v-for="mentor in college.mentors" :key="mentor.name">
@@ -218,6 +255,7 @@ const colleges = [
 
 .college-intro {
   margin-bottom: 3rem;
+  text-align: center;
 }
 
 .college-desc {
@@ -251,8 +289,8 @@ const colleges = [
 }
 
 .mentor-photo {
-  width: 90px;
-  height: 120px;
+  width: 120px;
+  height: 160px;
   flex-shrink: 0;
   overflow: hidden;
   border: 2px solid #e2dac9;
@@ -267,7 +305,7 @@ const colleges = [
 .mentor-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   min-width: 0;
 }
 
@@ -320,7 +358,7 @@ const colleges = [
   .recruit-notice-contact { flex-direction: column; gap: 0.5rem; }
   .college-mentors { grid-template-columns: 1fr; }
   .mentor-card { flex-direction: column; align-items: center; text-align: center; }
-  .mentor-photo { width: 75px; height: 100px; }
+  .mentor-photo { width: 100px; height: 133px; }
   .mentor-desc { text-align: center; }
   .page-entry { padding: 3rem 0 2rem; }
 }
