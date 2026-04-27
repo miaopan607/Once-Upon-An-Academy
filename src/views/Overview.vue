@@ -82,6 +82,27 @@ const getExpiredInfoSortValue = (dates: string[]) => {
   return getDateSortValue(sortDate);
 };
 
+const historyTimeline = [
+  { date: '2010', desc: '开始在5Sing音乐上陆续发布作品，16年开始更多人熟知' },
+  { date: '2014', desc: '开始任上海市市宫茉莉花民族乐团高胡乐手，期间跟随乐团参加了上海市市宫民乐团暨国庆献礼演出《我的祖国》，随团参加在贺绿汀音乐厅举行的"上海之春"民族音乐会' },
+  { date: '2015', desc: '从上海师范大学录音艺术专业毕业' },
+  { date: '2015', desc: '与辰小弦作为二胡乐手在北京参加鸾凤鸣首场古风LIVE' },
+  { date: '2016', desc: '活跃在唱吧，发布翻唱作品' },
+  { date: '2017', desc: '在英国布里斯托大学影视音乐作曲专业完成学业，取得硕士学位' },
+  { date: '2017', desc: '为歌手董真作曲的个人单曲《怀沙》发布，开始以作曲家身份黄师傅HBY创作作品，随后为多位歌手及游戏创作音乐作品' },
+  { date: '2018年7月13日', desc: '改名为黄诗扶HBY，后更名为黄诗扶' },
+  { date: '2018', desc: '加入万象凡音' },
+  { date: '2019年1月', desc: '推出个人首张原创音乐专辑《人间不值得》，由幕后创作人正式转为歌手' },
+  { date: '2019年10月', desc: '参加"南京森林音乐节"' },
+  { date: '2020年1月', desc: '发布个人第二张原创音乐专辑《卿卿与你》（入梦也&清醒记）' },
+  { date: '2020年3月', desc: '为电视剧《三千鸦杀》作曲并演唱的插曲《栩栩》发布，第一首OST' },
+  { date: '2021年7月', desc: '发布个人第三张原创音乐专辑《从前有座山》' },
+  { date: '2023', desc: '发布个人原创音乐EP《见过》' },
+  { date: '2023年5月', desc: '举办第一次"人间"全国巡演' },
+  { date: '2025年3月', desc: '发布个人第四张原创音乐专辑《今日无事》' },
+  { date: '2025年6月', desc: '举办第二次"入梦"音乐幕剧全国巡演' },
+];
+
 const expiredInfo = [
   { name: '人间·广州站', dates: ['2023/05/02'] },
   { name: '人间·武汉站', dates: ['2023/06/10'] },
@@ -225,13 +246,23 @@ const expiredInfo = [
           <div class="split-col">
             <div class="section-header">
               <h2 class="title-primary">校史拾遗</h2>
-              <p class="subtitle-primary">（描述）</p>
+              <p class="subtitle-primary" style="visibility: hidden;">办学历程</p>
             </div>
             <div class="elegant-card h-full">
-              <h3 class="card-title">（标题）</h3> 
-              <p class="mt-4 text-detail">
-                （校史待补充）
-              </p>
+              <div class="vtimeline-scroll">
+                <div class="vtimeline">
+                  <div class="vtimeline-item" v-for="(item, idx) in historyTimeline" :key="idx">
+                    <div class="vtimeline-dot-wrap">
+                      <div class="vtimeline-dot"></div>
+                      <div class="vtimeline-line" v-if="idx < historyTimeline.length - 1"></div>
+                    </div>
+                    <div class="vtimeline-content">
+                      <div class="vtimeline-date">{{ item.date }}</div>
+                      <div class="vtimeline-desc">{{ item.desc }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="split-col">
@@ -241,7 +272,6 @@ const expiredInfo = [
             </div>
             <div class="elegant-card elegant-card-dark h-full">
               <h3 class="card-title text-gold">黄诗扶</h3>
-              <!-- <p class="tagline mt-2">（头衔待补充）</p> -->
               <ul class="resume-list mt-4">
                 <li>
                   古风音乐唱作人。她发行的首张个人音乐专辑《人间不值得》颇受青睐，此后陆续推出二专《入梦也&清醒记》、三专《从前有座山》、《见过》EP与四专《今日无事》，还创作了《吹梦到西洲》《何必诗债换酒钱》《天上掉下个林妹妹》等脍炙人口的作品，并举办了“人间”和“入梦”两轮主题巡演，反响与口碑俱佳。
@@ -571,6 +601,85 @@ const expiredInfo = [
   color: #111;
 }
 
+/* 纵向时间轴 */
+.vtimeline-scroll {
+  margin-top: 1rem;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 4px 0.5rem 4px 0;
+}
+
+.vtimeline-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.vtimeline-scroll::-webkit-scrollbar-track {
+  background: #e2dac9;
+}
+
+.vtimeline-scroll::-webkit-scrollbar-thumb {
+  background: #C5A059;
+  border-radius: 2px;
+}
+
+.vtimeline {
+  position: relative;
+  padding-left: 4px;
+}
+
+.vtimeline-item {
+  display: flex;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.vtimeline-item:last-child .vtimeline-content {
+  padding-bottom: 0;
+}
+
+.vtimeline-dot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 12px;
+}
+
+.vtimeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A059;
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.15);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.vtimeline-line {
+  width: 2px;
+  flex: 1;
+  background: #e2dac9;
+}
+
+.vtimeline-content {
+  padding-bottom: 1rem;
+}
+
+.vtimeline-date {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #C5A059;
+  letter-spacing: 2px;
+  margin-bottom: 0.25rem;
+  line-height: 12px;
+}
+
+.vtimeline-desc {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #444;
+}
+
 /* 优雅卡片 */
 .elegant-card {
   background: #fff;
@@ -657,6 +766,10 @@ const expiredInfo = [
   .doc-date-list { font-size: 0.85rem; }
   .doc-stamp { margin-top: 1.5rem; font-size: 0.85rem; }
   .env-image { height: 260px !important; }
+  .vtimeline-scroll { max-height: 320px; }
+  .vtimeline-item { gap: 1rem; }
+  .vtimeline-date { font-size: 0.9rem; }
+  .vtimeline-desc { font-size: 0.82rem; }
   .motto-row { flex-direction: column; gap: 0.3rem; }
   .page-entry { padding: 3rem 0 2rem; }
 }
