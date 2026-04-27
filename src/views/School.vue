@@ -95,7 +95,7 @@ const colleges = [
 </script>
 
 <template>
-  <div class="faculty-page">
+  <div class="school-page">
     <section class="subhero">
       <div class="subhero-bg" style="background-image: url('/hero.jpg');"></div>
       <div class="subhero-overlay"></div>

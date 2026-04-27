@@ -111,7 +111,7 @@ const handleAudioPause = () => {
 
 const navLinks = [
   { name: '学校概况', path: '/' },
-  { name: '学院介绍', path: '/faculty' },
+  { name: '学院介绍', path: '/school' },
   { name: '人才培养', path: '/talent' },
   { name: '招生就业', path: '/admission' },
   { name: '网上教学', path: '/online-learning' },
