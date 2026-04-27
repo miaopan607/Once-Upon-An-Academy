@@ -138,8 +138,10 @@ const colleges = [
                   <img :src="mentor.photo" :alt="mentor.name" />
                 </div>
                 <div class="mentor-info">
-                  <h3 class="mentor-name">{{ mentor.name }}</h3>
-                  <p class="mentor-gender">性别：{{ mentor.gender }}</p>
+                  <div class="mentor-header">
+                    <h3 class="mentor-name">{{ mentor.name }}</h3>
+                    <span class="mentor-gender">性别：{{ mentor.gender }}</span>
+                  </div>
                   <p class="mentor-desc">{{ mentor.desc }}</p>
                 </div>
               </div>
@@ -326,18 +328,23 @@ const colleges = [
   min-width: 0;
 }
 
+.mentor-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
 .mentor-name {
   font-size: 1.15rem;
   color: #0f1719;
   font-weight: 600;
   letter-spacing: 2px;
-  margin-bottom: 0.3rem;
 }
 
 .mentor-gender {
   font-size: 0.85rem;
   color: #b8860b;
-  margin-bottom: 0.6rem;
   letter-spacing: 1px;
 }
 
@@ -382,6 +389,7 @@ const colleges = [
   .recruit-notice-contact { flex-direction: column; gap: 0.5rem; }
   .college-mentors { grid-template-columns: 1fr; }
   .mentor-card { flex-direction: column; align-items: center; text-align: center; }
+  .mentor-header { justify-content: center; }
   .mentor-photo { width: 100px; height: 133px; }
   .mentor-desc { text-align: center; }
   .page-entry { padding: 3rem 0 2rem; }
