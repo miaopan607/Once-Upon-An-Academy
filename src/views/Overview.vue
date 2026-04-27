@@ -137,7 +137,7 @@ const expiredInfo = [
     </div>
 
     <section class="subhero">
-      <div class="subhero-bg" style="background-image: url('/hero.jpg');"></div>
+      <div class="subhero-bg" style="background-image: url('/hero.webp');"></div>
       <div class="subhero-overlay"></div>
       <div class="subhero-content">
         <h1 class="subhero-title">学校概况</h1>
@@ -155,7 +155,7 @@ const expiredInfo = [
             <div class="notice-left" ref="noticeLeft">
               <div class="mobius-section" ref="mobiusSection">
                 <div class="mobius-container">
-                  <img class="mobius-img" src="/images/d508w-7xfm8.gif" alt="莫比乌斯环" />
+                  <img class="mobius-img" src="/images/small.gif" alt="莫比乌斯环" />
                 </div>
                 <div class="time-display" ref="timeDisplayEl">{{ currentTime }}</div>
               </div>

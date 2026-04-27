@@ -200,7 +200,7 @@ const navLinks = [
 
     <audio
       ref="audioRef"
-      src="/audio/music.mp3"
+      src="/audio/music.opus"
       autoplay
       loop
       preload="auto"
