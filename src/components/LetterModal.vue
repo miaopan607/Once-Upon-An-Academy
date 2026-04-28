@@ -674,6 +674,11 @@ defineExpose({ show })
   .letter-content {
     padding: 26px 20px 30px;
     line-height: 1.85;
+    background-image: repeating-linear-gradient(0deg,
+        transparent,
+        transparent 29px,
+        rgba(195, 175, 140, 0.2) 29px,
+        rgba(195, 175, 140, 0.2) 30px);
     background-size: 100% 30px;
     background-position: 0 6px;
   }
@@ -759,6 +764,11 @@ defineExpose({ show })
   .letter-content {
     padding: 20px 14px 24px;
     line-height: 1.75;
+    background-image: repeating-linear-gradient(0deg,
+        transparent,
+        transparent 27px,
+        rgba(195, 175, 140, 0.2) 27px,
+        rgba(195, 175, 140, 0.2) 28px);
     background-size: 100% 28px;
     background-position: 0 4px;
   }
