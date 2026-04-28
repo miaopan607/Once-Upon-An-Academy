@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, provide } from 'vue';
 import { useRoute } from 'vue-router';
+import LetterModal from './components/LetterModal.vue';
 
 const route = useRoute();
 const isScrolled = ref(false);
@@ -101,6 +102,9 @@ const togglePlayback = async () => {
   audio.pause();
 };
 
+provide('isMusicPlaying', isPlaying);
+provide('toggleMusic', togglePlayback);
+
 const handleAudioPlay = () => {
   isPlaying.value = true;
 };
@@ -117,6 +121,12 @@ const navLinks = [
   { name: '网上教学', path: '/online-learning' },
   { name: '联系我们', path: '/contact' },
 ];
+
+const letterModalRef = ref<InstanceType<typeof LetterModal> | null>(null);
+
+function openLetter() {
+  letterModalRef.value?.show();
+}
 </script>
 
 <template>
@@ -144,6 +154,18 @@ const navLinks = [
               </svg>
             </span>
           </button>
+          <button
+            type="button"
+            class="music-toggle desktop-letter-toggle"
+            aria-label="查看信件"
+            @click="openLetter"
+          >
+            <span class="music-toggle__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
+              </svg>
+            </span>
+          </button>
         </div>
         <nav class="nav-links desktop-nav">
           <router-link
@@ -155,24 +177,38 @@ const navLinks = [
             {{ link.name }}
           </router-link>
         </nav>
-        <button
-          type="button"
-          class="music-toggle mobile-music-toggle"
-          :class="{ 'is-playing': isPlaying }"
-          :aria-label="isPlaying ? '暂停背景音乐' : '播放背景音乐'"
-          @click="togglePlayback"
-        >
-          <span class="music-toggle__icon" aria-hidden="true">
-            <svg viewBox="0 0 1024 1024" focusable="false">
-              <path
-                d="M875.008 295.424a34.133333 34.133333 0 1 0-58.197333 35.669333c35.328 57.514667 53.930667 123.562667 53.930666 191.488 0 201.898667-164.352 366.250667-366.250666 366.250667S138.24 724.48 138.24 522.581333 302.592 156.330667 504.490667 156.330667c18.773333 0 34.133333-15.36 34.133333-34.133334s-15.36-34.133333-34.133333-34.133333C264.874667 88.064 69.973333 282.965333 69.973333 522.581333s194.901333 434.517333 434.517334 434.517334 434.517333-194.901333 434.517333-434.517334c0.170667-80.384-22.016-159.061333-64-227.157333z"
-              />
-              <path
-                d="M501.248 389.973333c-77.653333 0-140.8 63.146667-140.8 140.8s63.146667 140.8 140.8 140.8 140.8-63.146667 140.8-140.8V224.256c0-19.456 15.872-35.328 35.328-35.328 19.456 0 35.328 15.872 35.328 35.328 0 18.773333 15.36 34.133333 34.133333 34.133333s34.133333-15.36 34.133334-34.133333c0-57.173333-46.421333-103.594667-103.594667-103.594667s-103.594667 46.421333-103.594667 103.594667v186.026667a140.526933 140.526933 0 0 0-72.533333-20.309334z m0 213.333334a72.704 72.704 0 0 1-72.533333-72.533334 72.704 72.704 0 0 1 72.533333-72.533333 72.704 72.704 0 0 1 72.533333 72.533333 72.704 72.704 0 0 1-72.533333 72.533334z"
-              />
-            </svg>
-          </span>
-        </button>
+        <div class="mobile-actions">
+          <button
+            type="button"
+            class="music-toggle mobile-letter-toggle"
+            aria-label="查看信件"
+            @click="openLetter"
+          >
+            <span class="music-toggle__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
+              </svg>
+            </span>
+          </button>
+          <button
+            type="button"
+            class="music-toggle mobile-music-toggle"
+            :class="{ 'is-playing': isPlaying }"
+            :aria-label="isPlaying ? '暂停背景音乐' : '播放背景音乐'"
+            @click="togglePlayback"
+          >
+            <span class="music-toggle__icon" aria-hidden="true">
+              <svg viewBox="0 0 1024 1024" focusable="false">
+                <path
+                  d="M875.008 295.424a34.133333 34.133333 0 1 0-58.197333 35.669333c35.328 57.514667 53.930667 123.562667 53.930666 191.488 0 201.898667-164.352 366.250667-366.250666 366.250667S138.24 724.48 138.24 522.581333 302.592 156.330667 504.490667 156.330667c18.773333 0 34.133333-15.36 34.133333-34.133334s-15.36-34.133333-34.133333-34.133333C264.874667 88.064 69.973333 282.965333 69.973333 522.581333s194.901333 434.517333 434.517334 434.517334 434.517333-194.901333 434.517333-434.517334c0.170667-80.384-22.016-159.061333-64-227.157333z"
+                />
+                <path
+                  d="M501.248 389.973333c-77.653333 0-140.8 63.146667-140.8 140.8s63.146667 140.8 140.8 140.8 140.8-63.146667 140.8-140.8V224.256c0-19.456 15.872-35.328 35.328-35.328 19.456 0 35.328 15.872 35.328 35.328 0 18.773333 15.36 34.133333 34.133333 34.133333s34.133333-15.36 34.133334-34.133333c0-57.173333-46.421333-103.594667-103.594667-103.594667s-103.594667 46.421333-103.594667 103.594667v186.026667a140.526933 140.526933 0 0 0-72.533333-20.309334z m0 213.333334a72.704 72.704 0 0 1-72.533333-72.533334 72.704 72.704 0 0 1 72.533333-72.533333 72.704 72.704 0 0 1 72.533333 72.533333 72.704 72.704 0 0 1-72.533333 72.533334z"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
       </div>
       <!-- 移动端导航栏 -->
       <div class="mobile-nav">
@@ -208,6 +244,8 @@ const navLinks = [
       @pause="handleAudioPause"
       @ended="handleAudioPause"
     />
+
+    <LetterModal ref="letterModalRef" />
   </div>
 </template>
 
@@ -271,6 +309,10 @@ header.header-scrolled .logo {
   margin-top: 3px;
 }
 
+.desktop-letter-toggle {
+  margin-top: 3px;
+}
+
 .music-toggle {
   display: inline-flex;
   align-items: center;
@@ -315,6 +357,16 @@ header.header-scrolled .logo {
 
 .mobile-music-toggle {
   display: none;
+}
+
+.mobile-letter-toggle {
+  display: none;
+}
+
+.mobile-actions {
+  display: none;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .nav-links a {
@@ -439,6 +491,7 @@ header.header-scrolled .logo {
   }
 
   .brand-group .desktop-music-toggle,
+  .brand-group .desktop-letter-toggle,
   .desktop-nav {
     display: none;
   }
@@ -463,7 +516,17 @@ header.header-scrolled .logo {
     margin-right: auto;
   }
 
+  .mobile-actions {
+    display: flex;
+  }
+
   .mobile-music-toggle {
+    display: inline-flex;
+    width: 2.55rem;
+    height: 2.55rem;
+  }
+
+  .mobile-letter-toggle {
     display: inline-flex;
     width: 2.55rem;
     height: 2.55rem;
