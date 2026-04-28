@@ -370,7 +370,7 @@ defineExpose({ show })
 
 /* ========== 信纸内容 ========== */
 .letter-content {
-  padding: 34px 40px 40px;
+  padding: 8px 40px 40px;
   color: #3d3226;
   line-height: 2;
   letter-spacing: 0.03em;
@@ -425,7 +425,7 @@ defineExpose({ show })
   font-weight: 700;
   color: #3d3226;
   letter-spacing: 0.15em;
-  margin: 10px 0 24px;
+  margin: 0 0 32px;
   position: relative;
   z-index: 2;
   line-height: 32px;
@@ -437,7 +437,7 @@ defineExpose({ show })
   font-weight: 600;
   color: #4a3c2c;
   letter-spacing: 0.06em;
-  margin: 0 0 24px;
+  margin: 0 0 32px;
 }
 
 /* 诗文段落基础 */
@@ -460,7 +460,7 @@ defineExpose({ show })
   font-size: 0.85em;
   color: #8a7b68;
   letter-spacing: 0.04em;
-  margin-bottom: 6px;
+  margin-bottom: 32px;
 }
 
 .letter-content .verse-stanza {
@@ -509,23 +509,24 @@ defineExpose({ show })
   text-align: right;
   position: relative;
   z-index: 2;
-  margin-top: 20px;
+  margin-top: 32px;
 }
 
 .letter-content .letter-sign-block.cn {
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
 .letter-content .letter-sign-block.en {
-  margin-top: 20px;
+  margin-top: 32px;
 }
 
 .letter-content .letter-sig-date {
   font-size: 0.85em;
   color: #7a6b58;
   letter-spacing: 0.04em;
-  margin-bottom: 6px;
+  margin-bottom: 0;
   text-indent: 0;
+  line-height: 32px;
 }
 
 .letter-content .letter-sig-author {
@@ -535,6 +536,7 @@ defineExpose({ show })
   letter-spacing: 0.06em;
   margin-bottom: 0;
   text-indent: 0;
+  line-height: 32px;
 }
 
 .letter-content .ltr {
@@ -672,7 +674,7 @@ defineExpose({ show })
   }
 
   .letter-content {
-    padding: 26px 20px 30px;
+    padding: 6px 20px 30px;
     line-height: 1.85;
     background-image: repeating-linear-gradient(0deg,
         transparent,
@@ -699,20 +701,42 @@ defineExpose({ show })
     line-height: 30px;
   }
 
+  .letter-content .verse-meta {
+    margin-bottom: 30px;
+  }
+
+  .letter-content .letter-sig-date {
+    line-height: 30px;
+  }
+
+  .letter-content .letter-sig-author {
+    line-height: 30px;
+  }
+
   .letter-content .verse-stanza {
     margin-bottom: 30px;
   }
 
   .letter-content .letter-title {
     font-size: 1.2em;
+    margin: 0 0 30px;
   }
 
   .letter-content .letter-title-en {
     font-size: 1.08em;
+    margin: 0 0 30px;
   }
 
   .letter-content .letter-sep {
-    margin: 22px auto;
+    margin: 30px auto;
+  }
+
+  .letter-content .letter-sign-block {
+    margin-top: 30px;
+  }
+
+  .letter-content .letter-sign-block.en {
+    margin-top: 30px;
   }
 
   .letter-content .letter-sig-author {
@@ -762,7 +786,7 @@ defineExpose({ show })
   }
 
   .letter-content {
-    padding: 20px 14px 24px;
+    padding: 4px 20px 24px;
     line-height: 1.75;
     background-image: repeating-linear-gradient(0deg,
         transparent,
@@ -789,20 +813,42 @@ defineExpose({ show })
     line-height: 28px;
   }
 
+  .letter-content .verse-meta {
+    margin-bottom: 28px;
+  }
+
+  .letter-content .letter-sig-date {
+    line-height: 28px;
+  }
+
+  .letter-content .letter-sig-author {
+    line-height: 28px;
+  }
+
   .letter-content .verse-stanza {
     margin-bottom: 28px;
   }
 
   .letter-content .letter-title {
     font-size: 1.1em;
+    margin: 0 0 28px;
   }
 
   .letter-content .letter-title-en {
     font-size: 1em;
+    margin: 0 0 28px;
   }
 
   .letter-content .letter-sep {
-    margin: 18px auto;
+    margin: 28px auto;
+  }
+
+  .letter-content .letter-sign-block {
+    margin-top: 28px;
+  }
+
+  .letter-content .letter-sign-block.en {
+    margin-top: 28px;
   }
 
   .open-btn {
