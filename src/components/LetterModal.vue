@@ -189,8 +189,6 @@ defineExpose({ show })
                 <p class="letter-sig-author">时空研究者 执笔</p>
               </div>
 
-              <div class="letter-sep"></div>
-
               <h2 class="letter-title letter-title-en">Invitation to Time-Space Travel</h2>
               <p class="verse verse-en verse-meta">Current Timestamp: 00:00 UTC, 8 May 2027</p>
 
@@ -370,7 +368,7 @@ defineExpose({ show })
 
 /* ========== 信纸内容 ========== */
 .letter-content {
-  padding: 8px 40px 40px;
+  padding: 40px 40px 40px;
   color: #3d3226;
   line-height: 2;
   letter-spacing: 0.03em;
@@ -437,7 +435,7 @@ defineExpose({ show })
   font-weight: 600;
   color: #4a3c2c;
   letter-spacing: 0.06em;
-  margin: 0 0 32px;
+  margin: 64px 0 32px;
 }
 
 /* 诗文段落基础 */
@@ -460,7 +458,7 @@ defineExpose({ show })
   font-size: 0.85em;
   color: #8a7b68;
   letter-spacing: 0.04em;
-  margin-bottom: 32px;
+  margin-bottom: 0;
 }
 
 .letter-content .verse-stanza {
@@ -492,18 +490,6 @@ defineExpose({ show })
   font-size: 0.85em;
   font-style: italic;
 }
-
-/* 分隔装饰 */
-.letter-content .letter-sep {
-  width: 60px;
-  height: 0;
-  border: none;
-  border-top: 1px solid rgba(170, 145, 115, 0.4);
-  margin: 32px auto;
-  position: relative;
-  z-index: 2;
-}
-
 /* 签署区块 */
 .letter-content .letter-sign-block {
   text-align: right;
@@ -674,7 +660,7 @@ defineExpose({ show })
   }
 
   .letter-content {
-    padding: 6px 20px 30px;
+    padding: 36px 20px 30px;
     line-height: 1.85;
     background-image: repeating-linear-gradient(0deg,
         transparent,
@@ -701,10 +687,6 @@ defineExpose({ show })
     line-height: 30px;
   }
 
-  .letter-content .verse-meta {
-    margin-bottom: 30px;
-  }
-
   .letter-content .letter-sig-date {
     line-height: 30px;
   }
@@ -724,11 +706,7 @@ defineExpose({ show })
 
   .letter-content .letter-title-en {
     font-size: 1.08em;
-    margin: 0 0 30px;
-  }
-
-  .letter-content .letter-sep {
-    margin: 30px auto;
+    margin: 60px 0 30px;
   }
 
   .letter-content .letter-sign-block {
@@ -786,7 +764,7 @@ defineExpose({ show })
   }
 
   .letter-content {
-    padding: 4px 20px 24px;
+    padding: 32px 20px 24px;
     line-height: 1.75;
     background-image: repeating-linear-gradient(0deg,
         transparent,
@@ -813,10 +791,6 @@ defineExpose({ show })
     line-height: 28px;
   }
 
-  .letter-content .verse-meta {
-    margin-bottom: 28px;
-  }
-
   .letter-content .letter-sig-date {
     line-height: 28px;
   }
@@ -836,11 +810,7 @@ defineExpose({ show })
 
   .letter-content .letter-title-en {
     font-size: 1em;
-    margin: 0 0 28px;
-  }
-
-  .letter-content .letter-sep {
-    margin: 28px auto;
+    margin: 56px 0 28px;
   }
 
   .letter-content .letter-sign-block {
