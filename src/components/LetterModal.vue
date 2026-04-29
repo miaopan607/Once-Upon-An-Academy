@@ -78,16 +78,13 @@ let savedScrollY = 0
 
 function lockScroll() {
   savedScrollY = window.scrollY
-  document.body.style.position = 'fixed'
-  document.body.style.top = `-${savedScrollY}px`
-  document.body.style.width = '100%'
+  document.documentElement.style.overflow = 'hidden'
+  document.body.style.overflow = 'hidden'
 }
 
 function unlockScroll() {
-  document.body.style.position = ''
-  document.body.style.top = ''
-  document.body.style.width = ''
-  window.scrollTo(0, savedScrollY)
+  document.documentElement.style.overflow = ''
+  document.body.style.overflow = ''
 }
 
 async function initModal() {
