@@ -287,6 +287,18 @@ const expiredInfo = [
 
 
 
+      <!-- 学院建设工程鸣谢 -->
+      <section class="section-padding bg-paper">
+        <div class="container">
+          <div class="section-header text-center">
+            <h2 class="title-primary">书院建设工程鸣谢</h2>
+          </div>
+          <div class="acknowledgment-content">
+            <img src="/images/竣工图.webp" alt="竣工图" class="acknowledgment-img" />
+          </div>
+        </div>
+      </section>
+
       <!-- 底部入口 -->
       <section class="page-entry section-padding">
         <div class="container text-center">
@@ -710,6 +722,29 @@ const expiredInfo = [
 .card-title { font-size: 1.4rem; margin-bottom: 0.5rem; }
 
 .env-image { border-radius: 4px; }
+
+/* 学院建设工程鸣谢 */
+.acknowledgment-content {
+  max-width: 800px;
+  margin: 2rem auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.acknowledgment-img {
+  width: 280px;
+  opacity: 0.8;
+}
+
+.acknowledgment-text {
+  font-size: 1rem;
+  line-height: 2;
+  color: #444;
+  text-align: center;
+  text-indent: 2em;
+}
 
 /* 底部入口 */
 .page-entry {
