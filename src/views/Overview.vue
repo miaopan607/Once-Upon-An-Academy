@@ -274,12 +274,20 @@ const expiredInfo = [
               <p class="subtitle-primary" style="visibility: hidden;">（描述）</p>
             </div>
             <div class="elegant-card elegant-card-dark h-full">
-              <h3 class="card-title text-gold">黄诗扶</h3>
-              <ul class="resume-list mt-4">
-                <li>
-                  古风音乐唱作人。她发行的首张个人音乐专辑《人间不值得》颇受青睐，此后陆续推出二专《入梦也&清醒记》、三专《从前有座山》、《见过》EP与四专《今日无事》，还创作了《吹梦到西洲》《何必诗债换酒钱》《天上掉下个林妹妹》等脍炙人口的作品，并举办了“人间”和“入梦”两轮主题巡演，反响与口碑俱佳。
-                </li>
-              </ul>
+              <div class="alumni-layout">
+                <div class="alumni-image">
+                  <img src="/images/杰出校友.webp" alt="杰出校友" />
+                </div>
+                <div class="alumni-divider"></div>
+                <div class="alumni-content">
+                  <h3 class="card-title text-gold">黄诗扶</h3>
+                  <ul class="resume-list mt-4">
+                    <li>
+                      古风音乐唱作人。她发行的首张个人音乐专辑《人间不值得》颇受青睐，此后陆续推出二专《入梦也&清醒记》、三专《从前有座山》、《见过》EP与四专《今日无事》，还创作了《吹梦到西洲》《何必诗债换酒钱》《天上掉下个林妹妹》等脍炙人口的作品，并举办了"人间"和"入梦"两轮主题巡演，反响与口碑俱佳。
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -714,7 +722,7 @@ const expiredInfo = [
 }
 
 .elegant-card-dark {
-  background: #0f1719;
+  background: #4a4a4a;
   color: #fff;
   border-top: 3px solid #fbda41;
 }
@@ -783,7 +791,64 @@ const expiredInfo = [
 
 .tagline { font-size: 0.95rem; color: #aaa; letter-spacing: 1px; }
 
+/* 荣誉校友卡片布局 */
+.history-alumni-section .split-layout {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.alumni-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.alumni-image {
+  flex-shrink: 0;
+  width: 260px;
+  display: flex;
+  align-items: center;
+}
+
+.alumni-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.alumni-divider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.alumni-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.alumni-content .resume-list li {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
 @media (max-width: 768px) {
+  .history-alumni-section .split-layout {
+    grid-template-columns: 1fr;
+  }
+  .alumni-layout {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .alumni-image {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  .alumni-divider {
+    width: 100%;
+    height: 1px;
+  }
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
   .overview-page { --notice-frozen-top: 6.25rem; }
