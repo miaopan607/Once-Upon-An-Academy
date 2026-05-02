@@ -631,7 +631,7 @@ const expiredInfo = [
 /* 纵向时间轴 */
 .vtimeline-scroll {
   margin-top: 1rem;
-  max-height: 320px;
+  max-height: 400px;
   overflow-y: auto;
   padding: 4px 0.5rem 4px 0;
 }
@@ -873,7 +873,7 @@ const expiredInfo = [
   .doc-date-list { font-size: 0.85rem; }
   .doc-stamp { margin-top: 1.5rem; font-size: 0.85rem; }
   .env-image { height: 260px !important; }
-  .vtimeline-scroll { max-height: 320px; }
+  .vtimeline-scroll { max-height: 380px; }
   .vtimeline-item { gap: 1rem; }
   .vtimeline-date { font-size: 0.9rem; }
   .vtimeline-desc { font-size: 0.82rem; }
