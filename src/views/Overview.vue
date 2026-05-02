@@ -209,6 +209,9 @@ const expiredInfo = [
             <p class="overview-text">
               从前书院，简称人院，坐落于美丽的入间省人梦市清醒县有座山镇今日无路，依山傍水，环境静谧。其前身是与四大书院齐名的大四书院，教改后更名为从前书院。书院占地面积共5.8亩，后倚有座山，前饮清水河，左木修，右池阔。院内画舫水榭、亭台楼阁错落其间，风光秀丽，景色宜人，有自然之趣而无喧嚣之扰，是广大学子潜心修学的好去处。书院内师资力量雄厚，院内教师在诗书画乐艺上均有较高水准，更有雄狮两座立于门前。此外，书院教学成果显著，目前已入选KFC计划，多次斩获今日无路最佳书院头衔，是目前省内公认的办学水平最高的从前书院，同时也是世界范围内影响力最大的从前书院，目前已与上海师范大学、布里斯托大学等高等院校开展了深度交流合作。
             </p>
+            <div class="overview-image text-center">
+              <img src="/images/设计图.webp" alt="书院设计图" style="max-width: 100%; height: auto;" />
+            </div>
           </div>
         </div>
       </section>
@@ -500,6 +503,10 @@ const expiredInfo = [
   color: #444;
   text-align: justify;
   text-indent: 2em;
+}
+
+.overview-image {
+  margin-top: 2rem;
 }
 
 /* 立校之本 */

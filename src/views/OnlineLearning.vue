@@ -2,13 +2,6 @@
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const categories = [
-  { name: '声乐课程', desc: '演唱技巧与舞台表现' },
-  { name: '创作课程', desc: '词曲创作与编曲基础' },
-  { name: '赏析课程', desc: '国风音乐作品鉴赏' },
-  { name: '文化课程', desc: '古典诗词与传统文化' },
-  { name: '实践课程', desc: '作品录制与艺术策划' }
-];
 </script>
 
 <template>
@@ -28,15 +21,10 @@ const categories = [
         <div class="container">
           <div class="section-header text-center">
             <h2 class="title-primary">2026 生贺节目课程</h2>
-            <p class="subtitle-primary">节目表陆续更新中</p>
           </div>
 
-          <div class="category-grid">
-            <div class="category-card" v-for="cat in categories" :key="cat.name">
-              <h3 class="category-name">{{ cat.name }}</h3>
-              <p class="category-desc">{{ cat.desc }}</p>
-              <div class="category-status">资料整理中</div>
-            </div>
+          <div class="course-schedule text-center">
+            <img src="/images/课程表.webp" alt="2026 生贺节目课程表" style="max-width: 100%; height: auto;" />
           </div>
         </div>
       </section>
@@ -114,47 +102,13 @@ const categories = [
   opacity: 0.9;
 }
 
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
+.course-schedule {
   margin-top: 3rem;
-}
-
-.category-card {
-  background: #fff;
-  padding: 2.5rem 2rem;
-  border: 1px solid #e2dac9;
   text-align: center;
-  transition: all 0.3s ease;
 }
-
-.category-card:hover {
-  border-color: #C5A059;
-  box-shadow: 0 10px 25px rgba(197, 160, 89, 0.12);
-  transform: translateY(-3px);
-}
-
-.category-name {
-  font-size: 1.15rem;
-  color: #0f1719;
-  font-weight: 600;
-  letter-spacing: 2px;
-  margin-bottom: 0.5rem;
-}
-
-.category-desc {
-  font-size: 0.85rem;
-  color: #888;
-  margin-bottom: 1.5rem;
-}
-
-.category-status {
-  font-size: 0.8rem;
-  color: #C5A059;
-  letter-spacing: 2px;
-  padding-top: 1rem;
-  border-top: 1px dashed #e2dac9;
+.course-schedule img {
+  display: block;
+  margin: 0 auto;
 }
 
 /* 底部入口 */
@@ -188,8 +142,7 @@ const categories = [
 @media (max-width: 768px) {
   .subhero { height: 260px; }
   .subhero-title { font-size: 1.8rem; }
-  .category-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-  .category-card { padding: 2rem 1.5rem; }
+
   .page-entry { padding: 3rem 0 2rem; }
 }
 </style>
