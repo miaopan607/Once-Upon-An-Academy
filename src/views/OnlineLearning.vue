@@ -24,7 +24,7 @@ const router = useRouter();
           </div>
 
           <div class="course-schedule text-center">
-            <img src="/images/课程表.webp" alt="2026 生贺节目课程表" style="max-width: 100%; height: auto;" />
+            <img src="/images/课程表新.webp" alt="2026 生贺节目课程表" style="max-width: 100%; height: auto;" />
           </div>
         </div>
       </section>
