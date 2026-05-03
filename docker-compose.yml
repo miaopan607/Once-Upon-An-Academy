@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: .
+    container_name: academy-backend
+    restart: unless-stopped
+    expose:
+      - "3001"
+    volumes:
+      - /opt/docker/academy-backend/data:/app/server/data
+    networks:
+      - npm_network
+
+networks:
+  npm_network:
+    external: true

@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import LetterModal from './components/LetterModal.vue';
+import CheckIn from './components/CheckIn.vue';
 
 const route = useRoute();
 const isScrolled = ref(false);
@@ -228,6 +229,8 @@ function openLetter() {
     <main class="main-content">
       <router-view />
     </main>
+
+    <CheckIn />
 
     <!-- Custom Toast -->
     <div class="custom-toast" :class="{ 'toast-visible': showToast }">

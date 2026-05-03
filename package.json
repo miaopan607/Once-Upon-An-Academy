@@ -5,18 +5,25 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "npm run type-check && vite build",
+    "dev": "concurrently -n fe,be -c cyan,yellow \"pnpm run dev:fe\" \"pnpm run dev:be\"",
+    "dev:fe": "vite",
+    "dev:be": "node server/index.js",
+    "build": "pnpm run type-check && vite build",
+    "start": "node server/index.js",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
-    "deploy": "pnpm run build && rsync -avz --delete dist/ shifu:/opt/docker/npm/data/static/Once-Upon-An-Academy/dist"
+    "deploy": "pnpm run deploy:fe && pnpm run deploy:be",
+    "deploy:fe": "pnpm run build && rsync -avz --delete dist/ shifu:/opt/docker/npm/data/static/Once-Upon-An-Academy/dist",
+    "deploy:be": "rsync -avz --delete server Dockerfile docker-compose.yml package.json pnpm-lock.yaml shifu:/opt/docker/academy-backend/ && ssh shifu \"cd /opt/docker/academy-backend && docker compose up -d --build\""
   },
   "dependencies": {
+    "express": "^5.1.0",
     "vue": "^3.5.0",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
+    "concurrently": "^9.2.1",
     "typescript": "~5.9.0",
     "vite": "^7.0.0",
     "vue-tsc": "^3.0.0"
