@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, inject, type Ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, inject, type Ref } from 'vue'
 
 const STORAGE_KEY = 'letter_modal_dismissed'
 const THANK_YOU_STORAGE_KEY = 'thank_you_letter_viewed'
@@ -13,6 +13,8 @@ const isRevealed = ref(false)
 const isFlipping = ref(false)
 const flipStage = ref<'idle' | 'out' | 'in-start' | 'in'>('idle')
 const currentLetter = ref<LetterType>('invitation')
+const hasViewedThankYouLetter = ref(!!localStorage.getItem(THANK_YOU_STORAGE_KEY))
+const shouldShowSwitchButton = computed(() => hasViewedThankYouLetter.value || currentLetter.value === 'thank-you')
 
 const wrapperRef = ref<HTMLElement | null>(null)
 const contentRef = ref<HTMLElement | null>(null)
@@ -115,6 +117,7 @@ function markCurrentLetterViewed() {
 
 function markThankYouViewed() {
   localStorage.setItem(THANK_YOU_STORAGE_KEY, '1')
+  hasViewedThankYouLetter.value = true
 }
 
 function closeModal() {
@@ -272,6 +275,7 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
           </svg>
         </button>
         <button
+          v-if="shouldShowSwitchButton"
           class="modal-action-btn modal-switch-btn"
           :aria-label="currentLetter === 'invitation' ? '查看时空感谢信' : '查看时空旅行邀请函'"
           :disabled="isFlipping"
