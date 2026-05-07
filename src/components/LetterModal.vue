@@ -2,20 +2,32 @@
 import { ref, onMounted, onUnmounted, nextTick, inject, type Ref } from 'vue'
 
 const STORAGE_KEY = 'letter_modal_dismissed'
+const THANK_YOU_STORAGE_KEY = 'thank_you_letter_viewed'
+type LetterType = 'invitation' | 'thank-you'
 const INITIAL_REVEAL = 45
 const BUTTON_AREA = 80
+const FLIP_DURATION = 300
 
 const isVisible = ref(false)
 const isRevealed = ref(false)
+const isFlipping = ref(false)
+const flipStage = ref<'idle' | 'out' | 'in-start' | 'in'>('idle')
+const currentLetter = ref<LetterType>('invitation')
 
 const wrapperRef = ref<HTMLElement | null>(null)
 const contentRef = ref<HTMLElement | null>(null)
 const coverRef = ref<HTMLElement | null>(null)
+const modalScrollRef = ref<HTMLElement | null>(null)
 
 const isMusicPlaying = inject<Ref<boolean>>('isMusicPlaying', ref(false))
 const toggleMusic = inject<() => Promise<void>>('toggleMusic', async () => {})
 
 let contentHeight = 0
+let flipOutTimer: ReturnType<typeof window.setTimeout> | null = null
+let flipDoneTimer: ReturnType<typeof window.setTimeout> | null = null
+let flipFrame: number | null = null
+let flipRunId = 0
+let resizeFrame: number | null = null
 
 if (!localStorage.getItem(STORAGE_KEY)) {
   isVisible.value = true
@@ -28,11 +40,14 @@ function measureContent() {
 
   const origHeight = wrapper.style.height
   const origOverflow = wrapper.style.overflow
+  const origTransition = wrapper.style.transition
   wrapper.style.height = 'auto'
   wrapper.style.overflow = 'visible'
+  wrapper.style.transition = 'none'
   contentHeight = content.offsetHeight
   wrapper.style.height = origHeight
   wrapper.style.overflow = origOverflow
+  wrapper.style.transition = origTransition
 }
 
 function initLayout() {
@@ -49,10 +64,7 @@ function initLayout() {
   cover.style.height = (contentHeight - INITIAL_REVEAL + 120) + 'px'
 }
 
-function reveal() {
-  if (isRevealed.value) return
-  isRevealed.value = true
-
+function applyCachedRevealedLayout() {
   const wrapper = wrapperRef.value
   const cover = coverRef.value
   if (!wrapper || !cover) return
@@ -61,17 +73,71 @@ function reveal() {
   cover.style.top = contentHeight + 'px'
 }
 
+function applyRevealedLayout() {
+  measureContent()
+  applyCachedRevealedLayout()
+}
+
+function clearFlipTimers() {
+  flipRunId += 1
+  if (flipOutTimer) {
+    window.clearTimeout(flipOutTimer)
+    flipOutTimer = null
+  }
+  if (flipDoneTimer) {
+    window.clearTimeout(flipDoneTimer)
+    flipDoneTimer = null
+  }
+  if (flipFrame !== null) {
+    window.cancelAnimationFrame(flipFrame)
+    flipFrame = null
+  }
+  isFlipping.value = false
+  flipStage.value = 'idle'
+}
+
+function cancelResizeFrame() {
+  if (resizeFrame !== null) {
+    window.cancelAnimationFrame(resizeFrame)
+    resizeFrame = null
+  }
+}
+
+function reveal() {
+  if (isRevealed.value) return
+  isRevealed.value = true
+  applyCachedRevealedLayout()
+}
+
+function markCurrentLetterViewed() {
+  localStorage.setItem(currentLetter.value === 'invitation' ? STORAGE_KEY : THANK_YOU_STORAGE_KEY, '1')
+}
+
+function markThankYouViewed() {
+  localStorage.setItem(THANK_YOU_STORAGE_KEY, '1')
+}
+
 function closeModal() {
   isVisible.value = false
-  localStorage.setItem(STORAGE_KEY, '1')
+  markCurrentLetterViewed()
+  clearFlipTimers()
+  cancelResizeFrame()
   unlockScroll()
   window.removeEventListener('resize', handleResize)
 }
 
 function handleResize() {
-  if (!isRevealed.value) {
-    initLayout()
-  }
+  cancelResizeFrame()
+  resizeFrame = window.requestAnimationFrame(() => {
+    resizeFrame = null
+
+    if (!isRevealed.value) {
+      initLayout()
+      return
+    }
+
+    applyRevealedLayout()
+  })
 }
 
 let savedScrollY = 0
@@ -101,11 +167,82 @@ async function initModal() {
   window.addEventListener('resize', handleResize)
 }
 
-async function show() {
-  if (isVisible.value) return
+async function openModal(letter: LetterType) {
+  currentLetter.value = letter
+  if (letter === 'thank-you') {
+    markThankYouViewed()
+  }
+
+  if (isVisible.value) {
+    isRevealed.value = false
+    await nextTick()
+    initLayout()
+    return
+  }
+
   isVisible.value = true
   isRevealed.value = false
   await initModal()
+}
+
+async function show() {
+  await openModal('invitation')
+}
+
+async function showThankYou() {
+  await openModal('thank-you')
+}
+
+async function showThankYouIfUnviewed() {
+  if (!localStorage.getItem(THANK_YOU_STORAGE_KEY)) {
+    await showThankYou()
+  }
+}
+
+async function switchLetter(letter: LetterType) {
+  if (letter === currentLetter.value || isFlipping.value) return
+
+  clearFlipTimers()
+  const runId = flipRunId
+  isFlipping.value = true
+  flipStage.value = 'out'
+
+  flipOutTimer = window.setTimeout(async () => {
+    if (runId !== flipRunId) return
+
+    flipOutTimer = null
+    currentLetter.value = letter
+    isRevealed.value = true
+    if (letter === 'thank-you') {
+      markThankYouViewed()
+    }
+
+    await nextTick()
+    if (runId !== flipRunId) return
+
+    applyRevealedLayout()
+    modalScrollRef.value?.scrollTo({ top: 0, behavior: 'auto' })
+    flipStage.value = 'in-start'
+
+    await nextTick()
+    if (runId !== flipRunId) return
+
+    wrapperRef.value?.getBoundingClientRect()
+
+    flipFrame = window.requestAnimationFrame(() => {
+      if (runId !== flipRunId) return
+
+      flipFrame = null
+      flipStage.value = 'in'
+      flipDoneTimer = window.setTimeout(() => {
+        if (runId !== flipRunId) return
+
+        flipDoneTimer = null
+        flipStage.value = 'idle'
+        isFlipping.value = false
+      }, FLIP_DURATION)
+    })
+  }, FLIP_DURATION)
 }
 
 onMounted(async () => {
@@ -115,24 +252,36 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  clearFlipTimers()
+  cancelResizeFrame()
   unlockScroll()
   window.removeEventListener('resize', handleResize)
 })
 
-defineExpose({ show })
+defineExpose({ show, showThankYou, showThankYouIfUnviewed })
 </script>
 
 <template>
   <Teleport to="body">
     <div v-if="isVisible" class="modal-overlay">
-      <button class="modal-close-btn" @click="closeModal" aria-label="关闭">
+      <button class="modal-action-btn modal-close-btn" @click="closeModal" aria-label="关闭">
         <svg viewBox="0 0 24 24" width="22" height="22">
           <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
           <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
         </svg>
       </button>
       <button
-        class="modal-music-btn"
+        class="modal-action-btn modal-switch-btn"
+        :aria-label="currentLetter === 'invitation' ? '查看时空感谢信' : '查看时空旅行邀请函'"
+        :disabled="isFlipping"
+        @click="switchLetter(currentLetter === 'invitation' ? 'thank-you' : 'invitation')"
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-4H6V9h12v3z" fill="currentColor"/>
+        </svg>
+      </button>
+      <button
+        class="modal-action-btn modal-music-btn"
         :class="{ 'is-playing': isMusicPlaying }"
         :aria-label="isMusicPlaying ? '暂停背景音乐' : '播放背景音乐'"
         @click="toggleMusic"
@@ -149,74 +298,139 @@ defineExpose({ show })
         </span>
       </button>
 
-      <div class="modal-scroll">
+      <div class="modal-scroll" ref="modalScrollRef">
         <div class="modal-center">
-          <div ref="wrapperRef" class="letter-wrapper">
+          <div
+            ref="wrapperRef"
+            class="letter-wrapper"
+            :class="{
+              'is-flipping-out': flipStage === 'out',
+              'is-flipping-in-start': flipStage === 'in-start',
+              'is-flipping-in': flipStage === 'in'
+            }"
+          >
             <div ref="contentRef" class="letter-content">
-              <h2 class="letter-title">时空旅行邀请函</h2>
-              <p class="verse verse-meta">现时定格:2027.05.08 00:00 UTC</p>
+              <template v-if="currentLetter === 'invitation'">
+                <h2 class="letter-title">时空旅行邀请函</h2>
+                <p class="verse verse-meta">现时定格:2027.05.08 00:00 UTC</p>
 
-              <p class="verse verse-stanza">我正式启动，时空穿梭实验——</p>
-              <p class="verse verse-stanza">
-                时间可扭曲，空间能折叠<br>
-                过去并非消亡，只是暂时封存<br>
-                破除因果悖论，挣脱时间枷锁
-              </p>
-              <p class="verse verse-stanza">
-                我向全域时空投递这份邀请函：<br>
-                无论你<br>
-                身处哪一段时间线<br>
-                停留于哪一处平行空间<br>
-                皆可借时间旅行的法则<br>
-                穿越时空 逆流岁月
-              </p>
-              <p class="verse verse-stanza">
-                诚邀每一位时空旅人参与：<br>
-                <span class="verse-em">2026.05.08黄诗扶</span><br>
-                <span class="verse-em">「从前书院」生辰盛会</span>
-              </p>
-              <p class="verse verse-stanza">
-                宇宙辽阔 星河辗转<br>
-                我在旧日时光<br>
-                等你赴约
-              </p>
+                <p class="verse verse-stanza">我正式启动，时空穿梭实验——</p>
+                <p class="verse verse-stanza">
+                  时间可扭曲，空间能折叠<br>
+                  过去并非消亡，只是暂时封存<br>
+                  破除因果悖论，挣脱时间枷锁
+                </p>
+                <p class="verse verse-stanza">
+                  我向全域时空投递这份邀请函：<br>
+                  无论你<br>
+                  身处哪一段时间线<br>
+                  停留于哪一处平行空间<br>
+                  皆可借时间旅行的法则<br>
+                  穿越时空 逆流岁月
+                </p>
+                <p class="verse verse-stanza">
+                  诚邀每一位时空旅人参与：<br>
+                  <span class="verse-em">2026.05.08黄诗扶</span><br>
+                  <span class="verse-em">「从前书院」生辰盛会</span>
+                </p>
+                <p class="verse verse-stanza">
+                  宇宙辽阔 星河辗转<br>
+                  我在旧日时光<br>
+                  等你赴约
+                </p>
 
-              <div class="letter-sign-block cn">
-                <p class="letter-sig-date">2027年5月8日</p>
-                <p class="letter-sig-author">时空研究者 执笔</p>
-              </div>
+                <div class="letter-sign-block cn">
+                  <p class="letter-sig-date">2027年5月8日</p>
+                  <p class="letter-sig-author">时空研究者 执笔</p>
+                </div>
 
-              <h2 class="letter-title letter-title-en">Invitation to Time-Space Travel</h2>
-              <p class="verse verse-en verse-meta">Current Timestamp: 00:00 UTC, 8 May 2027</p>
+                <h2 class="letter-title letter-title-en">Invitation to Time-Space Travel</h2>
+                <p class="verse verse-en verse-meta">Current Timestamp: 00:00 UTC, 8 May 2027</p>
 
-              <p class="verse verse-en verse-stanza">I hereby officially launch the time-space traversal experiment&mdash;</p>
-              <p class="verse verse-en verse-stanza">
-                Time may twist, space may fold<br>
-                The past's not lost, but safely sealed<br>
-                Break causal paradoxes, break time's strict hold
-              </p>
-              <p class="verse verse-en verse-stanza">
-                I extend this invitation to the entire spacetime continuum:<br>
-                No matter which timeline you are in<br>
-                No matter which parallel universe you are in<br>
-                You can all follow the laws of time travel's art<br>
-                To cross the spacetime, reverse time's depart
-              </p>
-              <p class="verse verse-en verse-stanza">
-                We cordially invite every time traveler to join us:<br>
-                <span class="verse-em verse-em-en">May 8th, 2026, Huang Shifu</span><br>
-                <span class="verse-em verse-em-en">"Former Academy" Birthday Celebration</span>
-              </p>
-              <p class="verse verse-en verse-stanza">
-                The universe is vast, and the Milky Way is ever-turning<br>
-                In the days of yore<br>
-                I await your arrival
-              </p>
+                <p class="verse verse-en verse-stanza">I hereby officially launch the time-space traversal experiment&mdash;</p>
+                <p class="verse verse-en verse-stanza">
+                  Time may twist, space may fold<br>
+                  The past's not lost, but safely sealed<br>
+                  Break causal paradoxes, break time's strict hold
+                </p>
+                <p class="verse verse-en verse-stanza">
+                  I extend this invitation to the entire spacetime continuum:<br>
+                  No matter which timeline you are in<br>
+                  No matter which parallel universe you are in<br>
+                  You can all follow the laws of time travel's art<br>
+                  To cross the spacetime, reverse time's depart
+                </p>
+                <p class="verse verse-en verse-stanza">
+                  We cordially invite every time traveler to join us:<br>
+                  <span class="verse-em verse-em-en">May 8th, 2026, Huang Shifu</span><br>
+                  <span class="verse-em verse-em-en">"Former Academy" Birthday Celebration</span>
+                </p>
+                <p class="verse verse-en verse-stanza">
+                  The universe is vast, and the Milky Way is ever-turning<br>
+                  In the days of yore<br>
+                  I await your arrival
+                </p>
 
-              <div class="letter-sign-block en">
-                <p class="letter-sig-date ltr">8 May 2027</p>
-                <p class="letter-sig-author ltr">Written by a Spacetime Researcher</p>
-              </div>
+                <div class="letter-sign-block en">
+                  <p class="letter-sig-date ltr">8 May 2027</p>
+                  <p class="letter-sig-author ltr">Written by a Spacetime Researcher</p>
+                </div>
+              </template>
+
+              <template v-else>
+                <h2 class="letter-title">时空感谢信</h2>
+
+                <p class="verse verse-stanza">展信致礼：</p>
+                <p class="verse verse-stanza">
+                  我们身处2026年的时空，<br>
+                  有幸收到跨越维度送来的时空邀约，<br>
+                  如期赴约「从前书院」黄诗扶生辰盛会。
+                </p>
+                <p class="verse verse-stanza">
+                  我们亲身亲历这场盛会，<br>
+                  亲历当下的温柔与相逢。<br>
+                  而当时序折叠、<br>
+                  空间交错才恍然知晓：<br>
+                  在另一条平行时间线里，<br>
+                  这场盛会早已落幕，<br>
+                  一切早已成为既定的过往。
+                </p>
+                <p class="verse verse-stanza">
+                  我们奔赴的此刻，<br>
+                  可能是他人回溯的从前；<br>
+                  我们拥有的从前，<br>
+                  可能是别人停留的此刻。
+                </p>
+                <p class="verse verse-stanza">
+                  世间时序首尾相连，<br>
+                  万物因果循环相扣，<br>
+                  整个世界，<br>
+                  本就是一枚无限缠绕、<br>
+                  往复不息的莫比乌斯环。
+                </p>
+                <p class="verse verse-stanza">
+                  时光从非单向奔走，<br>
+                  过去与未来彼此咬合，<br>
+                  我们始终在岁月里探寻因果，<br>
+                  在时空缝隙中追问相逢的意义。
+                </p>
+                <p class="verse verse-stanza">
+                  感谢这场特别的时空实验，<br>
+                  感谢跨越维度的对话与联结，<br>
+                  让我们打破时间的边界，<br>
+                  读懂相逢的宿命与温柔。
+                </p>
+                <p class="verse verse-stanza">
+                  以光阴为序，<br>
+                  以岁月为契，<br>
+                  感念相遇，致谢相逢。
+                </p>
+
+                <div class="letter-sign-block cn">
+                  <p class="letter-sig-date">2026年5月8日</p>
+                  <p class="letter-sig-author">某卿卿 敬上</p>
+                </div>
+              </template>
             </div>
 
             <div ref="coverRef" class="letter-cover">
@@ -258,6 +472,7 @@ defineExpose({ show })
   justify-content: center;
   align-items: center;
   padding: 24px 20px;
+  perspective: 1200px;
 }
 
 @keyframes modal-fade-in {
@@ -265,56 +480,46 @@ defineExpose({ show })
   to   { opacity: 1; }
 }
 
-/* ========== 关闭按钮 ========== */
-.modal-close-btn {
+.modal-action-btn {
   position: fixed;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(251, 218, 65, 0.55);
+  background: rgba(15, 23, 25, 0.55);
+  color: rgba(251, 218, 65, 0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.modal-action-btn:hover {
+  background: rgba(15, 23, 25, 0.8);
+  border-color: #fbda41;
+  color: #fbda41;
+}
+
+.modal-close-btn {
   top: 24px;
   right: 24px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(251, 218, 65, 0.55);
-  background: rgba(15, 23, 25, 0.55);
-  color: rgba(251, 218, 65, 0.85);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.modal-close-btn:hover {
-  background: rgba(15, 23, 25, 0.8);
-  border-color: #fbda41;
-  color: #fbda41;
-}
-
-/* ========== 弹窗音乐按钮 ========== */
 .modal-music-btn {
-  position: fixed;
   top: 24px;
   right: 76px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(251, 218, 65, 0.55);
-  background: rgba(15, 23, 25, 0.55);
-  color: rgba(251, 218, 65, 0.85);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.modal-music-btn:hover {
-  background: rgba(15, 23, 25, 0.8);
-  border-color: #fbda41;
-  color: #fbda41;
+.modal-switch-btn {
+  top: 24px;
+  right: 128px;
+}
+
+.modal-switch-btn:hover {
+  transform: scale(1.05);
 }
 
 .modal-music-btn.is-playing {
@@ -353,6 +558,9 @@ defineExpose({ show })
   position: relative;
   overflow: hidden;
   transition: none;
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
   box-shadow:
     0 1px 3px rgba(80, 50, 20, 0.08),
     0 4px 16px rgba(80, 50, 20, 0.1),
@@ -361,6 +569,26 @@ defineExpose({ show })
 
 .letter-wrapper.ready {
   transition: height 5s linear;
+}
+
+.letter-wrapper.is-flipping-out {
+  transform: rotateY(90deg);
+  transition: transform 0.3s ease-in, height 0.25s ease !important;
+}
+
+.letter-wrapper.is-flipping-in-start {
+  transform: rotateY(-90deg);
+  transition: none !important;
+}
+
+.letter-wrapper.is-flipping-in {
+  transform: rotateY(0deg);
+  transition: transform 0.3s ease-out, height 0.25s ease !important;
+}
+
+.letter-wrapper.ready:not(.is-flipping-out):not(.is-flipping-in-start):not(.is-flipping-in) {
+  transform: rotateY(0deg);
+  transition: transform 0.3s ease-out, height 5s linear;
 }
 
 /* ========== 信纸内容 ========== */
@@ -642,18 +870,24 @@ defineExpose({ show })
     padding: 16px 12px;
   }
 
+  .modal-action-btn {
+    width: 34px;
+    height: 34px;
+  }
+
   .modal-close-btn {
     top: 14px;
     right: 14px;
-    width: 34px;
-    height: 34px;
   }
 
   .modal-music-btn {
     top: 14px;
     right: 58px;
-    width: 34px;
-    height: 34px;
+  }
+
+  .modal-switch-btn {
+    top: 14px;
+    right: 108px;
   }
 
   .letter-content {
@@ -746,18 +980,24 @@ defineExpose({ show })
     padding: 12px 8px;
   }
 
+  .modal-action-btn {
+    width: 30px;
+    height: 30px;
+  }
+
   .modal-close-btn {
     top: 10px;
     right: 10px;
-    width: 30px;
-    height: 30px;
   }
 
   .modal-music-btn {
     top: 10px;
     right: 50px;
-    width: 30px;
-    height: 30px;
+  }
+
+  .modal-switch-btn {
+    top: 10px;
+    right: 96px;
   }
 
   .letter-content {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted, provide } from 'vue';
+import { computed, ref, onMounted, onUnmounted, provide, nextTick, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import LetterModal from './components/LetterModal.vue';
 import CheckIn from './components/CheckIn.vue';
@@ -133,6 +133,21 @@ const letterModalRef = ref<InstanceType<typeof LetterModal> | null>(null);
 function openLetter() {
   letterModalRef.value?.show();
 }
+
+function showOnlineLearningThankYouLetter() {
+  letterModalRef.value?.showThankYouIfUnviewed();
+}
+
+watch(
+  () => route.path,
+  async (path) => {
+    if (path !== '/online-learning') return
+
+    await nextTick()
+    showOnlineLearningThankYouLetter()
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
