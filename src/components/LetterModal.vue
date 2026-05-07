@@ -436,6 +436,15 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
                   <p class="letter-sig-date">2026年5月8日</p>
                   <p class="letter-sig-author">某卿卿 敬上</p>
                 </div>
+
+                <button
+                  v-if="isRevealed"
+                  class="letter-review-btn"
+                  :disabled="isFlipping"
+                  @click="switchLetter('invitation')"
+                >
+                  回顾时空研究者的邀请
+                </button>
               </template>
             </div>
 
@@ -753,6 +762,37 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
 .letter-content .ltr {
   font-family: 'Georgia', 'Noto Serif SC', 'STSong', 'KaiTi', '楷体', serif;
   direction: ltr;
+}
+
+.letter-content .letter-review-btn {
+  display: block;
+  margin: 32px auto 0;
+  padding: 10px 22px;
+  border: 1px solid rgba(139, 111, 80, 0.55);
+  border-radius: 999px;
+  background: rgba(139, 111, 80, 0.08);
+  color: #5a3f26;
+  font-family: inherit;
+  font-size: 0.9em;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.letter-content .letter-review-btn:hover {
+  background: rgba(139, 111, 80, 0.14);
+  border-color: rgba(139, 111, 80, 0.8);
+  color: #3d3226;
+  transform: translateY(-1px);
+}
+
+.letter-content .letter-review-btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+  transform: none;
 }
 
 /* ========== 遮罩层（信封盖） ========== */
