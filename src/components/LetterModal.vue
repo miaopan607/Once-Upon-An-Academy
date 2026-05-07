@@ -206,6 +206,7 @@ async function switchLetter(letter: LetterType) {
   if (letter === currentLetter.value || isFlipping.value) return
 
   clearFlipTimers()
+  const wasRevealed = isRevealed.value
   const runId = flipRunId
   isFlipping.value = true
   flipStage.value = 'out'
@@ -215,7 +216,7 @@ async function switchLetter(letter: LetterType) {
 
     flipOutTimer = null
     currentLetter.value = letter
-    isRevealed.value = true
+    isRevealed.value = wasRevealed
     if (letter === 'thank-you') {
       markThankYouViewed()
     }
@@ -223,8 +224,12 @@ async function switchLetter(letter: LetterType) {
     await nextTick()
     if (runId !== flipRunId) return
 
-    applyRevealedLayout()
-    modalScrollRef.value?.scrollTo({ top: 0, behavior: 'auto' })
+    if (wasRevealed) {
+      applyRevealedLayout()
+      modalScrollRef.value?.scrollTo({ top: 0, behavior: 'auto' })
+    } else {
+      initLayout()
+    }
     flipStage.value = 'in-start'
 
     await nextTick()
