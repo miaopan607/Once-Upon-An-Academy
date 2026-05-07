@@ -264,39 +264,41 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
 <template>
   <Teleport to="body">
     <div v-if="isVisible" class="modal-overlay">
-      <button class="modal-action-btn modal-close-btn" @click="closeModal" aria-label="关闭">
-        <svg viewBox="0 0 24 24" width="22" height="22">
-          <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
-      </button>
-      <button
-        class="modal-action-btn modal-switch-btn"
-        :aria-label="currentLetter === 'invitation' ? '查看时空感谢信' : '查看时空旅行邀请函'"
-        :disabled="isFlipping"
-        @click="switchLetter(currentLetter === 'invitation' ? 'thank-you' : 'invitation')"
-      >
-        <svg viewBox="0 0 24 24" width="18" height="18">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-4H6V9h12v3z" fill="currentColor"/>
-        </svg>
-      </button>
-      <button
-        class="modal-action-btn modal-music-btn"
-        :class="{ 'is-playing': isMusicPlaying }"
-        :aria-label="isMusicPlaying ? '暂停背景音乐' : '播放背景音乐'"
-        @click="toggleMusic"
-      >
-        <span class="modal-music-btn__icon" aria-hidden="true">
-          <svg viewBox="0 0 1024 1024" width="18" height="18">
-            <path
-              d="M875.008 295.424a34.133333 34.133333 0 1 0-58.197333 35.669333c35.328 57.514667 53.930667 123.562667 53.930666 191.488 0 201.898667-164.352 366.250667-366.250666 366.250667S138.24 724.48 138.24 522.581333 302.592 156.330667 504.490667 156.330667c18.773333 0 34.133333-15.36 34.133333-34.133334s-15.36-34.133333-34.133333-34.133333C264.874667 88.064 69.973333 282.965333 69.973333 522.581333s194.901333 434.517333 434.517334 434.517334 434.517333-194.901333 434.517333-434.517334c0.170667-80.384-22.016-159.061333-64-227.157333z"
-            />
-            <path
-              d="M501.248 389.973333c-77.653333 0-140.8 63.146667-140.8 140.8s63.146667 140.8 140.8 140.8 140.8-63.146667 140.8-140.8V224.256c0-19.456 15.872-35.328 35.328-35.328 19.456 0 35.328 15.872 35.328 35.328 0 18.773333 15.36 34.133333 34.133333 34.133333s34.133333-15.36 34.133334-34.133333c0-57.173333-46.421333-103.594667-103.594667-103.594667s-103.594667 46.421333-103.594667 103.594667v186.026667a140.526933 140.526933 0 0 0-72.533333-20.309334z m0 213.333334a72.704 72.704 0 0 1-72.533333-72.533334 72.704 72.704 0 0 1 72.533333-72.533333 72.704 72.704 0 0 1 72.533333 72.533333 72.704 72.704 0 0 1-72.533333 72.533334z"
-            />
+      <div class="modal-actions">
+        <button class="modal-action-btn modal-close-btn" @click="closeModal" aria-label="关闭">
+          <svg viewBox="0 0 24 24" width="22" height="22">
+            <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
           </svg>
-        </span>
-      </button>
+        </button>
+        <button
+          class="modal-action-btn modal-switch-btn"
+          :aria-label="currentLetter === 'invitation' ? '查看时空感谢信' : '查看时空旅行邀请函'"
+          :disabled="isFlipping"
+          @click="switchLetter(currentLetter === 'invitation' ? 'thank-you' : 'invitation')"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-4H6V9h12v3z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button
+          class="modal-action-btn modal-music-btn"
+          :class="{ 'is-playing': isMusicPlaying }"
+          :aria-label="isMusicPlaying ? '暂停背景音乐' : '播放背景音乐'"
+          @click="toggleMusic"
+        >
+          <span class="modal-music-btn__icon" aria-hidden="true">
+            <svg viewBox="0 0 1024 1024" width="18" height="18">
+              <path
+                d="M875.008 295.424a34.133333 34.133333 0 1 0-58.197333 35.669333c35.328 57.514667 53.930667 123.562667 53.930666 191.488 0 201.898667-164.352 366.250667-366.250666 366.250667S138.24 724.48 138.24 522.581333 302.592 156.330667 504.490667 156.330667c18.773333 0 34.133333-15.36 34.133333-34.133334s-15.36-34.133333-34.133333-34.133333C264.874667 88.064 69.973333 282.965333 69.973333 522.581333s194.901333 434.517333 434.517334 434.517334 434.517333-194.901333 434.517333-434.517334c0.170667-80.384-22.016-159.061333-64-227.157333z"
+              />
+              <path
+                d="M501.248 389.973333c-77.653333 0-140.8 63.146667-140.8 140.8s63.146667 140.8 140.8 140.8 140.8-63.146667 140.8-140.8V224.256c0-19.456 15.872-35.328 35.328-35.328 19.456 0 35.328 15.872 35.328 35.328 0 18.773333 15.36 34.133333 34.133333 34.133333s34.133333-15.36 34.133334-34.133333c0-57.173333-46.421333-103.594667-103.594667-103.594667s-103.594667 46.421333-103.594667 103.594667v186.026667a140.526933 140.526933 0 0 0-72.533333-20.309334z m0 213.333334a72.704 72.704 0 0 1-72.533333-72.533334 72.704 72.704 0 0 1 72.533333-72.533333 72.704 72.704 0 0 1 72.533333 72.533333 72.704 72.704 0 0 1-72.533333 72.533334z"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
 
       <div class="modal-scroll" ref="modalScrollRef">
         <div class="modal-center">
@@ -480,8 +482,18 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
   to   { opacity: 1; }
 }
 
-.modal-action-btn {
+.modal-actions {
   position: fixed;
+  top: 50%;
+  left: calc(50% + 324px);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10001;
+}
+
+.modal-action-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -492,7 +504,6 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10001;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
@@ -501,21 +512,6 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
   background: rgba(15, 23, 25, 0.8);
   border-color: #fbda41;
   color: #fbda41;
-}
-
-.modal-close-btn {
-  top: 24px;
-  right: 24px;
-}
-
-.modal-music-btn {
-  top: 24px;
-  right: 76px;
-}
-
-.modal-switch-btn {
-  top: 24px;
-  right: 128px;
 }
 
 .modal-switch-btn:hover {
@@ -870,24 +866,30 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
     padding: 16px 12px;
   }
 
-  .modal-action-btn {
-    width: 34px;
-    height: 34px;
+  .modal-actions {
+    top: 14px;
+    right: 14px;
+    left: auto;
+    transform: none;
+    flex-direction: row;
+    gap: 10px;
   }
 
   .modal-close-btn {
-    top: 14px;
-    right: 14px;
+    order: 3;
   }
 
   .modal-music-btn {
-    top: 14px;
-    right: 58px;
+    order: 2;
   }
 
   .modal-switch-btn {
-    top: 14px;
-    right: 108px;
+    order: 1;
+  }
+
+  .modal-action-btn {
+    width: 34px;
+    height: 34px;
   }
 
   .letter-content {
@@ -980,24 +982,15 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
     padding: 12px 8px;
   }
 
+  .modal-actions {
+    top: 10px;
+    right: 10px;
+    gap: 10px;
+  }
+
   .modal-action-btn {
     width: 30px;
     height: 30px;
-  }
-
-  .modal-close-btn {
-    top: 10px;
-    right: 10px;
-  }
-
-  .modal-music-btn {
-    top: 10px;
-    right: 50px;
-  }
-
-  .modal-switch-btn {
-    top: 10px;
-    right: 96px;
   }
 
   .letter-content {
