@@ -228,6 +228,7 @@ async function switchLetter(letter: LetterType) {
       applyRevealedLayout()
       modalScrollRef.value?.scrollTo({ top: 0, behavior: 'auto' })
     } else {
+      wrapperRef.value?.classList.remove('ready')
       initLayout()
     }
     flipStage.value = 'in-start'
@@ -248,6 +249,12 @@ async function switchLetter(letter: LetterType) {
         flipDoneTimer = null
         flipStage.value = 'idle'
         isFlipping.value = false
+        if (!wasRevealed) {
+          window.requestAnimationFrame(() => {
+            if (runId !== flipRunId) return
+            wrapperRef.value?.classList.add('ready')
+          })
+        }
       }, FLIP_DURATION)
     })
   }, FLIP_DURATION)
