@@ -443,7 +443,7 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
 
                 <div class="letter-sign-block cn">
                   <p class="letter-sig-date">2026年5月8日</p>
-                  <p class="letter-sig-author">某卿卿 敬上</p>
+                  <p class="letter-sig-author">某卿卿</p>
                 </div>
 
                 <button
