@@ -3,6 +3,8 @@ services:
     build: .
     container_name: academy-backend
     restart: unless-stopped
+    env_file:
+      - .env
     expose:
       - "3001"
     volumes:

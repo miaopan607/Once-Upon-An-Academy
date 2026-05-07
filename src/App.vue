@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, provide } from 'vue';
+import { computed, ref, onMounted, onUnmounted, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import LetterModal from './components/LetterModal.vue';
 import CheckIn from './components/CheckIn.vue';
 
 const route = useRoute();
+const isStandalonePage = computed(() => route.path === '/course-admin');
 const isScrolled = ref(false);
 const isPlaying = ref(false);
 const showToast = ref(false);
@@ -71,6 +72,10 @@ const setupAutoplayUnlock = () => {
 };
 
 onMounted(async () => {
+  if (isStandalonePage.value) {
+    return;
+  }
+
   window.addEventListener('scroll', handleScroll);
   const played = await tryPlayAudio();
 
@@ -132,8 +137,13 @@ function openLetter() {
 
 <template>
   <div class="academy-website">
-    <!-- Header -->
-    <header :class="{ 'header-scrolled': isScrolled }">
+    <main v-if="isStandalonePage">
+      <router-view />
+    </main>
+
+    <template v-else>
+      <!-- Header -->
+      <header :class="{ 'header-scrolled': isScrolled }">
       <div class="header-content">
         <div class="brand-group">
           <router-link to="/" class="logo" style="white-space: nowrap;">从前书院</router-link>
@@ -224,31 +234,32 @@ function openLetter() {
           </router-link>
         </div>
       </div>
-    </header>
+      </header>
 
-    <main class="main-content">
-      <router-view />
-    </main>
+      <main class="main-content">
+        <router-view />
+      </main>
 
-    <CheckIn />
+      <CheckIn />
 
-    <!-- Custom Toast -->
-    <div class="custom-toast" :class="{ 'toast-visible': showToast }">
-      {{ toastMessage }}
-    </div>
+      <!-- Custom Toast -->
+      <div class="custom-toast" :class="{ 'toast-visible': showToast }">
+        {{ toastMessage }}
+      </div>
 
-    <audio
-      ref="audioRef"
-      src="/audio/music.opus"
-      autoplay
-      loop
-      preload="auto"
-      @play="handleAudioPlay"
-      @pause="handleAudioPause"
-      @ended="handleAudioPause"
-    />
+      <audio
+        ref="audioRef"
+        src="/audio/music.opus"
+        autoplay
+        loop
+        preload="auto"
+        @play="handleAudioPlay"
+        @pause="handleAudioPause"
+        @ended="handleAudioPause"
+      />
 
-    <LetterModal ref="letterModalRef" />
+      <LetterModal ref="letterModalRef" />
+    </template>
   </div>
 </template>
 

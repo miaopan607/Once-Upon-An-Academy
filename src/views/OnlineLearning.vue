@@ -1,7 +1,67 @@
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+type CourseScheduleRow = {
+  id: string;
+  section: string;
+  program: string;
+  mentor: string;
+  linkText: string;
+  linkUrl: string;
+};
+
+type CourseScheduleDisplayRow = CourseScheduleRow & {
+  rowSpan: number;
+  showSection: boolean;
+};
+
+const schedule = ref<CourseScheduleRow[]>([]);
+const loading = ref(true);
+const loadError = ref(false);
+
+function getLinkText(row: CourseScheduleRow) {
+  return row.linkText || (row.linkUrl ? '点击跳转' : '敬请期待');
+}
+
+const displaySchedule = computed<CourseScheduleDisplayRow[]>(() => {
+  return schedule.value.map((row, index, rows) => {
+    const showSection = index === 0 || row.section !== rows[index - 1].section;
+    const rowSpan = showSection
+      ? rows.slice(index).findIndex((nextRow) => nextRow.section !== row.section)
+      : 0;
+
+    return {
+      ...row,
+      showSection,
+      rowSpan: rowSpan === -1 ? rows.length - index : rowSpan,
+    };
+  });
+});
+
+async function fetchSchedule(showLoading = false) {
+  if (showLoading) {
+    loading.value = true;
+  }
+
+  try {
+    const res = await fetch('/api/course-schedule');
+    if (!res.ok) throw new Error('fetch failed');
+    const data = await res.json();
+    schedule.value = Array.isArray(data.schedule) ? data.schedule : [];
+    loadError.value = false;
+  } catch {
+    loadError.value = true;
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  fetchSchedule(true);
+});
 </script>
 
 <template>
@@ -34,210 +94,34 @@ const router = useRouter();
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">课前预习</th>
-                  <td>抽象测试题</td>
-                  <td>星词</td>
-                  <td class="location-cell">敬请期待</td>
+                <tr v-if="loading">
+                  <td class="table-state" colspan="4">课程表载入中...</td>
                 </tr>
-                <tr>
-                  <th scope="row">书院先行曲</th>
-                  <td>第七个孟夏</td>
-                  <td>芙糯酝</td>
-                  <td class="location-cell">敬请期待</td>
+                <tr v-else-if="loadError">
+                  <td class="table-state" colspan="4">课程表暂时无法载入，请稍后再试</td>
                 </tr>
-                <tr>
-                  <th scope="row" rowspan="5">劳技课</th>
-                  <td>梦的栖息地</td>
-                  <td>小浪花</td>
-                  <td class="location-cell">敬请期待</td>
+                <tr v-else-if="displaySchedule.length === 0">
+                  <td class="table-state" colspan="4">暂无课程安排</td>
                 </tr>
-                <tr>
-                  <td>黄黄赣州舞蹈翻跳</td>
-                  <td>栋栋</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>魔术擂台</td>
-                  <td>万梦星</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>模仿大赛</td>
-                  <td>咔咔</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>特制小剧场</td>
-                  <td>葭琲super</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row">课间休息</th>
-                  <td>文言文冷笑话</td>
-                  <td>林小默</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row" rowspan="9">音乐课</th>
-                  <td>卿心映梦</td>
-                  <td>i若离</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>秦淮河边的陈年往事</td>
-                  <td>一颗橙橙</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>扶卿游梦</td>
-                  <td>仁之</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>失调名</td>
-                  <td>万梦星</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>从我的梦中鹿过</td>
-                  <td>嘟嘟</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>喵都喵了</td>
-                  <td>葭琲super</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>万梦星</td>
-                  <td>凌辰</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>惊梦四叠</td>
-                  <td>余安</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>三十行情诗</td>
-                  <td>恭玉</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row">课间电影</th>
-                  <td>入梦深也</td>
-                  <td>红桃派</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row" rowspan="5">美术课</th>
-                  <td>生日贺图：诗里见新章</td>
-                  <td>一颗橙橙</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>生日贺图：海树等山花</td>
-                  <td>耐耐</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>生日贺图：花影</td>
-                  <td>炸裂猛贝</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>生日贺图：奇迹小黄OOTD</td>
-                  <td>王富贵</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>手绘梦境</td>
-                  <td>面条</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row">课间休息</th>
-                  <td>眼保健操</td>
-                  <td>面条</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row" rowspan="4">国学课</th>
-                  <td>临江仙</td>
-                  <td>花魂</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>今日无轼</td>
-                  <td>北辰寒星</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>魔鬼瓶</td>
-                  <td>林小默</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>生辰宴</td>
-                  <td>咔咔</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row">随堂小测</th>
-                  <td>听力测试</td>
-                  <td>面条</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row" rowspan="6">入梦课</th>
-                  <td>惊梦·寻花【游园惊梦篇】</td>
-                  <td>浮光跃金</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>贺卿芳华【木石前盟篇】</td>
-                  <td>耐耐</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>蝶携云信·卿贺诗辰【梁祝化蝶篇】</td>
-                  <td>北音卿樾</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>展信佳【霸王别姬篇】</td>
-                  <td>浮光跃金</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>故事外的人【等入梦系列】</td>
-                  <td>恭玉</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <td>入梦课小彩蛋</td>
-                  <td>芙糯酝</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row">午间阅读</th>
-                  <td>聊赠心间第一春</td>
-                  <td>多读书</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row">课后作业</th>
-                  <td>弹舌口哨教学</td>
-                  <td>温若樱</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
-                <tr>
-                  <th scope="row">放学铃</th>
-                  <td>那年夏，从俱往矣开始</td>
-                  <td>恭玉</td>
-                  <td class="location-cell">敬请期待</td>
-                </tr>
+                <template v-else>
+                  <tr v-for="row in displaySchedule" :key="row.id">
+                    <th v-if="row.showSection" scope="row" :rowspan="row.rowSpan">{{ row.section }}</th>
+                    <td>{{ row.program }}</td>
+                    <td>{{ row.mentor }}</td>
+                    <td class="location-cell">
+                      <a
+                        v-if="row.linkUrl"
+                        class="course-link"
+                        :href="row.linkUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {{ getLinkText(row) }}
+                      </a>
+                      <span v-else>{{ getLinkText(row) }}</span>
+                    </td>
+                  </tr>
+                </template>
               </tbody>
             </table>
           </div>
@@ -373,6 +257,25 @@ const router = useRouter();
   color: #655c4d;
   font-weight: 600;
   text-align: center !important;
+}
+
+.table-state {
+  padding: 2rem 1rem !important;
+  color: #655c4d;
+  text-align: center !important;
+  letter-spacing: 0.08em;
+}
+
+.course-link {
+  color: #7c5a14;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(124, 90, 20, 0.35);
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.course-link:hover {
+  color: #0f1719;
+  border-color: #0f1719;
 }
 
 /* 底部入口 */

@@ -17,6 +17,7 @@
     "deploy:be": "rsync -avz --delete server Dockerfile docker-compose.yml package.json pnpm-lock.yaml shifu:/opt/docker/academy-backend/ && ssh shifu \"cd /opt/docker/academy-backend && docker compose up -d --build\""
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "express": "^5.1.0",
     "vue": "^3.5.0",
     "vue-router": "^4.6.4"
