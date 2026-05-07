@@ -36,20 +36,10 @@ if (!localStorage.getItem(STORAGE_KEY)) {
 }
 
 function measureContent() {
-  const wrapper = wrapperRef.value
   const content = contentRef.value
-  if (!wrapper || !content) return
+  if (!content) return
 
-  const origHeight = wrapper.style.height
-  const origOverflow = wrapper.style.overflow
-  const origTransition = wrapper.style.transition
-  wrapper.style.height = 'auto'
-  wrapper.style.overflow = 'visible'
-  wrapper.style.transition = 'none'
-  contentHeight = content.offsetHeight
-  wrapper.style.height = origHeight
-  wrapper.style.overflow = origOverflow
-  wrapper.style.transition = origTransition
+  contentHeight = content.scrollHeight
 }
 
 function initLayout() {
@@ -105,10 +95,11 @@ function cancelResizeFrame() {
   }
 }
 
-function reveal() {
+async function reveal() {
   if (isRevealed.value) return
   isRevealed.value = true
-  applyCachedRevealedLayout()
+  await nextTick()
+  applyRevealedLayout()
 }
 
 function markCurrentLetterViewed() {
