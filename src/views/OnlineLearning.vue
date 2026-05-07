@@ -360,6 +360,10 @@ const router = useRouter();
   letter-spacing: 0.08em;
 }
 
+.schedule-table tbody td {
+  text-align: center;
+}
+
 .schedule-table tbody tr:nth-child(even) td {
   background: rgba(255, 255, 255, 0.42);
 }
