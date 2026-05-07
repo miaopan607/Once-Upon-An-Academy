@@ -47,7 +47,7 @@ app.post('/api/checkin', (req, res) => {
 // 生产环境：由 Express 托管前端静态文件
 if (existsSync(DIST_DIR)) {
   app.use(express.static(DIST_DIR))
-  app.get('*', (_req, res) => {
+  app.get('/{*splat}', (_req, res) => {
     res.sendFile(join(DIST_DIR, 'index.html'))
   })
 }
