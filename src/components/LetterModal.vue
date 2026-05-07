@@ -4,7 +4,7 @@ import { ref, computed, onMounted, onUnmounted, nextTick, inject, type Ref } fro
 const STORAGE_KEY = 'letter_modal_dismissed'
 const THANK_YOU_STORAGE_KEY = 'thank_you_letter_viewed'
 type LetterType = 'invitation' | 'thank-you'
-const INITIAL_REVEAL = 45
+const INITIAL_REVEAL = 112
 const BUTTON_AREA = 80
 const FLIP_DURATION = 300
 
