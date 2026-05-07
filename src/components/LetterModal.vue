@@ -277,12 +277,18 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
         <button
           v-if="shouldShowSwitchButton"
           class="modal-action-btn modal-switch-btn"
-          :aria-label="currentLetter === 'invitation' ? '查看时空感谢信' : '查看时空旅行邀请函'"
+          :aria-label="currentLetter === 'invitation' ? '切换到时空感谢信' : '切换到时空旅行邀请函'"
+          :title="currentLetter === 'invitation' ? '切换到时空感谢信' : '切换到时空旅行邀请函'"
           :disabled="isFlipping"
           @click="switchLetter(currentLetter === 'invitation' ? 'thank-you' : 'invitation')"
         >
-          <svg viewBox="0 0 24 24" width="18" height="18">
-            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-4H6V9h12v3z" fill="currentColor"/>
+          <svg class="modal-switch-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path class="modal-switch-icon__paper" d="M6.5 3.8h9l2.8 2.8v13.6H6.5z" />
+            <path class="modal-switch-icon__fold" d="M15.5 3.8v3h2.8" />
+            <path class="modal-switch-icon__cycle" d="M8.7 11.5a3.9 3.9 0 0 1 6.7-2.2" />
+            <path class="modal-switch-icon__cycle" d="M15.4 9.3h-2.2v-2.2" />
+            <path class="modal-switch-icon__cycle" d="M15.3 12.5a3.9 3.9 0 0 1-6.7 2.2" />
+            <path class="modal-switch-icon__cycle" d="M8.6 14.7h2.2v2.2" />
           </svg>
         </button>
         <button
@@ -527,8 +533,22 @@ defineExpose({ show, showThankYou, showThankYouIfUnviewed })
   color: #fbda41;
 }
 
-.modal-switch-btn:hover {
-  transform: scale(1.05);
+.modal-switch-icon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.modal-switch-icon__paper,
+.modal-switch-icon__fold {
+  stroke-width: 1.35;
+}
+
+.modal-switch-icon__cycle {
+  stroke-width: 1.75;
 }
 
 .modal-music-btn.is-playing {
