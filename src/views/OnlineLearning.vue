@@ -29,8 +29,8 @@ const router = useRouter();
                 <tr>
                   <th>环节</th>
                   <th>节目名称</th>
-                  <th>作者</th>
-                  <th>上课地点</th>
+                  <th>课程小导师</th>
+                  <th>上课链接</th>
                 </tr>
               </thead>
               <tbody>
